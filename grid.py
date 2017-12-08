@@ -1,5 +1,4 @@
 import pygame
-from game_objects import GameObject
 import sys
 
 
@@ -61,24 +60,23 @@ class Grid:
     def _scale_objects(self):
         self._objects = []
         for x, y, obj in self._original_objects:
-            width = int(obj.rect.width * (1 / self.scale))
-            height = int(obj.rect.height * (1 / self.scale))
+            width = int(obj.get_rect().width * (1 / self.scale))
+            height = int(obj.get_rect().height * (1 / self.scale))
 
-            scaled_surf = pygame.transform.scale(obj.surface, (width, height))
-            game_object = GameObject(scaled_surf)
+            scaled_surf = pygame.transform.scale(obj, (width, height))
 
-            self._objects.append((x, y, game_object))
+            self._objects.append((x, y, scaled_surf))
 
     def _draw_objects(self):
         self._scale_objects()
 
         for x, y, obj in self._objects:
-            rect = obj.surface.get_rect(
+            rect = obj.get_rect(
                 centerx=self.current_x + x * self.cell_size,
                 centery=self.current_y - y * self.cell_size
             )
             if rect.colliderect(self.surface.get_rect()):
-                self.surface.blit(obj.surface, rect)
+                self.surface.blit(obj, rect)
 
     def draw(self):
         x = self.current_x // self.cell_size
@@ -146,7 +144,7 @@ class Grid:
         elif event.type == pygame.VIDEORESIZE:
             self.scaled = True
 
-    def add_object(self, x, y, obj: GameObject):
+    def add_object(self, x, y, obj):
         self._original_objects.append((x, y, obj))
         self._objects = self._original_objects.copy()
 
@@ -162,9 +160,9 @@ if __name__ == '__main__':
 
     grid = Grid(screen)
 
-    s = pygame.Surface((100, 100))
-    s.fill(RED)
-    grid.add_object(10, 10, GameObject(s))
+    for x in range(-10000, 10000):
+        x /= 100
+        grid.add_object(x, x, pygame.Surface((10, 10)))
 
     clock = pygame.time.Clock()
     while True:

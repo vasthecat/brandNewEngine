@@ -1,42 +1,50 @@
+from components import TransformComponent
 import pygame
-import sys
 
 
-class GameObject(pygame.sprite.Sprite):
-    def __init__(self, surface):
-        pygame.sprite.Sprite.__init__(self)
-        self.surface = surface
-        self.rect = surface.get_rect()
+class GameObject:
+    def __init__(self, name='NewObject'):
+        self.name = name
+        self.components = []
 
-    def move_center_to(self, x, y):
-        self.rect = self.surface.get_rect(center=(x, y))
+    def get_component(self, type):
+        for component in self.components:
+            if isinstance(component, type):
+                return component
 
-    def move(self, x, y):
-        self.rect.move_ip(x, y)
+    def get_components(self, type):
+        return list(filter(lambda comp: isinstance(comp, type), self.components))
 
-    def draw(self, surface):
-        surface.blit(self.surface, self.rect)
+    def update(self):
+        for component in self.components:
+            component.update()
 
 
-if __name__ == '__main__':
-    BLACK = (0, 0, 0)
-    pygame.init()
-    w, h = size = 1280, 720
-    screen = pygame.display.set_mode(size)
+class Sprite(GameObject):
+    def __init__(self, sprite_filename, name='NewSprite'):
+        super().__init__(name)
+        self.image = load_image(sprite_filename)
 
-    surf = pygame.Surface(10, 10)
-    surf.fill((255, 255, 255))
 
-    obj = GameObject(surf)
-    obj.move_center_to(0, 80)
+class Camera:
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+        self.surface = pygame.display.get_surface()
 
-    clock = pygame.time.Clock()
-    while True:
-        clock.tick(60)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
+    def move(self, delta_x, delta_y):
+        self.x += delta_x
+        self.y += delta_y
 
-        screen.fill(BLACK)
-        obj.draw(screen)
-        pygame.display.flip()
+    def update(self):
+        self.surface.fill((0, 0, 0))
+
+    def draw(self, game_object):
+        surface = game_object.image
+        obj_x, obj_y = game_object.get_component(TransformComponent).coord
+        rect = surface.get_rect(centerx=obj_x - self.x, centery=self.y - obj_y)
+        self.surface.blit(surface, rect)
+
+
+def load_image(filename):
+    return pygame.image.load(filename).convert_alpha()
