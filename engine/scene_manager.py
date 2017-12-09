@@ -1,5 +1,4 @@
-from components import TransformComponent
-from game_objects import Camera
+from engine.game_objects import Camera
 
 
 class SceneManager:
@@ -45,7 +44,6 @@ class Scene:
 
     def add_object(self, x, y, game_obj):
         self.objects.append(game_obj)
-        game_obj.components.append(TransformComponent(x, y, game_obj))
 
     def find_objects(self, name):
         return list(filter(lambda obj: obj.name == name, self.objects))
@@ -57,7 +55,6 @@ class Scene:
             cam.update()
 
     def render(self):
-        self.update()
         for obj in self.objects:
             self.current_camera.draw(obj)
 

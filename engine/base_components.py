@@ -10,8 +10,15 @@ class TransformComponent(Component):
     def __init__(self, x, y, game_object):
         super().__init__(game_object)
         self.x, self.y = self.coord = x, y
+        self.rotation = 0
+
+    def move_to(self, x, y):
+        self.x, self.y = self.coord = x, y
 
     def move(self, delta_x, delta_y):
         self.x += delta_x
         self.y += delta_y
         self.coord = self.x, self.y
+
+    def rotate(self, degree):
+        self.rotation += degree
