@@ -32,7 +32,6 @@ class Scene:
         self.current_camera = camera
         self.cameras = [camera]
         self.objects = []
-        self.layers = {('Default', -1): []}
 
     def create_camera(self, x=0, y=0, set_current=False):
         camera = Camera(x, y)
@@ -43,14 +42,8 @@ class Scene:
     def set_current_camera(self, index):
         self.current_camera = self.cameras[index]
 
-    def add_object(self, game_obj, layer='Default'):
+    def add_object(self, game_obj):
         self.objects.append(game_obj)
-        for name, i in self.layers:
-            if name == layer:
-                self.layers[(name, i)].append(game_obj)
-
-    def create_layer(self, name, n):
-        self.layers[(name, n)] = []
 
     def find_objects(self, name):
         return list(filter(lambda obj: obj.name == name, self.objects))

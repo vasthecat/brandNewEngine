@@ -1,7 +1,9 @@
-from engine.base_components import Component, TransformComponent
 from engine.input_manager import input_manager
 from engine.scene_manager import scene_manager
+from engine.base_components import Component, TransformComponent
+
 from pygame.math import Vector2
+
 from math import acos, degrees
 
 
@@ -22,6 +24,9 @@ class ControllerComponent(Component):
     def update(self, *args):
         hor = input_manager.get_axis('Horizontal')
         vert = input_manager.get_axis('Vertical')
+        # rot = input_manager.get_axis('Rotation')
+        # self.transform.move(hor * 10, vert * 10)
+        # self.transform.rotate(rot * 5)
         mouse = self.get_mouse_coord()
 
         delta = Vector2(mouse[0] - self.transform.x, mouse[1] - self.transform.y)

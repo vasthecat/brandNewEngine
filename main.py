@@ -17,8 +17,8 @@ input_manager.add_axis('Rotation', {
 })
 
 obj = GameObject()
-obj.add_component(ImageComponent('images/arrow.png', obj))
 obj.add_component(ControllerComponent(obj))
+obj.add_component(ImageComponent('images/arrow.png', obj))
 
 scene.add_object(obj)
 
@@ -34,4 +34,5 @@ while True:
 
     scene.update()
     scene.render()
+
     pygame.display.flip()
