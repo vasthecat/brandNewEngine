@@ -1,3 +1,6 @@
+import pygame
+
+
 class Component:
     def __init__(self, game_object):
         self.game_object = game_object
@@ -22,3 +25,16 @@ class TransformComponent(Component):
 
     def rotate(self, degree):
         self.rotation += degree
+
+    def set_rotation(self, degree):
+        self.rotation = degree
+
+
+class ImageComponent(Component):
+    def __init__(self, image_path, game_object):
+        super().__init__(game_object)
+        self.image = ImageComponent.load_image(image_path)
+
+    @staticmethod
+    def load_image(filename):
+        return pygame.image.load(filename).convert_alpha()

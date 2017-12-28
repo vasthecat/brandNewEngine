@@ -22,6 +22,9 @@ class InputManager:
         if axis is not None:
             return sum(val for key, val in axis.items() if pygame.key.get_pressed()[key])
 
+    def get_mouse_pos(self):
+        return pygame.mouse.get_pos()
+
     def add_axis(self, name, keys):
         InputManager.AXES[name] = keys
 
