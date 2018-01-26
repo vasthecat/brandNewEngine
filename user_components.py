@@ -1,32 +1,32 @@
 from engine.input_manager import input_manager
 from engine.scene_manager import scene_manager
-from engine.base_components import Component, TransformComponent
+from engine.base_components import Component, TransformComponent, ImageComponent
+from engine.game_objects import GameObject
 
 from pygame.math import Vector2
+import pygame
 
 from math import acos, degrees
+from time import time
 
 
 class ControllerComponent(Component):
-    def __init__(self, game_object):
+    def __init__(self, speed, game_object):
         super().__init__(game_object)
         self.transform = self.game_object.get_component(TransformComponent)
-        self.speed = 10
+        self.speed = speed
 
     def get_mouse_coord(self):
         mouse = input_manager.get_mouse_pos()
         cam = scene_manager.current_scene.current_camera
-        t = cam.get_component(TransformComponent)
-        mouse_x = t.x + (cam.surface.get_rect().center[0] - mouse[0])
-        mouse_y = t.y + (mouse[1] - cam.surface.get_rect().center[1])
-        return -mouse_x, -mouse_y
+        t = cam.transform
+        mouse_x = t.x + (mouse[0] - cam.surface.get_rect().center[0])
+        mouse_y = t.y + (cam.surface.get_rect().center[1] - mouse[1])
+        return mouse_x, mouse_y
 
     def update(self, *args):
         hor = input_manager.get_axis('Horizontal')
         vert = input_manager.get_axis('Vertical')
-        # rot = input_manager.get_axis('Rotation')
-        # self.transform.move(hor * 10, vert * 10)
-        # self.transform.rotate(rot * 5)
         mouse = self.get_mouse_coord()
 
         delta = Vector2(mouse[0] - self.transform.x, mouse[1] - self.transform.y)
@@ -44,3 +44,31 @@ class ControllerComponent(Component):
             move = move.normalize() * self.speed
         self.transform.move(move.x, move.y)
         self.transform.set_rotation(rot)
+        scene_manager.current_scene.current_camera.transform.move(move.x, move.y)
+
+
+class ShooterComponent(Component):
+    def __init__(self, speed, life_time, game_object):
+        super().__init__(game_object)
+        self.speed = speed
+        self.bullets = []
+        self.life_time = life_time
+        self.prev_t = -1
+        self.scene = scene_manager.current_scene
+
+    def update(self, *args):
+        if pygame.mouse.get_pressed()[0] and time() - self.prev_t >= 0.1:
+            bullet = GameObject(*self.game_object.transform.coord)
+            bullet.add_component(ImageComponent('images/arrow.png', False, bullet))
+            bullet.transform.set_rotation(self.game_object.transform.rotation)
+            self.bullets.append((bullet, time()))
+            self.scene.add_object(bullet)
+            self.prev_t = time()
+
+        for bullet, t in self.bullets:
+            if time() - t >= self.life_time:
+                self.scene.remove_object(bullet)
+                self.bullets.remove((bullet, t))
+            else:
+                move = Vector2(1, 0).rotate(bullet.transform.rotation).normalize() * self.speed
+                bullet.transform.move(move.x, move.y)

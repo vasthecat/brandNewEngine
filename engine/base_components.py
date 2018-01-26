@@ -31,9 +31,18 @@ class TransformComponent(Component):
 
 
 class ImageComponent(Component):
-    def __init__(self, image_path, game_object):
+    image = property(lambda self: self.get_image())
+
+    def __init__(self, image_path, is_static, game_object):
         super().__init__(game_object)
-        self.image = ImageComponent.load_image(image_path)
+        self._image = ImageComponent.load_image(image_path)
+        self._is_static = is_static
+
+    def get_image(self):
+        if self._is_static:
+            return self._image
+        else:
+            return pygame.transform.rotate(self._image, self.game_object.transform.rotation)
 
     @staticmethod
     def load_image(filename):

@@ -5,7 +5,7 @@ import sys
 
 from engine.game_objects import GameObject
 from engine.base_components import ImageComponent
-from user_components import ControllerComponent
+from user_components import ControllerComponent, ShooterComponent
 from engine.scene_manager import scene_manager
 from engine.input_manager import input_manager
 
@@ -17,8 +17,16 @@ input_manager.add_axis('Rotation', {
 })
 
 obj = GameObject()
-obj.add_component(ControllerComponent(obj))
-obj.add_component(ImageComponent('images/arrow.png', obj))
+obj.add_component(ControllerComponent(15, obj))
+obj.add_component(ShooterComponent(50, 3, obj))
+obj.add_component(ImageComponent('images/player.png', False, obj))
+
+for y in range(-8, 8):
+    for x in range(-8, 8):
+        bg = GameObject(x * 512, y * 512)
+        bg.add_component(ImageComponent('images/bg.png', True, bg))
+
+        scene.add_object(bg)
 
 scene.add_object(obj)
 

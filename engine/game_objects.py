@@ -37,22 +37,23 @@ class Camera(GameObject):
     def update(self):
         self.surface.fill((0, 0, 0))
 
-    def draw(self, game_object):
-        if game_object.has_component(ImageComponent):
-            transform = game_object.transform
-            cam_transform = self.transform
+    def draw(self, game_objects):
+        for game_object in game_objects:
+            if game_object.has_component(ImageComponent):
+                transform = game_object.transform
+                cam_transform = self.transform
 
-            image = game_object.get_component(ImageComponent).image
-            surface = pygame.transform.rotate(image, cam_transform.rotation + transform.rotation)
-            obj_x, obj_y = transform.coord
-            x, y = cam_transform.coord
+                surface = game_object.get_component(ImageComponent).image
 
-            rect = surface.get_rect(
-                centerx=width // 2 + obj_x - x,
-                centery=height // 2 + y - obj_y
-            )
+                obj_x, obj_y = transform.coord
+                x, y = cam_transform.coord
 
-            self.surface.blit(surface, rect)
+                rect = surface.get_rect(
+                    centerx=width // 2 + obj_x - x,
+                    centery=height // 2 + y - obj_y
+                )
+
+                self.surface.blit(surface, rect)
 
 
 def load_image(filename):

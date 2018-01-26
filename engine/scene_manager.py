@@ -45,6 +45,9 @@ class Scene:
     def add_object(self, game_obj):
         self.objects.append(game_obj)
 
+    def remove_object(self, game_obj):
+        self.objects.remove(game_obj)
+
     def find_objects(self, name):
         return list(filter(lambda obj: obj.name == name, self.objects))
 
@@ -55,8 +58,7 @@ class Scene:
             cam.update()
 
     def render(self):
-        for obj in self.objects:
-            self.current_camera.draw(obj)
+        self.current_camera.draw(self.objects)
 
 
 scene_manager = SceneManager()
