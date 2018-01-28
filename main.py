@@ -18,7 +18,7 @@ input_manager.add_axis('Rotation', {
 
 obj = GameObject()
 obj.add_component(ControllerComponent(15, obj))
-obj.add_component(ShooterComponent(50, 3, obj))
+obj.add_component(ShooterComponent(50, 3, 0.15, obj))
 obj.add_component(ImageComponent('images/player.png', False, obj))
 
 for y in range(-8, 8):

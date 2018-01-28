@@ -15,6 +15,8 @@ class ControllerComponent(Component):
         super().__init__(game_object)
         self.transform = self.game_object.get_component(TransformComponent)
         self.speed = speed
+        self.sound = pygame.mixer.Sound('sounds/steps.ogg')
+        self._prev_move = Vector2(0, 0)
 
     def get_mouse_coord(self):
         mouse = input_manager.get_mouse_pos()
@@ -42,24 +44,33 @@ class ControllerComponent(Component):
         move = Vector2(hor, vert)
         if move.length() != 0:
             move = move.normalize() * self.speed
+            if self._prev_move.length() == 0:
+                pygame.mixer.Channel(0).play(self.sound, -1)
+        else:
+            pygame.mixer.Channel(0).stop()
+        self._prev_move = move
+
         self.transform.move(move.x, move.y)
         self.transform.set_rotation(rot)
         scene_manager.current_scene.current_camera.transform.move(move.x, move.y)
 
 
 class ShooterComponent(Component):
-    def __init__(self, speed, life_time, game_object):
+    def __init__(self, speed, life_time, rate_of_fire, game_object):
         super().__init__(game_object)
         self.speed = speed
-        self.bullets = []
         self.life_time = life_time
+        self.rate_of_fire = rate_of_fire
+        self.bullets = []
         self.prev_t = -1
         self.scene = scene_manager.current_scene
+        self.sound = pygame.mixer.Sound('sounds/shot.ogg')
 
     def update(self, *args):
-        if pygame.mouse.get_pressed()[0] and time() - self.prev_t >= 0.1:
+        if pygame.mouse.get_pressed()[0] and time() - self.prev_t >= self.rate_of_fire:
+            pygame.mixer.Channel(1).play(self.sound)
             bullet = GameObject(*self.game_object.transform.coord)
-            bullet.add_component(ImageComponent('images/arrow.png', False, bullet))
+            bullet.add_component(ImageComponent('images/bullet.png', False, bullet))
             bullet.transform.set_rotation(self.game_object.transform.rotation)
             self.bullets.append((bullet, time()))
             self.scene.add_object(bullet)
