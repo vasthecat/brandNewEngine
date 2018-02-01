@@ -25,24 +25,22 @@ class TransformComponent(Component):
 
     def rotate(self, degree):
         self.rotation += degree
+        img = self.game_object.get_component(ImageComponent)
+        if img is not None:
+            img.image = pygame.transform.rotate(img._original, self.rotation)
 
     def set_rotation(self, degree):
         self.rotation = degree
+        img = self.game_object.get_component(ImageComponent)
+        if img is not None:
+            img.image = pygame.transform.rotate(img._original, self.rotation)
 
 
 class ImageComponent(Component):
-    image = property(lambda self: self.get_image())
-
-    def __init__(self, image_path, is_static, game_object):
+    def __init__(self, image_path, game_object):
         super().__init__(game_object)
-        self._image = ImageComponent.load_image(image_path)
-        self._is_static = is_static
-
-    def get_image(self):
-        if self._is_static:
-            return self._image
-        else:
-            return pygame.transform.rotate(self._image, self.game_object.transform.rotation)
+        self._original = ImageComponent.load_image(image_path)
+        self.image = self._original
 
     @staticmethod
     def load_image(filename):
