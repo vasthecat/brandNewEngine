@@ -1,0 +1,76 @@
+{
+    "name": "scene1",
+    "objects": [
+        {
+            "name": "background",
+            "components": [
+                {
+                    "name": "ImageComponent",
+                    "path": "images/ground.png"
+                }
+            ]
+        },
+        {
+            "name": "house1",
+            "x": -1428, "y": 1123,
+            "components": [
+                {
+                    "name": "ImageComponent",
+                    "path": "images/house.png"
+                },
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": []
+                }
+            ]
+        },
+        {
+            "name": "player",
+            "components": [
+                {
+                    "name": "ImageComponent",
+                    "path": "images/player.png"
+                },
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": -64,
+                    "rect": [0, 0, 64, 20]
+                },
+                {
+                    "name": "TriggerCollider",
+                    "shift_x": 64,
+                    "shift_y": -32,
+                    "rect": [0, 0, 64, 128]
+                },
+                {
+                    "name": "PlayerController",
+                    "speed": 10
+                }
+            ]
+        },
+        {
+            "name": "house2",
+            "x": -1500, "y": -500,
+            "components": [
+                {
+                    "name": "ImageComponent",
+                    "path": "images/house_back.png"
+                }
+            ]
+        },
+        {
+            "name": "obj",
+            "components": [
+                {
+                    "name": "TriggerCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 100, 100]
+                }
+            ]
+        }
+    ]
+}

@@ -3,42 +3,15 @@ import engine.initialize_engine
 import pygame
 import sys
 
-from engine.game_objects import GameObject
-from engine.base_components import ImageComponent
-from user_components import PhysicsCollider, TriggerCollider, PlayerController
-from engine.scene_manager import scene_manager
+from scene_loader import load_scene
 from engine.input_manager import input_manager
+from engine.gui import GUI, Label
 
-scene = scene_manager.current_scene
 
-bg = GameObject()
-bg.add_component(ImageComponent('images/ground.png', bg))
-scene.add_object(bg)
+scene = load_scene('scenes/scene1.json')
 
-house1 = GameObject(-1428, 1123)
-house1.add_component(ImageComponent('images/house.png', house1))
-house1.add_component(PhysicsCollider(
-    0, 0,
-    house1.get_component(ImageComponent).image.get_rect(),
-    house1
-))
-scene.add_object(house1)
-
-player = GameObject()
-player.add_component(ImageComponent('images/player.png', player))
-player.add_component(PhysicsCollider(0, -64, [0, 0, 64, 20], player))
-player.add_component(TriggerCollider(64, -32, [0, 0, 64, 128], player))
-player.add_component(PlayerController(10, player))
-scene.add_object(player)
-
-house2 = GameObject(-1500, -500)
-house2.add_component(ImageComponent('images/house_back.png', house2))
-scene.add_object(house2)
-
-obj = GameObject()
-obj.add_component(TriggerCollider(0, 0, [0, 0, 100, 100], obj))
-scene.add_object(obj)
-
+gui = GUI()
+gui.add_element(Label((10, 50, 300, 80), "Huge text", pygame.Color('green')))
 clock = pygame.time.Clock()
 while True:
     clock.tick(60)
@@ -51,5 +24,9 @@ while True:
 
     scene.update()
     scene.render()
+
+    gui.apply_event(input_manager.get_events())
+    gui.update()
+    gui.render()
 
     pygame.display.flip()

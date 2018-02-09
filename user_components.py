@@ -1,6 +1,6 @@
 from engine.input_manager import input_manager
 from engine.scene_manager import scene_manager
-from engine.base_components import Component
+from engine.base_components import Component, ImageComponent
 
 from pygame.math import Vector2
 import pygame
@@ -40,7 +40,7 @@ class PlayerController(Component):
                 trigger_collider.update()
                 if obj != self.game_object and obj.has_component(TriggerCollider):
                     if trigger_collider.detect_collision(obj.get_component(TriggerCollider)):
-                        print('trigger') # TODO
+                        print('trigger')
 
 
 class Collider(Component):
@@ -59,7 +59,14 @@ class Collider(Component):
 
 
 class PhysicsCollider(Collider):
-    pass
+    def __init__(self, shift_x, shift_y, rect, game_object):
+        if not rect:
+            rect = game_object.get_component(ImageComponent)
+            if rect is None:
+                raise ValueError('rect parameter is empty and PhysicsCollider component added before ImageComponent')
+            else:
+                rect = rect.image.get_rect()
+        super().__init__(shift_x, shift_y, rect, game_object)
 
 
 class TriggerCollider(Collider):
