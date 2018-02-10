@@ -18,7 +18,7 @@ while True:
     for event in input_manager.get_events():
         if event.type == pygame.QUIT:
             pygame.quit()
-            sys.exit()
+            sys.exit() 
         gui.apply_event(event)
 
     scene.update()
