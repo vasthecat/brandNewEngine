@@ -5,13 +5,11 @@ import sys
 
 from scene_loader import load_scene
 from engine.input_manager import input_manager
-from engine.gui import GUI, Label
+from engine.gui import gui
 
 
 scene = load_scene('scenes/scene1.json')
 
-gui = GUI()
-gui.add_element(Label((10, 50, 300, 80), "Huge text", pygame.Color('green')))
 clock = pygame.time.Clock()
 while True:
     clock.tick(60)
@@ -21,11 +19,11 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        gui.apply_event(event)
 
     scene.update()
     scene.render()
 
-    gui.apply_event(input_manager.get_events())
     gui.update()
     gui.render()
 

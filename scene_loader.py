@@ -18,7 +18,7 @@ def _load_physics_collider(component_dict, obj):
 def _load_npc_collider(component_dict, obj):
     return TriggerCollider(
         component_dict['shift_x'], component_dict['shift_y'],
-        component_dict['rect'], obj
+        component_dict['rect'], component_dict['name'], component_dict.get('text_for_player', ''), component_dict['trigger_name'], obj
     )
 
 
@@ -38,6 +38,8 @@ def load_scene(path):
             obj.get('x', 0), obj.get('y', 0),
             obj.get('name', 'NewObject')
         )
+
+
         for component_dict in obj['components']:
             component_name = component_dict['name']
             game_object.add_component(component_loaders[component_name](component_dict, game_object))

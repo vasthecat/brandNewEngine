@@ -41,8 +41,9 @@
                 },
                 {
                     "name": "TriggerCollider",
-                    "shift_x": 64,
-                    "shift_y": -32,
+                    "trigger_name": "PlayerTrigger",
+                    "shift_x": 0,
+                    "shift_y": 0,
                     "rect": [0, 0, 64, 128]
                 },
                 {
@@ -66,9 +67,34 @@
             "components": [
                 {
                     "name": "TriggerCollider",
+                    "trigger_name": "obj2",
                     "shift_x": 0,
                     "shift_y": 0,
-                    "rect": [0, 0, 100, 100]
+                    "rect": [0, 0, 64, 128],
+                    "text_for_player":"Нажмите Е чтобы заговорить"
+                },
+                {
+                    "name": "ImageComponent",
+                    "path": "images/test_nps_1.png"
+                }
+            ]
+        },
+        {
+            "name": "ninja",
+            "x": 400,
+            "components": [
+                {
+                    "name": "TriggerCollider",
+                    "trigger_name": "ninja",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect":  [0,0,64,128],
+                    "text_for_player":"Нажмите Е чтобы заговорить",
+                    "key": "e"
+                },
+                {
+                    "name": "ImageComponent",
+                    "path": "images/test_nps_2.png"
                 }
             ]
         }

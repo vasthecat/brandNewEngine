@@ -2,14 +2,19 @@ from engine.input_manager import input_manager
 from engine.scene_manager import scene_manager
 from engine.base_components import Component, ImageComponent
 
+import engine.gui
+
 from pygame.math import Vector2
 import pygame
+
+from engine.gui import *
 
 
 class PlayerController(Component):
     def __init__(self, speed, game_object):
         super().__init__(game_object)
         self.speed = speed
+        self.gui_obj = {}
 
     def update(self, *args):
         hor = input_manager.get_axis('Horizontal')
@@ -40,7 +45,16 @@ class PlayerController(Component):
                 trigger_collider.update()
                 if obj != self.game_object and obj.has_component(TriggerCollider):
                     if trigger_collider.detect_collision(obj.get_component(TriggerCollider)):
-                        print('trigger')
+                        text = obj.get_component(TriggerCollider).text_for_player
+
+                        _ = Label((200, 500, 10, 100), text, pygame.Color('black'), obj.get_component(TriggerCollider).trigger_name)
+                        gui.add_element(_)
+                        self.gui_obj[obj.get_component(TriggerCollider).trigger_name] = _
+                    else:
+                        _ = obj.get_component(TriggerCollider).trigger_name
+                        gui.del_element(_)
+                        if _ in self.gui_obj:
+                            del self.gui_obj[_]
 
 
 class Collider(Component):
@@ -70,4 +84,8 @@ class PhysicsCollider(Collider):
 
 
 class TriggerCollider(Collider):
-    pass
+    def __init__(self, shift_x, shift_y, rect, name, text_for_player, trigger_name,game_object):
+        self.name = name
+        self.text_for_player = text_for_player
+        self.trigger_name = trigger_name
+        super().__init__(shift_x, shift_y, rect, game_object)

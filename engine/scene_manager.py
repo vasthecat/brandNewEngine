@@ -7,6 +7,11 @@ class SceneManager:
         self.scenes = {}
         self.create_scene('default_scene', set_current=True)
 
+    def set_current(self, name):
+        scene = self.scenes.get(name, None)
+        if scene is not None:
+            self.current_scene = scene
+
     def create_scene(self, scene_name, camera=None, set_current=False):
         if camera is None:
             camera = Camera()
