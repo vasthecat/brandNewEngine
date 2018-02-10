@@ -3,7 +3,7 @@ import pygame
 
 
 class Label:
-    def __init__(self, rect, text, front_color, name):
+    def __init__(self, rect, text, front_color, name, dict_with_func):
         self.rect = pygame.Rect(rect)
         self.text = text
         self.font_color = front_color
@@ -13,11 +13,18 @@ class Label:
         self.rendered_text = None
         self.rendered_rect = None
 
+        self.key_and_func = dict_with_func
 
     def render(self, surface):
         self.rendered_text = self.font.render(self.text, 1, self.font_color)
         self.rendered_rect = self.rendered_text.get_rect(x=self.rect.x + 2, centery=self.rect.centery)
         surface.blit(self.rendered_text, self.rendered_rect)
+
+    def apply_event(self, event):
+        for key, func in self.key_and_func.items():
+            if event.type == pygame.KEYDOWN:
+                if event.unicode == key:
+                    func()
 
 
 class GUI:
@@ -42,7 +49,7 @@ class GUI:
 
     def apply_event(self, event):
         for element in self.elements:
-            get_event = getattr(element, "get_event", None)
+            get_event = getattr(element, "apply_event", None)
             if callable(get_event):
                 element.apply_event(event)
 
