@@ -3,7 +3,7 @@ import pygame
 
 
 class Label:
-    def __init__(self, rect, text, front_color, name, dict_with_func):
+    def __init__(self, rect, text, front_color, name, dict_with_func = None):
         self.rect = pygame.Rect(rect)
         self.text = text
         self.font_color = front_color
@@ -23,7 +23,7 @@ class Label:
     def apply_event(self, event):
         for key, func in self.key_and_func.items():
             if event.type == pygame.KEYDOWN:
-                if event.unicode == key:
+                if event.key == key:
                     func()
 
 
