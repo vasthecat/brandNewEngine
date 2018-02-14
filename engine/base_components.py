@@ -39,9 +39,17 @@ class TransformComponent(Component):
 class ImageComponent(Component):
     def __init__(self, image_path, game_object):
         super().__init__(game_object)
+        self._path = image_path
         self._original = ImageComponent.load_image(image_path)
         self.image = self._original
 
     @staticmethod
     def load_image(filename):
         return pygame.image.load(filename).convert_alpha()
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return ImageComponent(component_dict['path'], obj)
+
+    def serialize(self):
+        return {'name': 'ImageComponent', 'path': self._path}

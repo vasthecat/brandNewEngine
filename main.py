@@ -8,7 +8,7 @@ from engine.input_manager import input_manager
 from engine.gui import gui
 
 
-scene = load_scene('scenes/scene1.json')
+scene = load_scene('scenes/scene2.json')
 
 clock = pygame.time.Clock()
 while True:

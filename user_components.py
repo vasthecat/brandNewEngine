@@ -23,8 +23,8 @@ class PlayerController(Component):
         x, y = self.game_object.transform.coord
 
         cam_move = Vector2(
-            hor * self.speed if abs(x + hor * self.speed) < 1370 else 0,
-            vert * self.speed if abs(y + vert * self.speed) < 1650 else 0
+            hor * self.speed if abs(x + hor * self.speed) < 350 else 0,
+            vert * self.speed if abs(y + vert * self.speed) < 640 else 0
         )
         scene_manager.current_scene.current_camera.transform.move(cam_move.x, cam_move.y)
 
@@ -56,6 +56,13 @@ class PlayerController(Component):
                         if _ in self.gui_obj:
                             del self.gui_obj[_]
 
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return PlayerController(component_dict['speed'], obj)
+
+    def serialize(self):
+        return {'name': 'PlayerController', 'speed': self.speed}
+
 
 class Collider(Component):
     def __init__(self, shift_x, shift_y, rect, game_object):
@@ -71,6 +78,16 @@ class Collider(Component):
         self.rect.centerx = self.game_object.transform.x + self.shift_x
         self.rect.centery = self.game_object.transform.y + self.shift_y
 
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return Collider(
+            component_dict['shift_x'], component_dict['shift_y'],
+            component_dict['rect'], obj
+        )
+
+    def serialize(self):
+        return {'name': 'Collider', 'shift_x': self.shift_x, 'shift_y': self.shift_y, 'rect': self.rect}
+
 
 class PhysicsCollider(Collider):
     def __init__(self, shift_x, shift_y, rect, game_object):
@@ -82,10 +99,37 @@ class PhysicsCollider(Collider):
                 rect = rect.image.get_rect()
         super().__init__(shift_x, shift_y, rect, game_object)
 
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return PhysicsCollider(
+            component_dict['shift_x'], component_dict['shift_y'],
+            component_dict['rect'], obj
+        )
+
+    def serialize(self):
+        d = super().serialize()
+        d['name'] = 'PhysicsCollider'
+        return d
+
 
 class TriggerCollider(Collider):
-    def __init__(self, shift_x, shift_y, rect, name, text_for_player, trigger_name,game_object):
-        self.name = name
+    def __init__(self, shift_x, shift_y, rect, text_for_player, trigger_name, game_object):
         self.text_for_player = text_for_player
         self.trigger_name = trigger_name
         super().__init__(shift_x, shift_y, rect, game_object)
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return TriggerCollider(
+            component_dict['shift_x'], component_dict['shift_y'],
+            component_dict['rect'], component_dict.get('text_for_player', ''),
+            component_dict['trigger_name'], obj
+        )
+
+    def serialize(self):
+        d = super().serialize()
+        d.update({
+            'name': 'TriggerCollider', 'trigger_name': self.trigger_name,
+            'text_for_player': self.text_for_player
+        })
+        return d
