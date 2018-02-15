@@ -6,123 +6,7 @@
             "components": [
                 {
                     "name": "ImageComponent",
-                    "path": "images/dev_map.png"
-                }
-            ]
-        },
-
-        {
-            "name": "house_win_closed_1",
-            "x": -800, "y": 890,
-            "components": [
-                {
-                    "name": "ImageComponent",
-                    "path": "images/houses/win/closed.png"
-                },
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": []
-                }
-            ]
-        },
-
-        {
-            "name": "house_win_opened",
-            "x": -477, "y": 890,
-            "components": [
-                {
-                    "name": "ImageComponent",
-                    "path": "images/houses/win/opened.png"
-                },
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": []
-                }
-            ]
-        },
-
-        {
-            "name": "house_win_closed_2",
-            "x": -220, "y": 890,
-            "components": [
-                {
-                    "name": "ImageComponent",
-                    "path": "images/houses/win/closed.png"
-                },
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": []
-                }
-            ]
-        },
-        {
-            "name": "house_win_closed_3",
-            "x": 100, "y": 890,
-            "components": [
-                {
-                    "name": "ImageComponent",
-                    "path": "images/houses/win/closed.png"
-                },
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": []
-                }
-            ]
-        },
-
-        {
-            "name": "house_win_back_1",
-            "x": -744, "y": 500,
-            "components": [
-                {
-                    "name": "ImageComponent",
-                    "path": "images/houses/win/back.png"
-                },
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": []
-                }
-            ]
-        },
-        {
-            "name": "house_win_back_2",
-            "x": -420, "y": 500,
-            "components": [
-                {
-                    "name": "ImageComponent",
-                    "path": "images/houses/win/back.png"
-                },
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": []
-                }
-            ]
-        },
-        {
-            "name": "house_win_back_3",
-            "x": 113, "y": 517,
-            "components": [
-                {
-                    "name": "ImageComponent",
-                    "path": "images/houses/win/back.png"
-                },
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": []
+                    "path": "images/ground_layer.png"
                 }
             ]
         },
@@ -137,30 +21,29 @@
                 {
                     "name": "PhysicsCollider",
                     "shift_x": 0,
-                    "shift_y": -64,
-                    "rect": [0, 0, 64, 20]
+                    "shift_y": -34,
+                    "rect": [0, 0, 34, 10]
                 },
                 {
                     "name": "TriggerCollider",
                     "trigger_name": "PlayerTrigger",
                     "shift_x": 0,
                     "shift_y": 0,
-                    "rect": [0, 0, 64, 128]
+                    "rect": [0, 0, 34, 58]
                 },
                 {
                     "name": "PlayerController",
-                    "speed": 10
+                    "speed": 4
                 }
             ]
         },
 
         {
-            "name": "house2",
-            "x": -1500, "y": -500,
+            "name": "roofs",
             "components": [
                 {
                     "name": "ImageComponent",
-                    "path": "images/house_back.png"
+                    "path": "images/upper_layer.png"
                 }
             ]
         }
