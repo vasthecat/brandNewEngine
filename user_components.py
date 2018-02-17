@@ -131,7 +131,7 @@ class PlayerController(Component):
                     if trigger_collider.detect_collision(obj.get_component(TriggerCollider)):
                         text = obj.get_component(TriggerCollider).text_for_player
                         x = 1280 / 2 - len(text) * len(text) / 2 - 100
-                        _ = Label((x, 500, 10, 100), text, pygame.Color('black'), obj.get_component(TriggerCollider).trigger_name,
+                        _ = Label((x, 500, 10, 100), text, pygame.Color('black'), 'fonts/8875.otf',obj.get_component(TriggerCollider).trigger_name,
                                   {pygame.K_e: test_func_press_e,
                                    pygame.K_SPACE: test_func_press_spase})
                         gui.add_element(_)
