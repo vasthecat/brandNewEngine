@@ -1,34 +1,15 @@
 import engine.initialize_engine
+from engine.scene_manager import scene_manager
 
 import pygame
 import sys
 
-from engine.game_objects import GameObject
-from engine.base_components import ImageComponent
-from user_components import ControllerComponent, ShooterComponent
-from engine.scene_manager import scene_manager
+from scene_loader import load_scene
 from engine.input_manager import input_manager
+from engine.gui import gui
 
-scene_manager.rename_scene('default_scene', 'scene1')
-scene = scene_manager.current_scene
-input_manager.add_axis('Rotation', {
-    pygame.K_q: -1,
-    pygame.K_e: 1,
-})
 
-obj = GameObject()
-obj.add_component(ControllerComponent(15, obj))
-obj.add_component(ShooterComponent(50, 3, 0.15, obj))
-obj.add_component(ImageComponent('images/player.png', obj))
-
-for y in range(-8, 8):
-    for x in range(-8, 8):
-        bg = GameObject(x * 512, y * 512)
-        bg.add_component(ImageComponent('images/bg.png', bg))
-
-        scene.add_object(bg)
-
-scene.add_object(obj)
+load_scene('scenes/scene1.json')
 
 clock = pygame.time.Clock()
 while True:
@@ -36,11 +17,15 @@ while True:
     input_manager.update()
 
     for event in input_manager.get_events():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             pygame.quit()
             sys.exit()
+        gui.apply_event(event)
 
-    scene.update()
-    scene.render()
+    scene_manager.current_scene.update()
+    scene_manager.current_scene.render()
+
+    gui.update()
+    gui.render()
 
     pygame.display.flip()

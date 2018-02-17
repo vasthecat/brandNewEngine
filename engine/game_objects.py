@@ -35,6 +35,7 @@ class Camera(GameObject):
         self.surface = pygame.display.get_surface()
 
     def update(self):
+        super().update()
         self.surface.fill((0, 0, 0))
 
     def draw(self, game_objects):
