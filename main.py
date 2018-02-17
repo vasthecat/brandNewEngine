@@ -5,7 +5,7 @@ import sys
 
 from scene_loader import load_scene
 from engine.input_manager import input_manager
-from engine.gui import gui
+from engine.gui import gui, Button, Image, Label
 
 
 scene = load_scene('scenes/scene1.json')
@@ -19,6 +19,7 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+
         gui.apply_event(event)
 
     scene.update()
