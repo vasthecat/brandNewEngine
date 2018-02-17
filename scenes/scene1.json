@@ -89,8 +89,7 @@
                     "shift_x": 0,
                     "shift_y": 0,
                     "rect":  [0,0,64,128],
-                    "text_for_player":"Е чтобы заговорить",
-                    "key": "e"
+                    "text_for_player":"Е чтобы заговорить"
                 },
                 {
                     "name": "ImageComponent",

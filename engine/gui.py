@@ -1,6 +1,10 @@
 import pygame
 
 
+def load_image(path):
+    return pygame.image.load(path).convert_alpha()
+
+
 class Label:
     def __init__(self, rect, text, front_color, name, dict_with_func = None):
         self.rect = pygame.Rect(rect)
@@ -24,21 +28,58 @@ class Label:
                     if event.key == key:
                         func()
 
+
 class Button:
-    def __init__(self, rect, image, name, func):
-        self.image = pygame.image.load(image).convert_alpha()
+    def __init__(self, pos, image_states, name, func):
+        self.normal_image = load_image(image_states['normal'])
+        self.hover_image = load_image(image_states['hovered'])
+        self.click_image = load_image(image_states['clicked'])
+
+        self.pos = pos
+
+        self.image = self.normal_image
 
         self.name = name
-        self.rect = pygame.Rect(rect[0], rect[1], self.image.get_size()[0], self.image.get_size()[1])
         self.func = func
 
+        self.states = {
+            'hovered': False,
+            'clicked': False,
+            'after_click': False
+        }
+
+    def update(self, *args):
+        if self.states['clicked']:
+            self.states['clicked'] = False
+            self.image = self.click_image
+            self.states['after_click'] = True
+        elif self.states['after_click']:
+            if self.states['hovered']:
+                self.image = self.click_image
+            else:
+                self.states['after_click'] = False
+
+        elif self.states['hovered']:
+            self.image = self.hover_image
+
+        else:
+            self.image = self.normal_image
+
     def render(self, surface):
-        surface.blit(self.image, self.rect)
+        surface.blit(self.image, self.image.get_rect(center=self.pos))
 
     def apply_event(self, event):
+        self.states['hovered'] = self.image.get_rect(center=self.pos).collidepoint(*pygame.mouse.get_pos())
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                if self.rect.collidepoint(event.pos):
+                if self.states['hovered']:
+                    self.states['clicked'] = True
+
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1:
+                if self.states['hovered']:
+                    self.states['after_click'] = False
                     self.func()
 
 
