@@ -24,9 +24,21 @@ clouds_controller = CloudsController('Con', [1, 0])
 generate_cloude(7)
 
 def init():
-    gui.add_element(Image((0, 0), 'images/sky1.png', 'sky'))
+    gui.add_element(Image((0, 0), 'images/sky.png', 'sky'))
     gui.add_element(clouds_controller)
-    gui.add_element(Button((640, 280), {'normal': 'images/normal.png', 'hovered': 'images/hovered.png', 'clicked': 'images/clicked.png'}, 'start_game', start_game))
-    gui.add_element(Label((585, 260, 1, 45), "Game", Color('white'), 'fonts/Dot.ttf', 'label_game'))
-    gui.add_element(Button((640, 400), {'normal': 'images/normal.png', 'hovered': 'images/hovered.png', 'clicked': 'images/clicked.png'}, 'exit', my_exit))
-    gui.add_element(Label((595, 380, 1, 45), "Exit", Color('white'), 'fonts/Dot.ttf', 'label_exit'))
+
+    gui.add_element(Button((640, 280), {
+        'normal': 'images/button/normal.png',
+        'hovered': 'images/button/hovered.png',
+        'clicked': 'images/button/clicked.png'
+    }, 'start_game', start_game))
+
+    gui.add_element(Label((640, 280), 38, "Start game", Color('white'), 'fonts/Dot.ttf', 'label_game'))
+
+    gui.add_element(Button((640, 400), {
+        'normal': 'images/button/normal.png',
+        'hovered': 'images/button/hovered.png',
+        'clicked': 'images/button/clicked.png'
+    }, 'exit', my_exit))
+
+    gui.add_element(Label((640, 400), 38, "Exit", Color('white'), 'fonts/Dot.ttf', 'label_exit'))

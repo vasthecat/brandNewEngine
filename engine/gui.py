@@ -8,19 +8,20 @@ def load_image(path):
 
 
 class Label:
-    def __init__(self, rect, text, front_color, path_font,name, dict_with_func = None):
-        self.rect = pygame.Rect(rect)
+    def __init__(self, pos, size, text, front_color, path_font, name, dict_with_func = None):
+        self.pos = pos
+        self.size = size
         self.text = text
         self.font_color = front_color
         self.name = name
 
-        self.font = pygame.font.Font(path_font, self.rect.height - 4)
+        self.font = pygame.font.Font(path_font, size)
 
         self.key_and_func = dict_with_func
 
     def render(self, surface):
         self.rendered_text = self.font.render(self.text, 1, self.font_color)
-        self.rendered_rect = self.rendered_text.get_rect(x=self.rect.x + 2, centery=self.rect.centery)
+        self.rendered_rect = self.rendered_text.get_rect(center=self.pos)
         surface.blit(self.rendered_text, self.rendered_rect)
 
     def apply_event(self, event):
