@@ -6,7 +6,6 @@ import sys
 
 from scene_loader import load_scene
 from engine.input_manager import input_manager
-from engine.gui import gui, Button, Image, Label
 import main_menu_gui
 
 main_menu_gui.init()

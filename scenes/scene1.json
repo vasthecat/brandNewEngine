@@ -2,6 +2,18 @@
     "name": "scene1",
     "objects": [
         {
+            "x": -796, "y": 132,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle",
+                    "animations": {
+                        "idle": {"path": "images/water.png", "size": [4, 4], "repeats": 10}
+                    }
+                }
+            ]
+        },
+        {
             "name": "ground_layer",
             "components": [
                 {
@@ -704,6 +716,84 @@
                 {
                     "name": "ImageFile",
                     "path": "images/upper_layer.png"
+                }
+            ]
+        },
+        {
+            "x": -108, "y": -225,
+            "components": [
+                {
+                    "name": "ParticleSystem",
+                    "path": "images/smoke_particle.png",
+                    "particles_per_frame": 1,
+                    "correction": [0, 2],
+                    "speed": 2,
+                    "life_time": 0.6
+                }
+            ]
+        },
+        {
+            "x": -424, "y": -189,
+            "components": [
+                {
+                    "name": "ParticleSystem",
+                    "path": "images/smoke_particle.png",
+                    "particles_per_frame": 1,
+                    "correction": [0, 2],
+                    "speed": 2,
+                    "life_time": 0.6
+                }
+            ]
+        },
+        {
+            "x": -784, "y": -232,
+            "components": [
+                {
+                    "name": "ParticleSystem",
+                    "path": "images/smoke_particle.png",
+                    "particles_per_frame": 1,
+                    "correction": [0, 2],
+                    "speed": 2,
+                    "life_time": 0.6
+                }
+            ]
+        },
+        {
+            "x": -770, "y": -644,
+            "components": [
+                {
+                    "name": "ParticleSystem",
+                    "path": "images/smoke_particle.png",
+                    "particles_per_frame": 1,
+                    "correction": [0, 2],
+                    "speed": 2,
+                    "life_time": 0.6
+                }
+            ]
+        },
+        {
+            "x": -472, "y": -672,
+            "components": [
+                {
+                    "name": "ParticleSystem",
+                    "path": "images/smoke_particle.png",
+                    "particles_per_frame": 1,
+                    "correction": [0, 2],
+                    "speed": 2,
+                    "life_time": 0.6
+                }
+            ]
+        },
+        {
+            "x": -144, "y": -700,
+            "components": [
+                {
+                    "name": "ParticleSystem",
+                    "path": "images/smoke_particle.png",
+                    "particles_per_frame": 1,
+                    "correction": [0, 2],
+                    "speed": 2,
+                    "life_time": 0.6
                 }
             ]
         }
