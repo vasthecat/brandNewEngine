@@ -6,15 +6,18 @@ import sys
 
 from scene_loader import load_scene
 from engine.input_manager import input_manager
-from engine.gui import gui, Button, Image, Label
+from engine.gui import gui, Button
 
 
 load_scene('scenes/scene1.json')
 
-def a():
-    print('Press button')
-
-gui.add_element(Button((200, 50), {'normal': 'images/normal.png', 'hovered':'images/hovered.png', 'clicked': 'images/clicked.png'}, 'but1', a))
+gui.add_element(
+    Button((200, 50), {
+        'normal': 'images/normal.png',
+        'hovered':'images/hovered.png',
+        'clicked': 'images/clicked.png'
+    }, 'but1', lambda: print('Pressed button'))
+)
 
 clock = pygame.time.Clock()
 while True:

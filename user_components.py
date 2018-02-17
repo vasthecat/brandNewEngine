@@ -1,12 +1,14 @@
 from engine.input_manager import input_manager
 from engine.scene_manager import scene_manager
 from engine.initialize_engine import width, height
-from engine.base_components import Component, ImageComponent
+from engine.base_components import Component, ImageComponent, ImageFile
 from engine.game_objects import GameObject
 
 from pygame.math import Vector2
 import pygame
 import itertools as it
+from time import time
+import random
 
 from engine.gui import gui, Label
 
@@ -61,12 +63,15 @@ class AnimationContoller(ImageComponent):
     def serialize(self):
         return {}  # TODO
 
+
 def test_func_press_e():
     #It is test function
     print('Press "e"')
 
+
 def test_func_press_spase():
     print('Press " "')
+
 
 class PlayerController(Component):
     def __init__(self, speed, game_object):
@@ -81,6 +86,7 @@ class PlayerController(Component):
         vert = input_manager.get_axis('Vertical')
 
         x, y = self.game_object.transform.coord
+        print(x, y)
 
         cam = scene_manager.current_scene.current_camera
         old_cam_pos = cam.transform.coord
@@ -235,3 +241,47 @@ class TriggerCollider(Collider):
             'text_for_player': self.text_for_player
         })
         return d
+
+
+class ParticleSystem(Component):
+    def __init__(self, image_path, particles_per_frame, correction, speed, life_time, game_object):
+        self.path = image_path
+        self.particles_per_frame = particles_per_frame
+        self.speed = speed
+        self.life_time = life_time
+        self.correction = Vector2(correction) + Vector2(-0.5, -0.5)
+        super().__init__(game_object)
+
+    def update(self, *args):
+        for _ in range(self.particles_per_frame):
+            go = GameObject(*self.game_object.transform.coord)
+            go.add_component(ImageFile(self.path, go))
+            go.add_component(Particle(
+                (self.correction + Vector2(random.random(), random.random())).normalize(),
+                self.speed, self.life_time, go
+            ))
+            scene_manager.current_scene.add_object(go)
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return ParticleSystem(
+            component_dict['path'], component_dict['particles_per_frame'], component_dict['correction'],
+            component_dict['speed'], component_dict['life_time'], obj
+        )
+
+
+class Particle(Component):
+    def __init__(self, direction, speed, life_time, game_object):
+        super().__init__(game_object)
+        self.life_time = life_time
+        self.direction = direction
+        self.speed = speed
+        self._start = time()
+
+    def update(self, *args):
+        if time() - self._start >= self.life_time:
+            # POSSIBLE MEMORY LEAK ????????
+            scene_manager.current_scene.remove_object(self.game_object)
+        else:
+            move = self.direction * self.speed
+            self.game_object.transform.move(move.x, move.y)
