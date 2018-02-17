@@ -1,6 +1,7 @@
 from engine.scene_manager import scene_manager
 from engine.game_objects import GameObject
-from user_components import ImageComponent, PhysicsCollider, TriggerCollider, PlayerController
+from engine.base_components import ImageFile
+from user_components import PhysicsCollider, TriggerCollider, PlayerController, AnimationContoller
 import json
 
 
@@ -27,8 +28,9 @@ def load_scene(path):
 
 
 component_loaders = {
-    'ImageComponent': ImageComponent.deserialize,
+    'ImageFile': ImageFile.deserialize,
     'PlayerController': PlayerController.deserialize,
     'PhysicsCollider': PhysicsCollider.deserialize,
     'TriggerCollider': TriggerCollider.deserialize,
+    'AnimationController': AnimationContoller.deserialize
 }

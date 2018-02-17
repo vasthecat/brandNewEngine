@@ -2,143 +2,687 @@
     "name": "scene1",
     "objects": [
         {
-            "name": "background",
+            "name": "ground_layer",
             "components": [
                 {
-                    "name": "ImageComponent",
+                    "name": "ImageFile",
                     "path": "images/ground_layer.png"
                 }
             ]
         },
 
         {
-            "name": "house_win_closed_1",
-            "x": -800, "y": 890,
+            "x": 164, "y": -111,
             "components": [
-                {
-                    "name": "ImageComponent",
-                    "path": "images/houses/win/closed.png"
-                },
                 {
                     "name": "PhysicsCollider",
                     "shift_x": 0,
                     "shift_y": 0,
-                    "rect": []
-                }
-            ]
-        },
-
-        {
-            "name": "house_win_opened",
-            "x": -477, "y": 890,
-            "components": [
-                {
-                    "name": "ImageComponent",
-                    "path": "images/houses/win/opened.png"
-                },
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": []
-                }
-            ]
-        },
-
-        {
-            "name": "house_win_closed_2",
-            "x": -220, "y": 890,
-            "components": [
-                {
-                    "name": "ImageComponent",
-                    "path": "images/houses/win/closed.png"
-                },
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": []
+                    "rect": [0, 0, 189, 90]
                 }
             ]
         },
         {
-            "name": "house_win_closed_3",
-            "x": 100, "y": 890,
+            "x": 637, "y": 119,
             "components": [
-                {
-                    "name": "ImageComponent",
-                    "path": "images/houses/win/closed.png"
-                },
                 {
                     "name": "PhysicsCollider",
                     "shift_x": 0,
                     "shift_y": 0,
-                    "rect": []
-                }
-            ]
-        },
-
-        {
-            "name": "house_win_back_1",
-            "x": -744, "y": 500,
-            "components": [
-                {
-                    "name": "ImageComponent",
-                    "path": "images/houses/win/back.png"
-                },
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": []
+                    "rect": [0, 0, 189, 90]
                 }
             ]
         },
         {
-            "name": "house_win_back_2",
-            "x": -420, "y": 500,
+            "x": 860, "y": 24,
             "components": [
-                {
-                    "name": "ImageComponent",
-                    "path": "images/houses/win/back.png"
-                },
                 {
                     "name": "PhysicsCollider",
                     "shift_x": 0,
                     "shift_y": 0,
-                    "rect": []
+                    "rect": [0, 0, 189, 90]
                 }
             ]
         },
         {
-            "name": "house_win_back_3",
-            "x": 113, "y": 517,
+            "x": 837, "y": -419,
             "components": [
-                {
-                    "name": "ImageComponent",
-                    "path": "images/houses/win/back.png"
-                },
                 {
                     "name": "PhysicsCollider",
                     "shift_x": 0,
                     "shift_y": 0,
-                    "rect": []
+                    "rect": [0, 0, 189, 90]
                 }
             ]
         },
-
+        {
+            "x": 742, "y": -454,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 80, 55]
+                }
+            ]
+        },
+        {
+            "x": 905, "y": -495,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 230, 100]
+                }
+            ]
+        },
+        {
+            "x": 930, "y": -580,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 230, 100]
+                }
+            ]
+        },
+        {
+            "x": 857, "y": -707,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 189, 90]
+                }
+            ]
+        },
+        {
+            "x": 360, "y": -656,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 189, 90]
+                }
+            ]
+        },
+        {
+            "x": 107, "y": -754,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 189, 90]
+                }
+            ]
+        },
+        {
+            "x": -187, "y": -782,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 189, 90]
+                }
+            ]
+        },
+        {
+            "x": -521, "y": -759,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 189, 90]
+                }
+            ]
+        },
+        {
+            "x": -416, "y": -673,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 80, 55]
+                }
+            ]
+        },
+        {
+            "x": -809, "y": -731,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 189, 90]
+                }
+            ]
+        },
+        {
+            "x": -832, "y": -329,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 189, 90]
+                }
+            ]
+        },
+        {
+            "x": -470, "y": -284,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 189, 90]
+                }
+            ]
+        },
+        {
+            "x": -151, "y": -321,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 189, 90]
+                }
+            ]
+        },
+        {
+            "x": 776, "y": 654,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 660, 670]
+                }
+            ]
+        },
+        {
+            "x": 724, "y": -77,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 96, 60]
+                }
+            ]
+        },
+        {
+            "x": -423, "y": 453,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 171, 63]
+                }
+            ]
+        },
+        {
+            "x": -743, "y": 450,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 171, 63]
+                }
+            ]
+        },
+        {
+            "x": -800, "y": 845,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 171, 63]
+                }
+            ]
+        },
+        {
+            "x": -480, "y": 850,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 171, 63]
+                }
+            ]
+        },
+        {
+            "x": -218, "y": 850,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 171, 63]
+                }
+            ]
+        },
+        {
+            "x": 100, "y": 850,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 171, 63]
+                }
+            ]
+        },
+        {
+            "x": 210, "y": 820,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 50, 50]
+                }
+            ]
+        },
+        {
+            "x": 210, "y": 770,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 60, 50]
+                }
+            ]
+        },
+        {
+            "x": 210, "y": 710,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 60, 60]
+                }
+            ]
+        },
+        {
+            "x": 190, "y": 660,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 60, 60]
+                }
+            ]
+        },
+        {
+            "x": 190, "y": 593,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 60, 70]
+                }
+            ]
+        },
+        {
+            "x": 110, "y": 475,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 171, 63]
+                }
+            ]
+        },
+        {
+            "x": -948, "y": 560,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 50, 50]
+                }
+            ]
+        },
+        {
+            "x": -535, "y": 390,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 50, 50]
+                }
+            ]
+        },
+        {
+            "x": -230, "y": 260,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 50, 50]
+                }
+            ]
+        },
+        {
+            "x": -970, "y": -350,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 50, 50]
+                }
+            ]
+        },
+        {
+            "x": 310, "y": -180,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 50, 50]
+                }
+            ]
+        },
+        {
+            "x": 1008, "y": -63,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 50, 50]
+                }
+            ]
+        },
+        {
+            "x": 203, "y": -923,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 50, 50]
+                }
+            ]
+        },
+        {
+            "x": -653, "y": -872,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 50, 50]
+                }
+            ]
+        },
+        {
+            "x": -304, "y": -390,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 135, 50]
+                }
+            ]
+        },
+        {
+            "x": -308, "y": 803,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 60, 60]
+                }
+            ]
+        },
+        {
+            "x": 987, "y": -356,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 60, 60]
+                }
+            ]
+        },
+        {
+            "x": 473, "y": 300,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 100, 60]
+                }
+            ]
+        },
+        {
+            "x": 502, "y": -864,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 241, 60]
+                }
+            ]
+        },
+        {
+            "x": 724, "y": -877,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 80, 60]
+                }
+            ]
+        },
+        {
+            "x": 884, "y": -914,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 80, 45]
+                }
+            ]
+        },
+        {
+            "x": -810, "y": -817,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 189, 180]
+                }
+            ]
+        },
+        {
+            "x": -850, "y": 128,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 320, 420]
+                }
+            ]
+        },
+        {
+            "x": -980, "y": -54,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 80, 120]
+                }
+            ]
+        },
+        {
+            "x": -768, "y": -68,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 260, 120]
+                }
+            ]
+        },
+        {
+            "x": -982, "y": 342,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 60, 50]
+                }
+            ]
+        },
+        {
+            "x": -660, "y": 96,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 60, 230]
+                }
+            ]
+        },
+        {
+            "x": -590, "y": 116,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 75, 420]
+                }
+            ]
+        },
+        {
+            "x": -470, "y": 100,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 60, 300]
+                }
+            ]
+        },
+        {
+            "x": -525, "y": 110,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 60, 400]
+                }
+            ]
+        },
+        {
+            "x": -88, "y": -80,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 40, 60]
+                }
+            ]
+        },
+        {
+            "x": -28, "y": -68,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 30, 45]
+                }
+            ]
+        },
+        {
+            "x": -198, "y": -80,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 40, 60]
+                }
+            ]
+        },
+        {
+            "x": -34, "y": 8,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 30, 30]
+                }
+            ]
+        },
         {
             "name": "player",
             "components": [
                 {
-                    "name": "ImageComponent",
-                    "path": "images/player.png"
+                    "name": "AnimationController",
+                    "start_animation": "idle_down",
+                    "animations": {
+                        "up": {"path": "images/player/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/player/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/player/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/player/run_left.png", "size": [1, 4], "repeats": 10},
+
+                        "idle_up": {"path": "images/player/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/player/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/player/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/player/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
                 },
                 {
                     "name": "PhysicsCollider",
                     "shift_x": 0,
-                    "shift_y": -34,
-                    "rect": [0, 0, 34, 10]
+                    "shift_y": -24,
+                    "rect": [0, 0, 30, 15]
                 },
                 {
                     "name": "TriggerCollider",
@@ -153,12 +697,11 @@
                 }
             ]
         },
-
         {
-            "name": "roofs",
+            "name": "upper_layer",
             "components": [
                 {
-                    "name": "ImageComponent",
+                    "name": "ImageFile",
                     "path": "images/upper_layer.png"
                 }
             ]
