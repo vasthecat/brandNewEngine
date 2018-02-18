@@ -9,6 +9,7 @@ import pygame
 import itertools as it
 from time import time
 import random
+from math import copysign
 
 from engine.gui import gui, Label
 
@@ -64,15 +65,6 @@ class AnimationContoller(ImageComponent):
         return {}  # TODO
 
 
-def test_func_press_e():
-    #It is test function
-    print('Press "e"')
-
-
-def test_func_press_spase():
-    print('Press " "')
-
-
 class PlayerController(Component):
     def __init__(self, speed, game_object):
         super().__init__(game_object)
@@ -80,45 +72,60 @@ class PlayerController(Component):
         self.gui_obj = {}
         self._prev_move = Vector2()
         self._direction = 'down'
+        self.set_camera_pos(Vector2())
 
-    def update(self, *args):
-        hor = input_manager.get_axis('Horizontal')
-        vert = input_manager.get_axis('Vertical')
-
-        x, y = self.game_object.transform.coord
-        print(x, y)
-
-        cam = scene_manager.current_scene.current_camera
-        old_cam_pos = cam.transform.coord
-
-        if abs(x + hor * self.speed) < 1024 - width // 2:
-            cam.transform.move_to(x + hor * self.speed, cam.transform.y)
-        if abs(y + vert * self.speed) < 1024 - height // 2:
-            cam.transform.move_to(cam.transform.x, y + vert * self.speed)
-
-        move = Vector2(hor * self.speed, vert * self.speed)
-        self.game_object.transform.move(move.x, move.y)
-
+    def change_animation(self, move):
         animator = self.game_object.get_component(AnimationContoller)
         if animator is not None:
-            if self._prev_move.y == 0 and move.y > 0:
-                animator.set_animation('up')
-                self._direction = 'up'
-            elif self._prev_move.y == 0 and move.y < 0:
-                animator.set_animation('down')
-                self._direction = 'down'
-
-            if self._prev_move.x == 0 and move.x > 0:
-                animator.set_animation('right')
+            if move.x > 0:
+                if self._prev_move.x == 0 or self._direction != 'right':
+                    animator.set_animation('right')
                 self._direction = 'right'
-            elif self._prev_move.x == 0 and move.x < 0:
-                animator.set_animation('left')
+            elif move.x < 0:
+                if self._prev_move.x == 0 or self._direction != 'left':
+                    animator.set_animation('left')
                 self._direction = 'left'
-
-            if move.x == move.y == 0:
+            elif move.y > 0:
+                if self._prev_move.y == 0 or self._direction != 'up':
+                    animator.set_animation('up')
+                self._direction = 'up'
+            elif move.y < 0:
+                if self._prev_move.y == 0 or self._direction != 'down':
+                    animator.set_animation('down')
+                self._direction = 'down'
+            elif move.x == move.y == 0:
                 animator.set_animation('idle_' + self._direction)
 
-        self._prev_move = move
+    def play_sound(self, move):
+        if self._prev_move.length() == 0 and move.length() != 0:
+            pygame.mixer.Sound('sounds/steps.ogg').play(-1)
+        elif move.length() == 0:
+            pygame.mixer.Channel(1).stop()
+
+    def set_camera_pos(self, player_move):
+        cam = scene_manager.current_scene.current_camera
+        x, y = self.game_object.transform.coord
+
+        if abs(x + player_move.x) < 1024 - width // 2:
+            cam.transform.move_to(x + player_move.x, cam.transform.y)
+        else:
+            cam.transform.move_to(
+                copysign(1024 - width // 2, x + player_move.x), cam.transform.y
+            )
+
+        if abs(y + player_move.y) < 1024 - height // 2:
+            cam.transform.move_to(cam.transform.x, y + player_move.y)
+        else:
+            cam.transform.move_to(
+                cam.transform.x, copysign(1024 - height // 2, y + player_move.y)
+            )
+
+    def update(self, *args):
+        move = Vector2(
+            input_manager.get_axis('Horizontal') * self.speed,
+            input_manager.get_axis('Vertical') * self.speed
+        )
+        self.game_object.transform.move(move.x, move.y)
 
         for obj in scene_manager.current_scene.objects:
             phys_collider = self.game_object.get_component(PhysicsCollider)
@@ -128,25 +135,19 @@ class PlayerController(Component):
                 phys_collider.update()
                 if obj != self.game_object and obj.has_component(PhysicsCollider):
                     if phys_collider.detect_collision(obj.get_component(PhysicsCollider)):
-                        scene_manager.current_scene.current_camera.transform.move_to(*old_cam_pos)
                         self.game_object.transform.move(-move.x, -move.y)
-                        self._prev_move = Vector2()
+                        move = Vector2()
+
             if trigger_collider is not None:
                 trigger_collider.update()
                 if obj != self.game_object and obj.has_component(TriggerCollider):
                     if trigger_collider.detect_collision(obj.get_component(TriggerCollider)):
-                        text = obj.get_component(TriggerCollider).text_for_player
-                        x = 1280 / 2 - len(text) * len(text) / 2 - 100
-                        _ = Label((x, 500, 10, 100), text, pygame.Color('black'), 'fonts/8875.otf',obj.get_component(TriggerCollider).trigger_name,
-                                  {pygame.K_e: test_func_press_e,
-                                   pygame.K_SPACE: test_func_press_spase})
-                        gui.add_element(_)
-                        self.gui_obj[obj.get_component(TriggerCollider).trigger_name] = _
-                    else:
-                        _ = obj.get_component(TriggerCollider).trigger_name
-                        gui.del_element(_)
-                        if _ in self.gui_obj:
-                            del self.gui_obj[_]
+                        pass
+
+        self.set_camera_pos(move)
+        self.change_animation(move)
+        self.play_sound(move)
+        self._prev_move = move
 
     @staticmethod
     def deserialize(component_dict, obj):
@@ -285,3 +286,16 @@ class Particle(Component):
         else:
             move = self.direction * self.speed
             self.game_object.transform.move(move.x, move.y)
+
+
+class MusicController(Component):
+    def __init__(self, music_paths, game_object):
+        super().__init__(game_object)
+        for path, volume in music_paths:
+            snd = pygame.mixer.Sound(path)
+            snd.set_volume(volume / 100)
+            snd.play(-1)
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return MusicController(component_dict['paths'], obj)

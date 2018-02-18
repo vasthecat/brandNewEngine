@@ -1,0 +1,15 @@
+{
+    "name": "main_menu",
+    "objects": [
+        {
+            "components": [
+                {
+                    "name": "MusicController",
+                    "paths": [
+                        ["sounds/main_menu_music.wav", 25]
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -674,10 +674,11 @@
         },
         {
             "name": "player",
+            "x": -960, "y": 712,
             "components": [
                 {
                     "name": "AnimationController",
-                    "start_animation": "idle_down",
+                    "start_animation": "idle_right",
                     "animations": {
                         "up": {"path": "images/player/run_up.png", "size": [1, 4], "repeats": 10},
                         "down": {"path": "images/player/run_down.png", "size": [1, 4], "repeats": 10},
@@ -794,6 +795,16 @@
                     "correction": [0, 2],
                     "speed": 2,
                     "life_time": 0.6
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "name": "MusicController",
+                    "paths": [
+                        ["sounds/village_background_music.ogg", 100]
+                    ]
                 }
             ]
         }
