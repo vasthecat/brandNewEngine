@@ -6,7 +6,7 @@ from engine.initialize_engine import width, height
 def init():
     global names_elements
     names_elements = []
-    gui.add_element(Image((width//2, height//2), load_image("images/game_menu_gui/menu1.png"), 'background'))
+    gui.add_element(Image((width//2, height//2), load_image("images/game_menu_gui/menu.png"), 'background'))
     names_elements.append('background')
 
     gui.add_element(Button((width//2, height//2-50),{
