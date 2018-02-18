@@ -65,15 +65,6 @@ class AnimationContoller(ImageComponent):
         return {}  # TODO
 
 
-def test_func_press_e():
-    #It is test function
-    print('Press "e"')
-
-
-def test_func_press_spase():
-    print('Press " "')
-
-
 class PlayerController(Component):
     def __init__(self, speed, game_object):
         super().__init__(game_object)
@@ -107,7 +98,7 @@ class PlayerController(Component):
 
     def play_sound(self, move):
         if self._prev_move.length() == 0 and move.length() != 0:
-            pygame.mixer.Channel(1).play(pygame.mixer.Sound('sounds/steps.ogg'), -1)
+            pygame.mixer.Sound('sounds/steps.ogg').play(-1)
         elif move.length() == 0:
             pygame.mixer.Channel(1).stop()
 
@@ -130,9 +121,6 @@ class PlayerController(Component):
             )
 
     def update(self, *args):
-        #x, y = self.game_object.transform.coord
-        #print(x, y)
-
         move = Vector2(
             input_manager.get_axis('Horizontal') * self.speed,
             input_manager.get_axis('Vertical') * self.speed
@@ -154,18 +142,7 @@ class PlayerController(Component):
                 trigger_collider.update()
                 if obj != self.game_object and obj.has_component(TriggerCollider):
                     if trigger_collider.detect_collision(obj.get_component(TriggerCollider)):
-                        text = obj.get_component(TriggerCollider).text_for_player
-                        x = 1280 / 2 - len(text) * len(text) / 2 - 100
-                        _ = Label((x, 500, 10, 100), text, pygame.Color('black'), 'fonts/8875.otf',obj.get_component(TriggerCollider).trigger_name,
-                                  {pygame.K_e: test_func_press_e,
-                                   pygame.K_SPACE: test_func_press_spase})
-                        gui.add_element(_)
-                        self.gui_obj[obj.get_component(TriggerCollider).trigger_name] = _
-                    else:
-                        _ = obj.get_component(TriggerCollider).trigger_name
-                        gui.del_element(_)
-                        if _ in self.gui_obj:
-                            del self.gui_obj[_]
+                        pass
 
         self.set_camera_pos(move)
         self.change_animation(move)
@@ -309,3 +286,16 @@ class Particle(Component):
         else:
             move = self.direction * self.speed
             self.game_object.transform.move(move.x, move.y)
+
+
+class MusicController(Component):
+    def __init__(self, music_paths, game_object):
+        super().__init__(game_object)
+        for path, volume in music_paths:
+            snd = pygame.mixer.Sound(path)
+            snd.set_volume(volume / 100)
+            snd.play(-1)
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return MusicController(component_dict['paths'], obj)
