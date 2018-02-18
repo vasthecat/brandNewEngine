@@ -29,8 +29,6 @@ class Button:
         self.hover_image = load_image(image_states['hovered'])
         self.click_image = load_image(image_states['clicked'])
 
-        self.pressed = False
-
         self.pos = pos
 
         self.image = self.normal_image
@@ -77,7 +75,6 @@ class Button:
                 if self.states['hovered']:
                     self.states['after_click'] = False
                     self.func()
-                    self.pressed = not self.pressed
 
 
 class Image:

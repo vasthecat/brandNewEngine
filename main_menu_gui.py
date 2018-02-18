@@ -3,7 +3,7 @@ from engine.initialize_engine import width, height
 from pygame import Color, quit
 import pygame
 from sys import exit
-import game_gui
+from game_gui import init as init_game_gui
 
 from scene_loader import load_scene
 
@@ -40,7 +40,7 @@ class CloudsController:
 def start_game():
     load_scene('scenes/scene1.json')
     gui.clear()
-    game_gui.init()
+    init_game_gui()
 
     gui.add_element(Label((50, 25), 50, '0', pygame.Color('red'), 'fonts/Dot.ttf', 'fps_label'))
 
