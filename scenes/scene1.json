@@ -674,10 +674,11 @@
         },
         {
             "name": "player",
+            "x": -960, "y": 712,
             "components": [
                 {
                     "name": "AnimationController",
-                    "start_animation": "idle_down",
+                    "start_animation": "idle_right",
                     "animations": {
                         "up": {"path": "images/player/run_up.png", "size": [1, 4], "repeats": 10},
                         "down": {"path": "images/player/run_down.png", "size": [1, 4], "repeats": 10},
