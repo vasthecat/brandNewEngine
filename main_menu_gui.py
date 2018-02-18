@@ -1,19 +1,48 @@
-from engine.gui import gui, load_image, Button, Label, Image, CloudsController
+from engine.gui import gui, load_image, Button, Label, Image
 from engine.initialize_engine import width, height
 from pygame import Color, quit
 import pygame
 from sys import exit
+import game_gui
 
 from scene_loader import load_scene
 
 from random import randint
 
 
+class CloudsController:
+    def __init__(self, name, change_pos):
+        self.name = name
+        self.change_pos = change_pos
+        self.elements = []
+
+    def add_element(self, element):
+        if randint(0, 1):
+            self.elements.append({'element': element, 'step': (-self.change_pos[0], self.change_pos[1])})
+            element.const_rect.x = width
+        else:
+            self.elements.append({'element': element, 'step': (self.change_pos[0], self.change_pos[1])})
+
+    def update(self):
+        for element in self.elements:
+            element['element'].move(*element['step'])
+            if element['element'].get_pos()[0] > width or element['element'].get_pos()[1] > height \
+                    or element['element'].get_pos()[0] + element['element'].size[0] < 0 \
+                    or element['element'].get_pos()[1] + element['element'].size[1] < 0:
+                element['element'].set_const_pos()
+
+    def render(self, surface):
+        for element in self.elements:
+            surface.blit(element['element'].image, element['element'].rect)
+
+
+
 def start_game():
     load_scene('scenes/scene1.json')
     gui.clear()
-    gui.add_element(Label((50, 25), 50, '0', pygame.Color('red'), 'fonts/Dot.ttf', 'fps_label'))
+    game_gui.init()
 
+    gui.add_element(Label((50, 25), 50, '0', pygame.Color('red'), 'fonts/Dot.ttf', 'fps_label'))
 
 def my_exit():
     quit()
@@ -34,13 +63,13 @@ def init():
     clouds_controller = CloudsController('Con', [1, 0])
     generate_clouds(15, clouds_controller)
 
-    gui.add_element(Image((0, 0), pygame.transform.scale(
+    gui.add_element(Image((width //2, height // 2), pygame.transform.scale(
         load_image('images/sky.png'), (width, height)
     ), 'sky'))
     gui.add_element(clouds_controller)
 
-    gui.add_element(Image((width // 2 - 245, -75), load_image('images/title_bg.png'), 'title'))
-    gui.add_element(Label((width // 2, 159), 53, 'Untitled game', pygame.Color('white'), 'fonts/Dot.ttf', 'title_textф'))
+    gui.add_element(Image((width // 2, 75), load_image('images/title_bg.png'), 'title'))
+    gui.add_element(Label((width // 2, 159), 53, 'Untitled game', pygame.Color('white'), 'fonts/Dot.ttf', 'title_text'))
 
     gui.add_element(Button((width // 2, height // 2), {
         'normal': 'images/button/normal.png',
