@@ -1,26 +1,43 @@
-from engine.input_manager import input_manager
-from engine.scene_manager import scene_manager
-from engine.initialize_engine import width, height
-from engine.base_components import Component, ImageComponent, ImageFile
-from engine.game_objects import GameObject
-
-from pygame.math import Vector2
-import pygame
 import itertools as it
 from time import time
 import random
 from math import copysign
 
+
+from pygame.math import Vector2
+import pygame
+
+
+from engine.input_manager import input_manager
+from engine.scene_manager import scene_manager
+from engine.initialize_engine import width, height
+from engine.base_components import Component, ImageComponent, ImageFile
+from engine.game_objects import GameObject
 from engine.gui import gui, Label, Button
 
+class SceneReplacement:
+    def __init__(self):
+        self.coords = {}
 
-def load_house():
-    from scene_loader import load_scene
-    gui.del_element('house')
-    gui.del_element('label_house')
-    load_scene('scenes/house.json')
-    pygame.mixer.stop()
+    def load_house(self, coord):
+        from scene_loader import load_scene
+        gui.del_element('house')
+        gui.del_element('label_house')
+        load_scene('scenes/house.json')
+        pygame.mixer.stop()
+        self.coords['coord_in_streed'] = coord
 
+    def load_streed(self, obj):
+        from scene_loader import load_scene
+        gui.del_element('enter_to_streed')
+        gui.del_element('label_enter_to_streed')
+        load_scene('scenes/scene1.json')
+        scene_manager.current_scene.find_objects('player')[0].transform.move_to(*self.coords['coord_in_streed'])
+        #obj.game_object.transform.move_to(*self.coords['coord_in_streed'])
+        pygame.mixer.stop()
+
+
+scene_replacement = SceneReplacement()
 
 class AnimationContoller(ImageComponent):
     def __init__(self, animations, start_animation, game_object):
@@ -82,6 +99,8 @@ class PlayerController(Component):
         self._direction = 'down'
         self.set_camera_pos(Vector2())
 
+        self._steps_sound = pygame.mixer.Sound('sounds/steps.ogg')
+
     def change_animation(self, move):
         animator = self.game_object.get_component(AnimationContoller)
         if animator is not None:
@@ -106,9 +125,9 @@ class PlayerController(Component):
 
     def play_sound(self, move):
         if self._prev_move.length() == 0 and move.length() != 0:
-            pygame.mixer.Sound('sounds/steps.ogg').play(-1)
+            self._steps_sound.play(-1)
         elif move.length() == 0:
-            pygame.mixer.Channel(1).stop()
+            self._steps_sound.stop()
 
     def set_camera_pos(self, player_move):
         cam = scene_manager.current_scene.current_camera
@@ -129,7 +148,8 @@ class PlayerController(Component):
             )
 
     def update(self, *args):
-        print(self.game_object.transform.coord)
+        #print(self.game_object.transform.coord)
+
         move = Vector2(
             input_manager.get_axis('Horizontal') * self.speed,
             input_manager.get_axis('Vertical') * self.speed
@@ -152,15 +172,34 @@ class PlayerController(Component):
                 if obj != self.game_object and obj.has_component(TriggerCollider):
                     if trigger_collider.detect_collision(obj.get_component(TriggerCollider)):
                         if obj.get_component(TriggerCollider).trigger_name == 'House':
-                            gui.add_element(Button((width//2, height-100),  {
+                            _ = Button((width//2, height-100), {
                                         'normal': 'images/button/normal.png',
                                         'hovered': 'images/button/hovered.png',
                                         'clicked': 'images/button/clicked.png'
-                                    }, 'house', load_house))
-                            gui.add_element(Label((width//2, height-100), 30, "Enter in house", pygame.Color('white'), 'fonts/Dot.ttf', 'label_house'))
+                                    }, 'house', lambda: scene_replacement.load_house(self.game_object.transform.coord))
+
+                            gui.add_element(_)
+                            _1= Label((width//2, height-100), 30, "Enter in house", pygame.Color('white'), 'fonts/Dot.ttf', 'label_house')
+                            gui.add_element(_1)
+                            self.gui_obj[obj.get_component(TriggerCollider)] = [_, _1]
+                        elif obj.get_component(TriggerCollider).trigger_name == 'enter_in_streed':
+                            _ = Button((width // 2, height - 100), {
+                                'normal': 'images/button/normal.png',
+                                'hovered': 'images/button/hovered.png',
+                                'clicked': 'images/button/clicked.png'
+                            }, 'enter_to_streed', lambda: scene_replacement.load_streed(self))
+                            gui.add_element(_)
+                            _1 = Label((width // 2, height - 100), 30, "Come to streed", pygame.Color('white'),
+                                       'fonts/Dot.ttf', 'label_enter_to_streed')
+
+
+                            gui.add_element(_1)
+                            self.gui_obj[obj.get_component(TriggerCollider)] = [_, _1]
                     else:
-                        gui.del_element('house')
-                        gui.del_element('label_house')
+                        if obj.get_component(TriggerCollider) in self.gui_obj:
+                            for i in self.gui_obj[obj.get_component(TriggerCollider)]:
+                                gui.del_element(i.name)
+                            del self.gui_obj[obj.get_component(TriggerCollider)]
 
 
         self.set_camera_pos(move)
@@ -214,6 +253,21 @@ class PhysicsCollider(Collider):
 
         super().__init__(shift_x, shift_y, rect, game_object)
 
+        self.go = GameObject(*game_object.transform.coord)
+        surface = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
+        surface.fill(pygame.Color(0, 255, 0, 120))
+        i = ImageComponent('images/player.png', self.go)
+        i.image = surface
+        i._original = surface
+        scene_manager.current_scene.add_object(self.go)
+        self.go.add_component(i)
+
+    def update(self, *args):
+        super().update()
+        x = self.game_object.transform.x + self.shift_x
+        y = self.game_object.transform.y + self.shift_y
+        self.go.transform.move_to(x, y)
+
 
 
     @staticmethod
@@ -234,20 +288,21 @@ class TriggerCollider(Collider):
         self.text_for_player = text_for_player
         self.trigger_name = trigger_name
         super().__init__(shift_x, shift_y, rect, game_object)
-        self.go = GameObject(*game_object.transform.coord)
-        surface = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
-        surface.fill(pygame.Color(255, 0, 0, 120))
-        i = ImageComponent('images/player.png', self.go)
-        i.image = surface
-        i._original = surface
-        scene_manager.current_scene.add_object(self.go)
-        self.go.add_component(i)
 
-    def update(self, *args):
-        super().update()
-        x = self.game_object.transform.x + self.shift_x
-        y = self.game_object.transform.y + self.shift_y
-        self.go.transform.move_to(x, y)
+    #    self.go = GameObject(*game_object.transform.coord)
+    #    surface = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
+    #    surface.fill(pygame.Color(255, 0, 0, 120))
+    #    i = ImageComponent('images/player.png', self.go)
+    #    i.image = surface
+    #    i._original = surface
+    #    scene_manager.current_scene.add_object(self.go)
+    #    self.go.add_component(i)
+#
+    #def update(self, *args):
+    #    super().update()
+    #    x = self.game_object.transform.x + self.shift_x
+    #    y = self.game_object.transform.y + self.shift_y
+    #    self.go.transform.move_to(x, y)
 
     @staticmethod
     def deserialize(component_dict, obj):

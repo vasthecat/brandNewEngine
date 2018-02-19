@@ -818,6 +818,30 @@
                     "rect":  [0, 0,64,32]
                 }
             ]
+        },
+        {
+            "x": -506, "y": -335,
+            "components":[
+                {
+                    "name": "TriggerCollider",
+                    "trigger_name": "House",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect":  [0, 0,64,32]
+                }
+            ]
+        },
+        {
+            "x": 862, "y": -35,
+            "components":[
+                {
+                    "name": "TriggerCollider",
+                    "trigger_name": "House",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect":  [0, 0,64,32]
+                }
+            ]
         }
     ]
 }
