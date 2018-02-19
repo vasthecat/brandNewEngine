@@ -24,17 +24,14 @@ class SceneReplacement:
         gui.del_element('house')
         gui.del_element('label_house')
         load_scene('scenes/house.json')
-        pygame.mixer.stop()
         self.coords['coord_in_streed'] = coord
 
-    def load_streed(self, obj):
+    def load_street(self, obj):
         from scene_loader import load_scene
-        gui.del_element('enter_to_streed')
-        gui.del_element('label_enter_to_streed')
+        gui.del_element('enter_to_street')
+        gui.del_element('label_enter_to_street')
         load_scene('scenes/scene1.json')
-        scene_manager.current_scene.find_objects('player')[0].transform.move_to(*self.coords['coord_in_streed'])
-        #obj.game_object.transform.move_to(*self.coords['coord_in_streed'])
-        pygame.mixer.stop()
+        scene_manager.current_scene.find_objects(obj.game_object.name)[0].transform.move_to(*self.coords['coord_in_streed'])
 
 
 scene_replacement = SceneReplacement()
@@ -91,6 +88,7 @@ class AnimationContoller(ImageComponent):
 
 
 class PlayerController(Component):
+
     def __init__(self, speed, game_object):
         super().__init__(game_object)
         self.speed = speed
@@ -187,10 +185,10 @@ class PlayerController(Component):
                                 'normal': 'images/button/normal.png',
                                 'hovered': 'images/button/hovered.png',
                                 'clicked': 'images/button/clicked.png'
-                            }, 'enter_to_streed', lambda: scene_replacement.load_streed(self))
+                            }, 'enter_to_street', lambda: scene_replacement.load_street(self))
                             gui.add_element(_)
-                            _1 = Label((width // 2, height - 100), 30, "Come to streed", pygame.Color('white'),
-                                       'fonts/Dot.ttf', 'label_enter_to_streed')
+                            _1 = Label((width // 2, height - 100), 30, "Come to street", pygame.Color('white'),
+                                       'fonts/Dot.ttf', 'label_enter_to_street')
 
 
                             gui.add_element(_1)
