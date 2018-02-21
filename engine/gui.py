@@ -24,10 +24,14 @@ class Label:
 
 
 class Button:
-    def __init__(self, pos, image_states, name, func=lambda: None):
+    def __init__(self, pos, image_states, text, font_path, text_color, text_size, name, func=lambda: None):
         self.normal_image = load_image(image_states['normal'])
         self.hover_image = load_image(image_states['hovered'])
         self.click_image = load_image(image_states['clicked'])
+
+        self.text = text
+        self.font = pygame.font.Font(font_path, text_size)
+        self.text_color = pygame.Color(text_color)
 
         self.pos = pos
 
@@ -61,6 +65,8 @@ class Button:
 
     def render(self, surface):
         surface.blit(self.image, self.image.get_rect(center=self.pos))
+        text = self.font.render(self.text, 4, self.text_color)
+        surface.blit(text, text.get_rect(center=self.pos))
 
     def apply_event(self, event):
         self.states['hovered'] = self.image.get_rect(center=self.pos).collidepoint(*pygame.mouse.get_pos())

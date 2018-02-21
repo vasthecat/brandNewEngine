@@ -35,13 +35,9 @@ class MainMenuGUI:
         gui.add_element(
             Label((width // 2, 159), 53, 'Untitled game', Color('white'), 'fonts/Dot.ttf', 'title_text'))
 
-        gui.add_element(MedievalButton((width // 2, height // 2), 'start_game', MainMenuGUI.start_game))
-        gui.add_element(
-            Label((width // 2, height // 2), 38, "Start game", Color('white'), 'fonts/Dot.ttf', 'label_game'))
+        gui.add_element(MedievalButton((width // 2, height // 2), 'Start game', 35, 'start_game', MainMenuGUI.start_game))
 
-        gui.add_element(MedievalButton((width // 2, height // 2 + 100), 'exit', MainMenuGUI.exit))
-        gui.add_element(
-            Label((width // 2, height // 2 + 100), 38, "Exit", Color('white'), 'fonts/Dot.ttf', 'label_exit'))
+        gui.add_element(MedievalButton((width // 2, height // 2 + 100), 'Exit', 35, 'exit', MainMenuGUI.exit))
 
 
 class GameGUI:
@@ -65,28 +61,15 @@ class GameGUI:
         gui.add_element(Image((width // 2, height // 2), load_image("images/game_menu_gui/menu.png"), 'background'))
         GameGUI.pause_menu_elements.add('background')
 
-        gui.add_element(MedievalButton((width // 2, height // 2 - 50), 'resume', GameGUI.pause_menu_clear))
+        gui.add_element(MedievalButton((width // 2, height // 2 - 50), 'Resume', 35, 'resume', GameGUI.pause_menu_clear))
         GameGUI.pause_menu_elements.add('resume')
-        gui.add_element(Label(
-            (width // 2, height // 2 - 50), 38, 'Resume', Color('white'), 'fonts/Dot.ttf', 'label_resume')
-        )
-        GameGUI.pause_menu_elements.add('label_resume')
 
-        gui.add_element(MedievalButton((width // 2, height // 2 + 30), 'exit', GameGUI.exit_in_menu))
+        gui.add_element(MedievalButton((width // 2, height // 2 + 30), 'Exit in menu', 33, 'exit', GameGUI.exit_in_menu))
         GameGUI.pause_menu_elements.add('exit')
-        gui.add_element(
-            Label((width // 2, height // 2 + 30), 35, 'Exit in menu', Color('white'), 'fonts/Dot.ttf', 'label_exit'))
-        GameGUI.pause_menu_elements.add('label_exit')
 
-        gui.add_element(MedievalButton((width // 2, height // 2 + 85), 'exit_in_desktop', MainMenuGUI.exit))
+        gui.add_element(MedievalButton((width // 2, height // 2 + 85), 'Exit in desktop', 29, 'exit_in_desktop', MainMenuGUI.exit))
         GameGUI.pause_menu_elements.add('exit_in_desktop')
-        gui.add_element(
-            Label((width // 2, height // 2 + 85), 31, 'Exit in desktop', Color('white'), 'fonts/Dot.ttf',
-                  'label_exit_in_desktop'))
-        GameGUI.pause_menu_elements.add('label_exit_in_desktop')
 
     @staticmethod
     def init():
-        gui.add_element(MedievalButton((width // 2, height - 35), 'game_menu', GameGUI.create_menu))
-        gui.add_element(
-            Label((width // 2, height - 35), 38, "Menu", Color('white'), 'fonts/Dot.ttf', 'label_game_menu'))
+        gui.add_element(MedievalButton((width // 2, height - 35), 'Menu', 35, 'game_menu', GameGUI.create_menu))

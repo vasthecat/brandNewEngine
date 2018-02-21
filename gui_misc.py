@@ -40,9 +40,9 @@ class CloudsController:
 
 
 class MedievalButton(Button):
-    def __init__(self, pos, name, func=lambda: None):
+    def __init__(self, pos, text, text_size, name, func=lambda: None):
         super().__init__(pos, {
             'normal': 'images/button/normal.png',
             'hovered': 'images/button/hovered.png',
             'clicked': 'images/button/clicked.png'
-        }, name, func)
+        }, text, 'fonts/Dot.ttf', 'white', text_size, name, func)

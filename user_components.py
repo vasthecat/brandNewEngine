@@ -171,31 +171,23 @@ class PlayerController(Component):
                     if trigger_collider.detect_collision(obj.get_component(TriggerCollider)):
                         if obj.get_component(TriggerCollider).trigger_name == 'House':
                             _ = MedievalButton(
-                                (width//2, height-100), 'house',
+                                (width//2, height-100), 'Enter in house', 29, 'house',
                                 lambda: SceneReplacement.load_house(self.game_object.transform.coord)
                             )
 
                             gui.add_element(_)
-                            _1= Label((width//2, height-100), 30, "Enter in house", pygame.Color('white'), 'fonts/Dot.ttf', 'label_house')
-                            gui.add_element(_1)
-                            self.gui_obj[obj.get_component(TriggerCollider)] = [_, _1]
+                            self.gui_obj[obj.get_component(TriggerCollider)] = _
 
                         elif obj.get_component(TriggerCollider).trigger_name == 'enter_in_street':
                             _ = MedievalButton(
-                                (width // 2, height - 100), 'enter_to_street',
+                                (width // 2, height - 100), 'Come to street', 29, 'enter_to_street',
                                 lambda: SceneReplacement.load_street(self.game_object)
                             )
                             gui.add_element(_)
-                            _1 = Label(
-                                (width // 2, height - 100), 30, "Come to street", pygame.Color('white'),
-                                'fonts/Dot.ttf', 'label_enter_to_street'
-                            )
-                            gui.add_element(_1)
-                            self.gui_obj[obj.get_component(TriggerCollider)] = [_, _1]
+                            self.gui_obj[obj.get_component(TriggerCollider)] = _
                     else:
                         if obj.get_component(TriggerCollider) in self.gui_obj:
-                            for i in self.gui_obj[obj.get_component(TriggerCollider)]:
-                                gui.del_element(i.name)
+                            gui.del_element(self.gui_obj[obj.get_component(TriggerCollider)].name)
                             del self.gui_obj[obj.get_component(TriggerCollider)]
 
         self.set_camera_pos(move)
@@ -266,24 +258,19 @@ class PhysicsCollider(Collider):
 
 
 class TriggerCollider(Collider):
-    def __init__(self, rects, text_for_player, trigger_name, game_object):
-        self.text_for_player = text_for_player
+    def __init__(self, rects, trigger_name, game_object):
         self.trigger_name = trigger_name
         super().__init__(rects, game_object)
 
     @staticmethod
     def deserialize(component_dict, obj):
         return TriggerCollider(
-            component_dict['rects'], component_dict.get('text_for_player', ''),
-            component_dict['trigger_name'], obj
+            component_dict['rects'], component_dict['trigger_name'], obj
         )
 
     def serialize(self):
         d = super().serialize()
-        d.update({
-            'name': 'TriggerCollider', 'trigger_name': self.trigger_name,
-            'text_for_player': self.text_for_player
-        })
+        d.update({'name': 'TriggerCollider', 'trigger_name': self.trigger_name})
         return d
 
 
