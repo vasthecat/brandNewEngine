@@ -15,33 +15,35 @@ from engine.base_components import Component, ImageComponent, ImageFile
 from engine.game_objects import GameObject
 from engine.gui import gui, Label, Button
 
-class SceneReplacement:
-    def __init__(self):
-        self.coords = {}
+from gui_misc import MedievalButton
 
-    def load_house(self, coord):
+
+class SceneReplacement:
+    coords = {}
+
+    @staticmethod
+    def load_house(coord):
         from scene_loader import load_scene
         gui.del_element('house')
         gui.del_element('label_house')
         load_scene('scenes/house.json')
-        self.coords['coord_in_streed'] = coord
+        SceneReplacement.coords['coord_in_street'] = coord
 
-    def load_street(self, obj):
+    @staticmethod
+    def load_street(obj):
         from scene_loader import load_scene
         gui.del_element('enter_to_street')
         gui.del_element('label_enter_to_street')
         load_scene('scenes/scene1.json')
-        scene_manager.current_scene.find_objects(obj.game_object.name)[0].transform.move_to(*self.coords['coord_in_streed'])
+        scene_manager.current_scene.find_objects(obj.name)[0].transform.move_to(*SceneReplacement.coords['coord_in_street'])
 
 
-scene_replacement = SceneReplacement()
-
-class AnimationContoller(ImageComponent):
+class AnimationController(ImageComponent):
     def __init__(self, animations, start_animation, game_object):
         self.animations = {}
         for name, params in animations.items():
-            self.animations[name] = AnimationContoller.cut_sheet(
-                AnimationContoller.load_image(params['path']), *params['size'], params['repeats']
+            self.animations[name] = AnimationController.cut_sheet(
+                AnimationController.load_image(params['path']), *params['size'], params['repeats']
             )
         self._current_animation_name = start_animation
         self._current_animation = it.cycle(self.animations[start_animation])
@@ -61,8 +63,8 @@ class AnimationContoller(ImageComponent):
         return frames
 
     def add_animation(self, name, path, size, repeats):
-        self.animations[name] = AnimationContoller.cut_sheet(
-            AnimationContoller.load_image(path), *size, repeats
+        self.animations[name] = AnimationController.cut_sheet(
+            AnimationController.load_image(path), *size, repeats
         )
 
     def set_animation(self, name):
@@ -79,7 +81,7 @@ class AnimationContoller(ImageComponent):
 
     @staticmethod
     def deserialize(component_dict, obj):
-        return AnimationContoller(
+        return AnimationController(
             component_dict['animations'], component_dict['start_animation'], obj
         )
 
@@ -99,7 +101,7 @@ class PlayerController(Component):
         self._steps_sound = pygame.mixer.Sound('sounds/steps.ogg')
 
     def change_animation(self, move):
-        animator = self.game_object.get_component(AnimationContoller)
+        animator = self.game_object.get_component(AnimationController)
         if animator is not None:
             if move.x > 0:
                 if self._prev_move.x == 0 or self._direction != 'right':
@@ -159,7 +161,6 @@ class PlayerController(Component):
                 phys_collider.update()
                 if obj != self.game_object and obj.has_component(PhysicsCollider):
                     collision = phys_collider.detect_collision(obj.get_component(PhysicsCollider))
-                    print(collision)
                     if collision:
                         self.game_object.transform.move(-move.x, -move.y)
                         move = Vector2()
@@ -169,27 +170,26 @@ class PlayerController(Component):
                 if obj != self.game_object and obj.has_component(TriggerCollider):
                     if trigger_collider.detect_collision(obj.get_component(TriggerCollider)):
                         if obj.get_component(TriggerCollider).trigger_name == 'House':
-                            _ = Button((width//2, height-100), {
-                                'normal': 'images/button/normal.png',
-                                'hovered': 'images/button/hovered.png',
-                                'clicked': 'images/button/clicked.png'
-                            }, 'house', lambda: scene_replacement.load_house(self.game_object.transform.coord))
+                            _ = MedievalButton(
+                                (width//2, height-100), 'house',
+                                lambda: SceneReplacement.load_house(self.game_object.transform.coord)
+                            )
 
                             gui.add_element(_)
                             _1= Label((width//2, height-100), 30, "Enter in house", pygame.Color('white'), 'fonts/Dot.ttf', 'label_house')
                             gui.add_element(_1)
                             self.gui_obj[obj.get_component(TriggerCollider)] = [_, _1]
-                        elif obj.get_component(TriggerCollider).trigger_name == 'enter_in_streed':
-                            _ = Button((width // 2, height - 100), {
-                                'normal': 'images/button/normal.png',
-                                'hovered': 'images/button/hovered.png',
-                                'clicked': 'images/button/clicked.png'
-                            }, 'enter_to_street', lambda: scene_replacement.load_street(self))
+
+                        elif obj.get_component(TriggerCollider).trigger_name == 'enter_in_street':
+                            _ = MedievalButton(
+                                (width // 2, height - 100), 'enter_to_street',
+                                lambda: SceneReplacement.load_street(self.game_object)
+                            )
                             gui.add_element(_)
-                            _1 = Label((width // 2, height - 100), 30, "Come to street", pygame.Color('white'),
-                                       'fonts/Dot.ttf', 'label_enter_to_street')
-
-
+                            _1 = Label(
+                                (width // 2, height - 100), 30, "Come to street", pygame.Color('white'),
+                                'fonts/Dot.ttf', 'label_enter_to_street'
+                            )
                             gui.add_element(_1)
                             self.gui_obj[obj.get_component(TriggerCollider)] = [_, _1]
                     else:
@@ -218,21 +218,11 @@ class _ColliderSprite(pygame.sprite.Sprite):
         self.shift_y = rect[1]
         self.rect = pygame.Rect(0, 0, *rect[2:])
 
-        self.go = GameObject(*self.rect.center)
-        surface = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
-        surface.fill(pygame.Color(0, 255, 0, 120))
-        i = ImageComponent(surface, self.go)
-
-        scene_manager.current_scene.add_object(self.go)
-        self.go.add_component(i)
-
     def move_to(self, x, y):
         self.rect.center = x + self.shift_x, y + self.shift_y
 
     def update(self, x, y, *args):
         self.move_to(x, y)
-
-        self.go.transform.move_to(self.rect.centerx, self.rect.centery)
 
 
 class Collider(Component):

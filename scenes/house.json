@@ -51,9 +51,19 @@
         {
             "components": [
                 {
+                    "name": "TriggerCollider",
+                    "trigger_name": "enter_in_street",
+                    "rects": [
+                        [-4, -250, 140, 32]
+                    ]
+                }
+            ]
+        },
+        {
+            "components": [
+                {
                     "name": "PhysicsCollider",
                     "rects": [
-                        [-4, -250, 140, 32],
                         [-212, 52, 40, 500],
                         [12, 237, 400, 30],
                         [76, 170, 22, 22],
