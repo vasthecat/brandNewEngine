@@ -1,11 +1,14 @@
 from engine.scene_manager import scene_manager
 from engine.game_objects import GameObject
 from engine.base_components import ImageFile
-from user_components import PhysicsCollider, TriggerCollider, PlayerController, AnimationContoller
+from user_components import (PhysicsCollider, TriggerCollider, PlayerController, AnimationController, ParticleSystem,
+                             MusicController)
 import json
+import pygame
 
 
 def load_scene(path):
+    pygame.mixer.stop()
     with open(path, encoding='utf-8') as f:
         scene_dict = json.load(f)
 
@@ -32,5 +35,7 @@ component_loaders = {
     'PlayerController': PlayerController.deserialize,
     'PhysicsCollider': PhysicsCollider.deserialize,
     'TriggerCollider': TriggerCollider.deserialize,
-    'AnimationController': AnimationContoller.deserialize
+    'AnimationController': AnimationController.deserialize,
+    'ParticleSystem': ParticleSystem.deserialize,
+    'MusicController': MusicController.deserialize,
 }

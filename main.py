@@ -4,12 +4,13 @@ from engine.scene_manager import scene_manager
 import pygame
 import sys
 
-from scene_loader import load_scene
 from engine.input_manager import input_manager
-from engine.gui import gui, Button, Image, Label
+from scene_loader import load_scene
+from engine.gui import gui
+from guis import MainMenuGUI
 
-
-load_scene('scenes/scene1.json')
+load_scene('scenes/main_menu.json')
+MainMenuGUI.init()
 
 clock = pygame.time.Clock()
 while True:
