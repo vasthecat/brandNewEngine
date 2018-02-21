@@ -31,16 +31,16 @@
                 },
                 {
                     "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": -24,
-                    "rect": [0, 0, 30, 15]
+                    "rects": [
+                        [0, -24, 30, 15]
+                    ]
                 },
                 {
                     "name": "TriggerCollider",
                     "trigger_name": "PlayerTrigger",
-                    "shift_x": 0,
-                    "shift_y": -24,
-                    "rect":  [0,0,30,12]
+                    "rects": [
+                        [0, -24, 30, 15]
+                    ]
                 },
                 {
                     "name": "PlayerController",
@@ -49,146 +49,24 @@
             ]
         },
         {
-            "x": -4, "y": -250,
-            "components":[
-                {
-                    "name": "TriggerCollider",
-                    "trigger_name": "enter_in_streed",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect":  [0, 0,140,32]
-                }
-            ]
-        },
-        {
-            "x": -212, "y": 52,
             "components": [
                 {
                     "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": [0, 0, 40, 500]
-                }
-            ]
-        },
-        {
-            "x": 12, "y": 237,
-            "components": [
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": [0, 0, 400, 30]
-                }
-            ]
-        },
-        {
-            "x": 76, "y": 170,
-            "components": [
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": [0, 0, 22, 22]
-                }
-            ]
-        },
-        {
-            "x": 204, "y": 126,
-            "components": [
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": [0, 0, 45, 70]
-                }
-            ]
-        },
-        {
-            "x": 160, "y": 5,
-            "components": [
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": [0, 0, 180, 172]
-                }
-            ]
-        },
-        {
-            "x": -152, "y": 5,
-            "components": [
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": [0, 0, 172, 172]
-                }
-            ]
-        },
-        {
-            "x": 229, "y": 0,
-            "components": [
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": [0, 0, 10, 500]
-                }
-            ]
-        },
-        {
-            "x": 205, "y": -180,
-            "components": [
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": [0, 0, 50, 50]
-                }
-            ]
-        },
-        {
-            "x": 128, "y": -220,
-            "components": [
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": [0, 0, 130, 70]
-                }
-            ]
-        },
-        {
-            "x": -129, "y": -220,
-            "components": [
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": [0, 0, 130, 70]
-                }
-            ]
-        },
-        {
-            "x": 0, "y": -260,
-            "components": [
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": [0, 0, 160, 10]
-                }
-            ]
-        },
-        {
-            "x": 104, "y": -126,
-            "components": [
-                {
-                    "name": "PhysicsCollider",
-                    "shift_x": 0,
-                    "shift_y": 0,
-                    "rect": [0, 0, 60, 24]
+                    "rects": [
+                        [-4, -250, 140, 32],
+                        [-212, 52, 40, 500],
+                        [12, 237, 400, 30],
+                        [76, 170, 22, 22],
+                        [204, 126, 45, 70],
+                        [160, 5, 180, 172],
+                        [-152, 5, 172, 172],
+                        [229, 0, 10, 500],
+                        [205, -180, 50, 50],
+                        [128, -220, 130, 70],
+                        [-129, -220, 130, 70],
+                        [0, -260, 160, 10],
+                        [104, -126, 60, 24]
+                   ]
                 }
             ]
         },
