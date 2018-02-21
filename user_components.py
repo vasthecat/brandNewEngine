@@ -88,7 +88,6 @@ class AnimationContoller(ImageComponent):
 
 
 class PlayerController(Component):
-
     def __init__(self, speed, game_object):
         super().__init__(game_object)
         self.speed = speed
@@ -146,22 +145,22 @@ class PlayerController(Component):
             )
 
     def update(self, *args):
-        #print(self.game_object.transform.coord)
-
         move = Vector2(
             input_manager.get_axis('Horizontal') * self.speed,
             input_manager.get_axis('Vertical') * self.speed
         )
         self.game_object.transform.move(move.x, move.y)
 
-        for obj in scene_manager.current_scene.objects:
-            phys_collider = self.game_object.get_component(PhysicsCollider)
-            trigger_collider = self.game_object.get_component(TriggerCollider)
+        phys_collider = self.game_object.get_component(PhysicsCollider)
+        trigger_collider = self.game_object.get_component(TriggerCollider)
 
+        for obj in scene_manager.current_scene.objects:
             if phys_collider is not None:
                 phys_collider.update()
                 if obj != self.game_object and obj.has_component(PhysicsCollider):
-                    if phys_collider.detect_collision(obj.get_component(PhysicsCollider)):
+                    collision = phys_collider.detect_collision(obj.get_component(PhysicsCollider))
+                    print(collision)
+                    if collision:
                         self.game_object.transform.move(-move.x, -move.y)
                         move = Vector2()
 
@@ -171,10 +170,10 @@ class PlayerController(Component):
                     if trigger_collider.detect_collision(obj.get_component(TriggerCollider)):
                         if obj.get_component(TriggerCollider).trigger_name == 'House':
                             _ = Button((width//2, height-100), {
-                                        'normal': 'images/button/normal.png',
-                                        'hovered': 'images/button/hovered.png',
-                                        'clicked': 'images/button/clicked.png'
-                                    }, 'house', lambda: scene_replacement.load_house(self.game_object.transform.coord))
+                                'normal': 'images/button/normal.png',
+                                'hovered': 'images/button/hovered.png',
+                                'clicked': 'images/button/clicked.png'
+                            }, 'house', lambda: scene_replacement.load_house(self.game_object.transform.coord))
 
                             gui.add_element(_)
                             _1= Label((width//2, height-100), 30, "Enter in house", pygame.Color('white'), 'fonts/Dot.ttf', 'label_house')
@@ -199,7 +198,6 @@ class PlayerController(Component):
                                 gui.del_element(i.name)
                             del self.gui_obj[obj.get_component(TriggerCollider)]
 
-
         self.set_camera_pos(move)
         self.change_animation(move)
         self.play_sound(move)
@@ -213,67 +211,63 @@ class PlayerController(Component):
         return {'name': 'PlayerController', 'speed': self.speed}
 
 
+class _ColliderSprite(pygame.sprite.Sprite):
+    def __init__(self, rect):
+        super().__init__()
+        self.shift_x = rect[0]
+        self.shift_y = rect[1]
+        self.rect = pygame.Rect(0, 0, *rect[2:])
+
+        self.go = GameObject(*self.rect.center)
+        surface = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
+        surface.fill(pygame.Color(0, 255, 0, 120))
+        i = ImageComponent(surface, self.go)
+
+        scene_manager.current_scene.add_object(self.go)
+        self.go.add_component(i)
+
+    def move_to(self, x, y):
+        self.rect.center = x + self.shift_x, y + self.shift_y
+
+    def update(self, x, y, *args):
+        self.move_to(x, y)
+
+        self.go.transform.move_to(self.rect.centerx, self.rect.centery)
+
+
 class Collider(Component):
-    def __init__(self, shift_x, shift_y, rect, game_object):
+    def __init__(self, rects, game_object):
         super().__init__(game_object)
-        self.shift_x = shift_x
-        self.shift_y = shift_y
-        self.rect = pygame.Rect(rect)
+        self.rects = pygame.sprite.Group(*(_ColliderSprite(rect) for rect in rects))
 
     def detect_collision(self, collider):
-        return self.rect.colliderect(collider.rect)
+        return pygame.sprite.groupcollide(self.rects, collider.rects, False, False)
 
     def update(self, *args):
-        self.rect.centerx = self.game_object.transform.x + self.shift_x
-        self.rect.centery = self.game_object.transform.y + self.shift_y
+        self.rects.update(*self.game_object.transform.coord)
 
     @staticmethod
     def deserialize(component_dict, obj):
-        return Collider(
-            component_dict['shift_x'], component_dict['shift_y'],
-            component_dict['rect'], obj
-        )
+        return Collider(component_dict['rects'], obj)
 
     def serialize(self):
-        return {'name': 'Collider', 'shift_x': self.shift_x, 'shift_y': self.shift_y, 'rect': self.rect}
+        return {'name': 'Collider'}  # TODO
 
 
 class PhysicsCollider(Collider):
-    def __init__(self, shift_x, shift_y, rect, game_object):
-        if not rect:
+    def __init__(self, rects, game_object):
+        if not rects:
             rect = game_object.get_component(ImageComponent)
             if rect is None:
                 raise ValueError('rect parameter is empty and PhysicsCollider component added before ImageComponent')
             else:
-                rect = rect.image.get_rect()
+                rects = [rect.image.get_rect()]
 
-
-
-        super().__init__(shift_x, shift_y, rect, game_object)
-
-        self.go = GameObject(*game_object.transform.coord)
-        surface = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
-        surface.fill(pygame.Color(0, 255, 0, 120))
-        i = ImageComponent('images/player.png', self.go)
-        i.image = surface
-        i._original = surface
-        scene_manager.current_scene.add_object(self.go)
-        self.go.add_component(i)
-
-    def update(self, *args):
-        super().update()
-        x = self.game_object.transform.x + self.shift_x
-        y = self.game_object.transform.y + self.shift_y
-        self.go.transform.move_to(x, y)
-
-
+        super().__init__(rects, game_object)
 
     @staticmethod
     def deserialize(component_dict, obj):
-        return PhysicsCollider(
-            component_dict['shift_x'], component_dict['shift_y'],
-            component_dict['rect'], obj
-        )
+        return PhysicsCollider(component_dict['rects'], obj)
 
     def serialize(self):
         d = super().serialize()
@@ -282,31 +276,15 @@ class PhysicsCollider(Collider):
 
 
 class TriggerCollider(Collider):
-    def __init__(self, shift_x, shift_y, rect, text_for_player, trigger_name, game_object):
+    def __init__(self, rects, text_for_player, trigger_name, game_object):
         self.text_for_player = text_for_player
         self.trigger_name = trigger_name
-        super().__init__(shift_x, shift_y, rect, game_object)
-
-    #    self.go = GameObject(*game_object.transform.coord)
-    #    surface = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
-    #    surface.fill(pygame.Color(255, 0, 0, 120))
-    #    i = ImageComponent('images/player.png', self.go)
-    #    i.image = surface
-    #    i._original = surface
-    #    scene_manager.current_scene.add_object(self.go)
-    #    self.go.add_component(i)
-#
-    #def update(self, *args):
-    #    super().update()
-    #    x = self.game_object.transform.x + self.shift_x
-    #    y = self.game_object.transform.y + self.shift_y
-    #    self.go.transform.move_to(x, y)
+        super().__init__(rects, game_object)
 
     @staticmethod
     def deserialize(component_dict, obj):
         return TriggerCollider(
-            component_dict['shift_x'], component_dict['shift_y'],
-            component_dict['rect'], component_dict.get('text_for_player', ''),
+            component_dict['rects'], component_dict.get('text_for_player', ''),
             component_dict['trigger_name'], obj
         )
 
