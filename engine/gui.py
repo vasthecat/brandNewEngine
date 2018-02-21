@@ -84,6 +84,7 @@ class Image:
         self.name = name
         self.size = self.image.get_size()
         self.rect = pygame.Rect(pos[0], pos[1], self.size[0], self.size[1])
+        self.rect = self.image.get_rect(center=pos)
         self.const_rect = self.rect.copy()
         self.const_rect.x = -self.size[0]
 
@@ -102,32 +103,6 @@ class Image:
         self.rect = self.const_rect.copy()
 
 
-class CloudsController:
-    def __init__(self, name, change_pos):
-        self.name = name
-        self.change_pos = change_pos
-        self.elements = []
-
-    def add_element(self, element):
-        if randint(0, 1):
-            self.elements.append({'element': element, 'step': (-self.change_pos[0], self.change_pos[1])})
-            element.const_rect.x = width
-        else:
-            self.elements.append({'element': element, 'step': (self.change_pos[0], self.change_pos[1])})
-
-    def update(self):
-        for element in self.elements:
-            element['element'].move(*element['step'])
-            if element['element'].get_pos()[0] > width or element['element'].get_pos()[1] > height \
-                    or element['element'].get_pos()[0] + element['element'].size[0] < 0 \
-                    or element['element'].get_pos()[1] + element['element'].size[1] < 0:
-                element['element'].set_const_pos()
-
-    def render(self, surface):
-        for element in self.elements:
-            surface.blit(element['element'].image, element['element'].rect)
-
-
 class GUI:
     def __init__(self):
         self.elements = []
@@ -140,6 +115,7 @@ class GUI:
         for elem in self.elements:
             if elem.name == name:
                 return elem
+
 
     def render(self):
         for element in self.elements:

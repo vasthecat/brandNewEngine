@@ -1,0 +1,206 @@
+{
+    "name": "house",
+    "objects": [
+        {
+            "name": "ground_layer",
+            "components": [
+                {
+                    "name": "ImageFile",
+                    "path": "images/house.png"
+                }
+            ]
+        },
+        {
+            "name": "player",
+            "x": -4, "y": -200,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_up",
+                    "animations": {
+                        "up": {"path": "images/player/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/player/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/player/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/player/run_left.png", "size": [1, 4], "repeats": 10},
+
+                        "idle_up": {"path": "images/player/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/player/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/player/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/player/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": -24,
+                    "rect": [0, 0, 30, 15]
+                },
+                {
+                    "name": "TriggerCollider",
+                    "trigger_name": "PlayerTrigger",
+                    "shift_x": 0,
+                    "shift_y": -24,
+                    "rect":  [0,0,30,12]
+                },
+                {
+                    "name": "PlayerController",
+                    "speed": 4
+                }
+            ]
+        },
+        {
+            "x": -4, "y": -250,
+            "components":[
+                {
+                    "name": "TriggerCollider",
+                    "trigger_name": "enter_in_streed",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect":  [0, 0,140,32]
+                }
+            ]
+        },
+        {
+            "x": -212, "y": 52,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 40, 500]
+                }
+            ]
+        },
+        {
+            "x": 12, "y": 237,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 400, 30]
+                }
+            ]
+        },
+        {
+            "x": 76, "y": 170,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 22, 22]
+                }
+            ]
+        },
+        {
+            "x": 204, "y": 126,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 45, 70]
+                }
+            ]
+        },
+        {
+            "x": 160, "y": 5,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 180, 172]
+                }
+            ]
+        },
+        {
+            "x": -152, "y": 5,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 172, 172]
+                }
+            ]
+        },
+        {
+            "x": 229, "y": 0,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 10, 500]
+                }
+            ]
+        },
+        {
+            "x": 205, "y": -180,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 50, 50]
+                }
+            ]
+        },
+        {
+            "x": 128, "y": -220,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 130, 70]
+                }
+            ]
+        },
+        {
+            "x": -129, "y": -220,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 130, 70]
+                }
+            ]
+        },
+        {
+            "x": 0, "y": -260,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 160, 10]
+                }
+            ]
+        },
+        {
+            "x": 104, "y": -126,
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect": [0, 0, 60, 24]
+                }
+            ]
+        },
+        {
+            "name": "ground_layer",
+            "components": [
+                {
+                    "name": "ImageFile",
+                    "path": "images/house_1_2.png"
+                }
+            ]
+        }
+
+    ]
+}

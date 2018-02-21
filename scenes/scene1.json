@@ -701,9 +701,8 @@
                     "name": "TriggerCollider",
                     "trigger_name": "PlayerTrigger",
                     "shift_x": 0,
-                    "shift_y": 0,
-                    "rect":  [0,0,64,128],
-                    "text_for_player":"Е чтобы заговорить"
+                    "shift_y": -24,
+                    "rect":  [0,0,30,12]
                 },
                 {
                     "name": "PlayerController",
@@ -805,6 +804,42 @@
                     "paths": [
                         ["sounds/village_background_music.ogg", 100]
                     ]
+                }
+            ]
+        },
+        {
+            "x": -440, "y": 813,
+            "components":[
+                {
+                    "name": "TriggerCollider",
+                    "trigger_name": "House",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect":  [0, 0,64,32]
+                }
+            ]
+        },
+        {
+            "x": -506, "y": -335,
+            "components":[
+                {
+                    "name": "TriggerCollider",
+                    "trigger_name": "House",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect":  [0, 0,64,32]
+                }
+            ]
+        },
+        {
+            "x": 862, "y": -35,
+            "components":[
+                {
+                    "name": "TriggerCollider",
+                    "trigger_name": "House",
+                    "shift_x": 0,
+                    "shift_y": 0,
+                    "rect":  [0, 0,64,32]
                 }
             ]
         }
