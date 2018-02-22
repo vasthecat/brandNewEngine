@@ -214,11 +214,23 @@ class _ColliderSprite(pygame.sprite.Sprite):
         self.shift_y = rect[1]
         self.rect = pygame.Rect(0, 0, *rect[2:])
 
+        self.go = GameObject(*self.rect.center)
+        surface = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
+        surface.fill(pygame.Color(0, 255, 0, 120))
+        i = ImageComponent(surface, self.go)
+
+        scene_manager.current_scene.add_object(self.go)
+        self.go.add_component(i)
+
+
     def move_to(self, x, y):
         self.rect.center = x + self.shift_x, y + self.shift_y
 
+
     def update(self, x, y, *args):
         self.move_to(x, y)
+
+        self.go.transform.move_to(self.rect.centerx, self.rect.centery)
 
 
 class Collider(Component):
