@@ -151,19 +151,6 @@ class PlayerController(Component):
             )
 
     def update(self, *args):
-        #Debug
-        for event in input_manager.get_events():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    print(self.game_object.transform.coord)
-                    break
-
-
-            elif event.type == pygame.KEYDOWN:
-                if int(event.scancode) in range(2, 11):
-                    print('s'+str(event.unicode))
-
-        #debug
         move = Vector2(
             input_manager.get_axis('Horizontal') * self.speed,
             input_manager.get_axis('Vertical') * self.speed
@@ -397,14 +384,12 @@ class NPCController(Component):
             move = Vector2(int(command[1]) - self.game_object.transform.x, int(command[2]) - self.game_object.transform.y)
             if move.length() > self.speed:
                 move = move.normalize() * self.speed
-                # self.game_object.transform.move(move.x, move.y)
             else:
                 self.current_command = next(self.commands)
 
             self.game_object.transform.move(move.x, move.y)
 
             phys_collider = self.game_object.get_component(PhysicsCollider)
-
             for obj in scene_manager.current_scene.objects:
                 if phys_collider is not None:
                     phys_collider.update()
