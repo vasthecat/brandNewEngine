@@ -95,7 +95,81 @@
                 }
             ]
         },
+        {   "x": 136, "y": 764,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_right",
+                    "animations": {
+                        "up": {"path": "images/player/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/player/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/player/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/player/run_left.png", "size": [1, 4], "repeats": 10},
 
+                        "idle_up": {"path": "images/player/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/player/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/player/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/player/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "NPCController",
+                    "speed": 2,
+                    "commands": [
+                        "move_to (104;716) (-72;660) (-124;504) (-64;356) (364;40) (404;-8) (404;-80) (404;-316) (436;-344) (480;-388) (520;-444) (520;-508) (520;-668) (468;-760) (312;-796) (312;-932) (548;-932) (528;-912) (528;-908)",
+                        "sleep 7",
+                        "move_to (284;-920)",
+                        "move_to (292;-848) (368;-852)",
+                        "sleep 5",
+                        "move_to (284;-800) (316;-772) (436;-740) (516;-712) (516;-456) (516;-200) (404;48) (-8;324) (-112;556) (-44;704) (120;772)",
+                        "sleep 9"
+                    ]
+                },
+                {
+                    "name": "PhysicsCollider",
+                    "rects": [
+                        [0, 0, 24, 24]
+                    ]
+                }
+            ]
+        },
+        {   "x": -660, "y": 240,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_right",
+                    "animations": {
+                        "up": {"path": "images/player/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/player/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/player/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/player/run_left.png", "size": [1, 4], "repeats": 10},
+
+                        "idle_up": {"path": "images/player/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/player/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/player/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/player/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "NPCController",
+                    "speed": 2,
+                    "commands": [
+                        "sleep 8",
+                        "move_to (-660;336) (-656;368) (-620;392) (-620;484) (-620;560) (-596;604) (-564;636) (-228;636) (-212;616) (-180;572) (-180;504) (-144;456) (-144;240) (-144;32) (-180;20) (-208;-8) (-244;-44) (-340;-64) (-452;-84) (-480;-92) (-480;-72)",
+                        "sleep 4",
+                        "move_to (-480;-88) (-300;-88) (-244;-132) (-156;-132) (-144;-132) (-144;-48) (-144;344) (28;344) (508;32) (628;-228) (628;-608) (664;-728) (664;-924) (600;-948) (600;-916)",
+                        "sleep 6",
+                        "move_to (596;-932) (804;-932) (804;-804) (692;-788) (640;-608) (476;-60) (120;288) (-152;504) (-208;608) (-484;640) (-548;596) (-612;536) (-612;404) (-656;376) (-656;248)"
+                    ]
+                },
+                {
+                    "name": "PhysicsCollider",
+                    "rects": [
+                        [0, 0, 24, 24]
+                    ]
+                }
+            ]
+        },
         {
             "name": "player",
             "x": -960, "y": 712,
@@ -118,7 +192,7 @@
                 {
                     "name": "PhysicsCollider",
                     "rects": [
-                        [0, -24, 30, 15]
+                        [0, 0, 24, 24]
                     ]
                 },
                 {

@@ -1,7 +1,7 @@
 import itertools as it
 from time import time
 import random
-from math import copysign
+from math import copysign, hypot
 
 
 from pygame.math import Vector2
@@ -100,6 +100,10 @@ class PlayerController(Component):
 
         self._steps_sound = pygame.mixer.Sound('sounds/steps.ogg')
 
+
+        self.flag = False #Debug
+
+
     def change_animation(self, move):
         animator = self.game_object.get_component(AnimationController)
         if animator is not None:
@@ -147,6 +151,19 @@ class PlayerController(Component):
             )
 
     def update(self, *args):
+        #Debug
+        for event in input_manager.get_events():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    print(self.game_object.transform.coord)
+                    break
+
+
+            elif event.type == pygame.KEYDOWN:
+                if int(event.scancode) in range(2, 11):
+                    print('s'+str(event.unicode))
+
+        #debug
         move = Vector2(
             input_manager.get_axis('Horizontal') * self.speed,
             input_manager.get_axis('Vertical') * self.speed
@@ -329,3 +346,87 @@ class MusicController(Component):
     @staticmethod
     def deserialize(component_dict, obj):
         return MusicController(component_dict['paths'], obj)
+
+
+class NPCController(Component):
+    def __init__(self, speed, commands, game_object):
+        super().__init__(game_object)
+        self.speed = speed
+
+        _ = []
+        for i, com in enumerate(commands):
+            com_ = com.split()[0]
+            if com_ == 'move_to' and len(com_) > 2:
+                for com2 in com.split()[1:]:
+                    _1 = com2.replace('(', '').replace(')', '').replace(';', ' ')
+                    _.append("move_to {}".format(_1))
+            else:
+                _.append(com)
+
+        self.commands = it.cycle(_)
+        self.current_command = next(self.commands)
+        self._start_sleep = None
+        self._prev_move = Vector2()
+        self._direction = 'down'
+
+    def change_animation(self, move):
+        animator = self.game_object.get_component(AnimationController)
+        if animator is not None:
+            if move.x > 0:
+                if self._prev_move.x == 0 or self._direction != 'right':
+                    animator.set_animation('right')
+                self._direction = 'right'
+            elif move.x < 0:
+                if self._prev_move.x == 0 or self._direction != 'left':
+                    animator.set_animation('left')
+                self._direction = 'left'
+            elif move.y > 0:
+                if self._prev_move.y == 0 or self._direction != 'up':
+                    animator.set_animation('up')
+                self._direction = 'up'
+            elif move.y < 0:
+                if self._prev_move.y == 0 or self._direction != 'down':
+                    animator.set_animation('down')
+                self._direction = 'down'
+            elif move.x == move.y == 0:
+                animator.set_animation('idle_' + self._direction)
+
+    def update(self, *args):
+        command = self.current_command.split()
+        if command[0] == 'move_to':
+            move = Vector2(int(command[1]) - self.game_object.transform.x, int(command[2]) - self.game_object.transform.y)
+            if move.length() > self.speed:
+                move = move.normalize() * self.speed
+                # self.game_object.transform.move(move.x, move.y)
+            else:
+                self.current_command = next(self.commands)
+
+            self.game_object.transform.move(move.x, move.y)
+
+            phys_collider = self.game_object.get_component(PhysicsCollider)
+
+            for obj in scene_manager.current_scene.objects:
+                if phys_collider is not None:
+                    phys_collider.update()
+                    if obj != self.game_object and obj.has_component(PhysicsCollider):
+                        collision = phys_collider.detect_collision(obj.get_component(PhysicsCollider))
+                        if collision:
+                            self.game_object.transform.move(-move.x, -move.y)
+                            move = Vector2()
+
+            self.change_animation(move)
+            self._prev_move = move
+
+        elif command[0] == 'sleep':
+            if self._start_sleep is None:
+                self._start_sleep = time()
+            if time() - self._start_sleep >= float(command[1]):
+                self.current_command = next(self.commands)
+                self._start_sleep = None
+            self.change_animation(Vector2())
+            self._prev_move = Vector2()
+
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return NPCController(component_dict['speed'], component_dict['commands'], obj)
