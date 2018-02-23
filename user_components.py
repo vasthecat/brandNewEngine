@@ -119,7 +119,7 @@ class PlayerController(Component):
                 if self._prev_move.y == 0 or self._direction != 'down':
                     animator.set_animation('down')
                 self._direction = 'down'
-            elif move.x == move.y == 0:
+            elif move.x == move.y == 0 and self._prev_move.length() != 0:
                 animator.set_animation('idle_' + self._direction)
 
     def play_sound(self, move):
@@ -396,7 +396,7 @@ class NPCController(Component):
                 if self._prev_move.y == 0 or self._direction != 'down':
                     animator.set_animation('down')
                 self._direction = 'down'
-            elif move.x == move.y == 0:
+            elif move.x == move.y == 0 and self._prev_move.length() != 0:
                 animator.set_animation('idle_' + self._direction)
 
     def update(self, *args):
