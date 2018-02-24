@@ -1,0 +1,124 @@
+{
+    "name": "house1",
+    "objects": [
+        {
+            "name": "ground_layer",
+            "components": [
+                {
+                    "name": "ImageFile",
+                    "path": "images/house.png"
+                }
+            ]
+        },
+        {
+            "name": "player",
+            "x": -4, "y": -200,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_up",
+                    "animations": {
+                        "up": {"path": "images/player/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/player/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/player/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/player/run_left.png", "size": [1, 4], "repeats": 10},
+
+                        "idle_up": {"path": "images/player/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/player/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/player/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/player/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "PhysicsCollider",
+                    "rects": [
+                        [0, -24, 30, 15]
+                    ]
+                },
+                {
+                    "name": "TriggerCollider",
+                    "trigger_name": "PlayerTrigger",
+                    "rects": [
+                        [0, -24, 30, 15]
+                    ]
+                },
+                {
+                    "name": "PlayerController",
+                    "speed": 4
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "name": "TriggerCollider",
+                    "trigger_name": "enter_in_street",
+                    "rects": [
+                        [-4, -250, 140, 32]
+                    ]
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "rects": [
+                        [-212, 52, 40, 500],
+                        [12, 237, 400, 30],
+                        [76, 170, 22, 22],
+                        [204, 126, 45, 70],
+                        [160, 5, 180, 172],
+                        [-152, 5, 172, 172],
+                        [229, 0, 10, 500],
+                        [205, -180, 50, 50],
+                        [128, -220, 130, 70],
+                        [-129, -220, 130, 70],
+                        [0, -260, 160, 10],
+                        [104, -126, 60, 24]
+                   ]
+                }
+            ]
+        },
+        {
+            "name": "ground_layer",
+            "components": [
+                {
+                    "name": "ImageFile",
+                    "path": "images/house_1_2.png"
+                }
+            ]
+        },
+        {
+            "name": "tardis",
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_down",
+                    "animations": {
+                        "up": {"path": "images/npcs/tardis/tardis.png", "size": [5, 5], "repeats": 3},
+                        "down": {"path": "images/npcs/tardis/tardis.png", "size": [5, 5], "repeats": 3},
+
+                        "idle_up": {"path": "images/npcs/tardis/tardis.png", "size": [5, 5], "repeats": 3},
+                        "idle_down": {"path": "images/npcs/tardis/tardis.png", "size": [5, 5], "repeats": 3}
+                    }
+                },
+                {
+                    "name": "NPCController",
+                    "speed": 1,
+                    "commands":[
+                        "move_to (0;70)",
+                        "del_self"
+                    ]
+                },
+                {
+                   "name": "PhysicsCollider",
+                    "rects": [
+                        [0, 0, 30, 70]
+                   ]
+                }
+            ]
+        }
+
+    ]
+}
