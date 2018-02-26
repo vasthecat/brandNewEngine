@@ -10,6 +10,10 @@ class SaveManager:
         return SaveManager.profiles[name]
 
     @staticmethod
+    def get_profile(name):
+        return SaveManager.profiles[name]
+
+    @staticmethod
     def remove_profile(name):
         del SaveManager.profiles[name]
 
@@ -25,7 +29,7 @@ class SaveManager:
         return SaveManager.profiles[name]
 
     @staticmethod
-    def add_entry(profile_name, entry_name, value):
+    def set_entry(profile_name, entry_name, value):
         SaveManager.profiles[profile_name][entry_name] = value
         return value
 

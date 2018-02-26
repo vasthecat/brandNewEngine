@@ -10,37 +10,13 @@ import pygame
 
 from engine.input_manager import InputManager
 from engine.scene_manager import SceneManager
+from engine.save_manager import SaveManager
 from engine.initialize_engine import width, height
 from engine.base_components import Component, ImageComponent, ImageFile
 from engine.game_objects import GameObject
 from engine.gui import GUI
 
 from gui_misc import MedievalButton
-
-
-class SceneReplacement:
-    coords = {}
-    del_tardis_flag = False
-
-    @staticmethod
-    def load_house(house):
-        from scene_loader import load_scene
-        GUI.del_element('house')
-        SceneReplacement.coords['coord_in_street'] = SceneManager.current_scene.find_object('player').transform.coord
-        load_scene('scenes/{}.json'.format(house))
-
-        if SceneReplacement.del_tardis_flag:
-            if SceneManager.current_scene.find_object('tardis'):
-                SceneManager.current_scene.remove_object(SceneManager.current_scene.find_object('tardis'))
-        else:
-            SceneReplacement.del_tardis_flag = True
-
-    @staticmethod
-    def load_street():
-        from scene_loader import load_scene
-        GUI.del_element('enter_to_street')
-        load_scene('scenes/scene1.json')
-        SceneManager.current_scene.find_object('player').transform.move_to(*SceneReplacement.coords['coord_in_street'])
 
 
 class AnimationController(ImageComponent):
@@ -176,70 +152,87 @@ class PlayerController(Component):
         return PlayerController(component_dict['speed'], obj)
 
 
-class TriggerController(Component):
+class HousesTrigger(Component):
     def __init__(self, game_object):
         super().__init__(game_object)
-        self._player_collider = SceneManager.current_scene.find_object('player').get_component(TriggerCollider)
+        self._player = SceneManager.current_scene.find_object('player')
+        self._player_collider = self._player.get_component(TriggerCollider)
         self._collider = self.game_object.get_component(TriggerCollider)
 
         self.gui_obj = None
+        self._button_shown = False
 
-    @staticmethod
-    def deserialize(component_dict, obj):
-        return TriggerController(obj)
+    def load_scene(self):
+        pass
 
-
-class House1Trigger(TriggerController):
     def update(self, *args):
         if self._collider is not None and self._player_collider is not None:
             if self._collider.detect_collision(self._player_collider):
-                if self.gui_obj is None:
-                    self.gui_obj = GUI.add_element(MedievalButton(
-                        (width // 2, height - 100), 'Enter in house', 29, 'house',
-                        lambda: SceneReplacement.load_house('house1')
-                    ))
+                if not self._button_shown:
+                    GUI.add_element(self.gui_obj)
+                    self._button_shown = True
             else:
-                if self.gui_obj is not None:
+                if self._button_shown:
                     GUI.del_element(self.gui_obj.name)
-                    self.gui_obj = None
+                    self._button_shown = False
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return HousesTrigger(obj)
+
+
+class House1Trigger(HousesTrigger):
+    def __init__(self, game_object):
+        super().__init__(game_object)
+        self.gui_obj = MedievalButton(
+            (width // 2, height - 100), 'Enter in house', 29, 'house', self.load_scene
+        )
+
+    def load_scene(self):
+        from scene_loader import load_scene
+        GUI.del_element('house')
+        SaveManager.set_entry('village1', 'plr_coord', self._player.transform.coord)
+        load_scene('scenes/house1.json')
+        if SaveManager.get_entry('village1', 'seen_tardis'):
+            SceneManager.current_scene.remove_object(SceneManager.current_scene.find_object('tardis'))
 
     @staticmethod
     def deserialize(component_dict, obj):
         return House1Trigger(obj)
 
 
-class House2Trigger(TriggerController):
-    def update(self, *args):
-        if self._collider is not None and self._player_collider is not None:
-            if self._collider.detect_collision(self._player_collider):
-                if self.gui_obj is None:
-                    self.gui_obj = GUI.add_element(MedievalButton(
-                        (width // 2, height - 100), 'Enter in house', 29, 'house',
-                        lambda: SceneReplacement.load_house('house2')
-                    ))
-            else:
-                if self.gui_obj is not None:
-                    GUI.del_element(self.gui_obj.name)
-                    self.gui_obj = None
+class House2Trigger(HousesTrigger):
+    def __init__(self, game_object):
+        super().__init__(game_object)
+        self.gui_obj = MedievalButton(
+            (width // 2, height - 100), 'Enter in house', 29, 'house', self.load_scene
+        )
+
+    def load_scene(self):
+        from scene_loader import load_scene
+        GUI.del_element('house')
+        SaveManager.set_entry('village1', 'plr_coord', self._player.transform.coord)
+        load_scene('scenes/house2.json')
 
     @staticmethod
     def deserialize(component_dict, obj):
         return House2Trigger(obj)
 
 
-class EnterStreetTrigger(TriggerController):
-    def update(self, *args):
-        if self._collider is not None and self._player_collider is not None:
-            if self._collider.detect_collision(self._player_collider):
-                if self.gui_obj is None:
-                    self.gui_obj = GUI.add_element(MedievalButton(
-                        (width // 2, height - 100), 'Come to street', 29, 'enter_to_street',
-                        lambda: SceneReplacement.load_street()
-                    ))
-            else:
-                if self.gui_obj is not None:
-                    GUI.del_element(self.gui_obj.name)
-                    self.gui_obj = None
+class EnterStreetTrigger(HousesTrigger):
+    def __init__(self, game_object):
+        super().__init__(game_object)
+        self.gui_obj = MedievalButton(
+            (width // 2, height - 100), 'Come to street', 29, 'enter_to_street', self.load_scene
+        )
+
+    def load_scene(self):
+        from scene_loader import load_scene
+        GUI.del_element('enter_to_street')
+        load_scene('scenes/scene1.json')
+        SceneManager.current_scene.find_object('player').transform.move_to(
+            *SaveManager.get_entry('village1', 'plr_coord')
+        )
 
     @staticmethod
     def deserialize(component_dict, obj):
@@ -477,6 +470,7 @@ class TardisController(Component):
         self.game_object.get_component(AnimationController).play_animation('start')
 
     def update(self, *args):
+        SaveManager.set_entry('village1', 'seen_tardis', True)
         if time() - self._start_time > 3:
             SceneManager.current_scene.remove_object(self.game_object)
 

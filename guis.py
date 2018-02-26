@@ -1,5 +1,6 @@
 from engine.gui import GUI, load_image, Label, Image
 from engine.initialize_engine import width, height
+from engine.save_manager import SaveManager
 
 from scene_loader import load_scene
 from gui_misc import CloudsController, MedievalButton
@@ -13,6 +14,7 @@ class MainMenuGUI:
     @staticmethod
     def start_game():
         load_scene('scenes/scene1.json')
+        SaveManager.add_profile('village1', {'seen_tardis': False})
         GUI.clear()
         GameGUI.init()
 
