@@ -8,34 +8,15 @@ from pygame.math import Vector2
 import pygame
 
 
-from engine.input_manager import input_manager
-from engine.scene_manager import scene_manager
+from engine.input_manager import InputManager
+from engine.scene_manager import SceneManager
+from engine.save_manager import SaveManager
 from engine.initialize_engine import width, height
 from engine.base_components import Component, ImageComponent, ImageFile
 from engine.game_objects import GameObject
-from engine.gui import gui, Label, Button
+from engine.gui import GUI
 
 from gui_misc import MedievalButton
-
-
-class SceneReplacement:
-    coords = {}
-
-    @staticmethod
-    def load_house(coord):
-        from scene_loader import load_scene
-        gui.del_element('house')
-        gui.del_element('label_house')
-        load_scene('scenes/house.json')
-        SceneReplacement.coords['coord_in_street'] = coord
-
-    @staticmethod
-    def load_street(obj):
-        from scene_loader import load_scene
-        gui.del_element('enter_to_street')
-        gui.del_element('label_enter_to_street')
-        load_scene('scenes/scene1.json')
-        scene_manager.current_scene.find_objects(obj.name)[0].transform.move_to(*SceneReplacement.coords['coord_in_street'])
 
 
 class AnimationController(ImageComponent):
@@ -71,7 +52,7 @@ class AnimationController(ImageComponent):
         self._current_animation_name = name
         self._current_animation = it.cycle(self.animations[name])
 
-    def play_animation(self, name, times):
+    def play_animation(self, name, times=1):
         self._current_animation = it.chain(
             iter(self.animations[name] * times), it.cycle(self.animations[self._current_animation_name])
         )
@@ -85,9 +66,6 @@ class AnimationController(ImageComponent):
             component_dict['animations'], component_dict['start_animation'], obj
         )
 
-    def serialize(self):
-        return {}  # TODO
-
 
 class PlayerController(Component):
     def __init__(self, speed, game_object):
@@ -96,7 +74,7 @@ class PlayerController(Component):
         self.gui_obj = {}
         self._prev_move = Vector2()
         self._direction = 'down'
-        self.set_camera_pos(Vector2())
+        self.set_camera_pos()
 
         self._steps_sound = pygame.mixer.Sound('sounds/steps.ogg')
 
@@ -119,7 +97,7 @@ class PlayerController(Component):
                 if self._prev_move.y == 0 or self._direction != 'down':
                     animator.set_animation('down')
                 self._direction = 'down'
-            elif move.x == move.y == 0:
+            elif move.x == move.y == 0 and self._prev_move.length() != 0:
                 animator.set_animation('idle_' + self._direction)
 
     def play_sound(self, move):
@@ -128,35 +106,34 @@ class PlayerController(Component):
         elif move.length() == 0:
             self._steps_sound.stop()
 
-    def set_camera_pos(self, player_move):
-        cam = scene_manager.current_scene.current_camera
+    def set_camera_pos(self):
+        cam = SceneManager.current_scene.current_camera
         x, y = self.game_object.transform.coord
 
-        if abs(x + player_move.x) < 1024 - width // 2:
-            cam.transform.move_to(x + player_move.x, cam.transform.y)
+        if abs(x) < 1024 - width // 2:
+            cam.transform.move_to(x, cam.transform.y)
         else:
             cam.transform.move_to(
-                copysign(1024 - width // 2, x + player_move.x), cam.transform.y
+                copysign(1024 - width // 2, x), cam.transform.y
             )
 
-        if abs(y + player_move.y) < 1024 - height // 2:
-            cam.transform.move_to(cam.transform.x, y + player_move.y)
+        if abs(y) < 1024 - height // 2:
+            cam.transform.move_to(cam.transform.x, y)
         else:
             cam.transform.move_to(
-                cam.transform.x, copysign(1024 - height // 2, y + player_move.y)
+                cam.transform.x, copysign(1024 - height // 2, y)
             )
 
     def update(self, *args):
         move = Vector2(
-            input_manager.get_axis('Horizontal') * self.speed,
-            input_manager.get_axis('Vertical') * self.speed
+            InputManager.get_axis('Horizontal') * self.speed,
+            InputManager.get_axis('Vertical') * self.speed
         )
         self.game_object.transform.move(move.x, move.y)
 
         phys_collider = self.game_object.get_component(PhysicsCollider)
-        trigger_collider = self.game_object.get_component(TriggerCollider)
 
-        for obj in scene_manager.current_scene.objects:
+        for obj in SceneManager.current_scene.objects:
             if phys_collider is not None:
                 phys_collider.update()
                 if obj != self.game_object and obj.has_component(PhysicsCollider):
@@ -165,32 +142,7 @@ class PlayerController(Component):
                         self.game_object.transform.move(-move.x, -move.y)
                         move = Vector2()
 
-            if trigger_collider is not None:
-                trigger_collider.update()
-                if obj != self.game_object and obj.has_component(TriggerCollider):
-                    if trigger_collider.detect_collision(obj.get_component(TriggerCollider)):
-                        if obj.get_component(TriggerCollider).trigger_name == 'House':
-                            _ = MedievalButton(
-                                (width//2, height-100), 'Enter in house', 29, 'house',
-                                lambda: SceneReplacement.load_house(self.game_object.transform.coord)
-                            )
-
-                            gui.add_element(_)
-                            self.gui_obj[obj.get_component(TriggerCollider)] = _
-
-                        elif obj.get_component(TriggerCollider).trigger_name == 'enter_in_street':
-                            _ = MedievalButton(
-                                (width // 2, height - 100), 'Come to street', 29, 'enter_to_street',
-                                lambda: SceneReplacement.load_street(self.game_object)
-                            )
-                            gui.add_element(_)
-                            self.gui_obj[obj.get_component(TriggerCollider)] = _
-                    else:
-                        if obj.get_component(TriggerCollider) in self.gui_obj:
-                            gui.del_element(self.gui_obj[obj.get_component(TriggerCollider)].name)
-                            del self.gui_obj[obj.get_component(TriggerCollider)]
-
-        self.set_camera_pos(move)
+        self.set_camera_pos()
         self.change_animation(move)
         self.play_sound(move)
         self._prev_move = move
@@ -199,8 +151,92 @@ class PlayerController(Component):
     def deserialize(component_dict, obj):
         return PlayerController(component_dict['speed'], obj)
 
-    def serialize(self):
-        return {'name': 'PlayerController', 'speed': self.speed}
+
+class HousesTrigger(Component):
+    def __init__(self, game_object):
+        super().__init__(game_object)
+        self._player = SceneManager.current_scene.find_object('player')
+        self._player_collider = self._player.get_component(TriggerCollider)
+        self._collider = self.game_object.get_component(TriggerCollider)
+
+        self.gui_obj = None
+        self._button_shown = False
+
+    def load_scene(self):
+        pass
+
+    def update(self, *args):
+        if self._collider is not None and self._player_collider is not None:
+            if self._collider.detect_collision(self._player_collider):
+                if not self._button_shown:
+                    GUI.add_element(self.gui_obj)
+                    self._button_shown = True
+            else:
+                if self._button_shown:
+                    GUI.del_element(self.gui_obj.name)
+                    self._button_shown = False
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return HousesTrigger(obj)
+
+
+class House1Trigger(HousesTrigger):
+    def __init__(self, game_object):
+        super().__init__(game_object)
+        self.gui_obj = MedievalButton(
+            (width // 2, height - 100), 'Enter in house', 29, 'house', self.load_scene
+        )
+
+    def load_scene(self):
+        from scene_loader import load_scene
+        GUI.del_element('house')
+        SaveManager.set_entry('village1', 'plr_coord', self._player.transform.coord)
+        load_scene('scenes/house1.json')
+        if SaveManager.get_entry('village1', 'seen_tardis'):
+            SceneManager.current_scene.remove_object(SceneManager.current_scene.find_object('tardis'))
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return House1Trigger(obj)
+
+
+class House2Trigger(HousesTrigger):
+    def __init__(self, game_object):
+        super().__init__(game_object)
+        self.gui_obj = MedievalButton(
+            (width // 2, height - 100), 'Enter in house', 29, 'house', self.load_scene
+        )
+
+    def load_scene(self):
+        from scene_loader import load_scene
+        GUI.del_element('house')
+        SaveManager.set_entry('village1', 'plr_coord', self._player.transform.coord)
+        load_scene('scenes/house2.json')
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return House2Trigger(obj)
+
+
+class EnterStreetTrigger(HousesTrigger):
+    def __init__(self, game_object):
+        super().__init__(game_object)
+        self.gui_obj = MedievalButton(
+            (width // 2, height - 100), 'Come to street', 29, 'enter_to_street', self.load_scene
+        )
+
+    def load_scene(self):
+        from scene_loader import load_scene
+        GUI.del_element('enter_to_street')
+        load_scene('scenes/scene1.json')
+        SceneManager.current_scene.find_object('player').transform.move_to(
+            *SaveManager.get_entry('village1', 'plr_coord')
+        )
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return EnterStreetTrigger(obj)
 
 
 class _ColliderSprite(pygame.sprite.Sprite):
@@ -232,9 +268,6 @@ class Collider(Component):
     def deserialize(component_dict, obj):
         return Collider(component_dict['rects'], obj)
 
-    def serialize(self):
-        return {'name': 'Collider'}  # TODO
-
 
 class PhysicsCollider(Collider):
     def __init__(self, rects, game_object):
@@ -251,11 +284,6 @@ class PhysicsCollider(Collider):
     def deserialize(component_dict, obj):
         return PhysicsCollider(component_dict['rects'], obj)
 
-    def serialize(self):
-        d = super().serialize()
-        d['name'] = 'PhysicsCollider'
-        return d
-
 
 class TriggerCollider(Collider):
     def __init__(self, rects, trigger_name, game_object):
@@ -267,11 +295,6 @@ class TriggerCollider(Collider):
         return TriggerCollider(
             component_dict['rects'], component_dict['trigger_name'], obj
         )
-
-    def serialize(self):
-        d = super().serialize()
-        d.update({'name': 'TriggerCollider', 'trigger_name': self.trigger_name})
-        return d
 
 
 class ParticleSystem(Component):
@@ -291,7 +314,7 @@ class ParticleSystem(Component):
                 (self.correction + Vector2(random.random(), random.random())).normalize(),
                 self.speed, self.life_time, go
             ))
-            scene_manager.current_scene.add_object(go)
+            SceneManager.current_scene.add_object(go)
 
     @staticmethod
     def deserialize(component_dict, obj):
@@ -312,7 +335,7 @@ class Particle(Component):
     def update(self, *args):
         if time() - self._start >= self.life_time:
             # POSSIBLE MEMORY LEAK ????????
-            scene_manager.current_scene.remove_object(self.game_object)
+            SceneManager.current_scene.remove_object(self.game_object)
         else:
             move = self.direction * self.speed
             self.game_object.transform.move(move.x, move.y)
@@ -329,3 +352,128 @@ class MusicController(Component):
     @staticmethod
     def deserialize(component_dict, obj):
         return MusicController(component_dict['paths'], obj)
+
+
+class WaterSound(Component):
+    def __init__(self, max_distance, game_object):
+        super().__init__(game_object)
+        self.sound = pygame.mixer.Sound('sounds/water_waves.ogg')
+        self.sound.play(-1)
+        self.player_transform = SceneManager.current_scene.find_object('player').transform
+        self.max_distance = max_distance
+
+    def update(self, *args):
+        vol = (self.max_distance - Vector2(
+            self.game_object.transform.x - self.player_transform.x,
+            self.game_object.transform.y - self.player_transform.y
+        ).length()) / self.max_distance
+
+        self.sound.set_volume(0 if vol < 0 else vol)
+        if vol < 0:
+            self.sound.set_volume(0)
+        else:
+            self.sound.set_volume(vol)
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return WaterSound(component_dict['max_distance'], obj)
+
+
+class NPCController(Component):
+    def __init__(self, speed, commands, game_object):
+        super().__init__(game_object)
+        self.speed = speed
+
+        _ = []
+        for i, com in enumerate(commands):
+            com_ = com.split()[0]
+            if com_ == 'move_to' and len(com_) > 2:
+                for com2 in com.split()[1:]:
+                    _1 = com2.replace('(', '').replace(')', '').replace(';', ' ')
+                    _.append("move_to {}".format(_1))
+            else:
+                _.append(com)
+
+        self.commands = it.cycle(_)
+        self.current_command = next(self.commands)
+        self._start_sleep = None
+        self._prev_move = Vector2()
+        self._direction = 'down'
+
+    def change_animation(self, move):
+        animator = self.game_object.get_component(AnimationController)
+        if animator is not None:
+            if move.x > 0:
+                if self._prev_move.x == 0 or self._direction != 'right':
+                    animator.set_animation('right')
+                self._direction = 'right'
+            elif move.x < 0:
+                if self._prev_move.x == 0 or self._direction != 'left':
+                    animator.set_animation('left')
+                self._direction = 'left'
+            elif move.y > 0:
+                if self._prev_move.y == 0 or self._direction != 'up':
+                    animator.set_animation('up')
+                self._direction = 'up'
+            elif move.y < 0:
+                if self._prev_move.y == 0 or self._direction != 'down':
+                    animator.set_animation('down')
+                self._direction = 'down'
+            elif move.x == move.y == 0 and self._prev_move.length() != 0:
+                animator.set_animation('idle_' + self._direction)
+
+    def update(self, *args):
+        command = self.current_command.split()
+        if command[0] == 'move_to':
+            move = Vector2(int(command[1]) - self.game_object.transform.x, int(command[2]) - self.game_object.transform.y)
+            if move.length() > self.speed:
+                move = move.normalize() * self.speed
+            else:
+                self.current_command = next(self.commands)
+
+            self.game_object.transform.move(move.x, move.y)
+
+            phys_collider = self.game_object.get_component(PhysicsCollider)
+            for obj in SceneManager.current_scene.objects:
+                if phys_collider is not None:
+                    phys_collider.update()
+                    if obj != self.game_object and obj.has_component(PhysicsCollider):
+                        collision = phys_collider.detect_collision(obj.get_component(PhysicsCollider))
+                        if collision:
+                            self.game_object.transform.move(-move.x, -move.y)
+                            move = Vector2()
+
+            self.change_animation(move)
+            self._prev_move = move
+
+        elif command[0] == 'sleep':
+            if self._start_sleep is None:
+                self._start_sleep = time()
+            if time() - self._start_sleep >= float(command[1]):
+                self.current_command = next(self.commands)
+                self._start_sleep = None
+            self.change_animation(Vector2())
+            self._prev_move = Vector2()
+
+        elif command[0] == 'del_self':
+            SceneManager.current_scene.remove_object(self.game_object)
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return NPCController(component_dict['speed'], component_dict['commands'], obj)
+
+
+class TardisController(Component):
+    def __init__(self, game_object):
+        super().__init__(game_object)
+        self._start_time = time()
+        self.game_object.get_component(AnimationController).play_animation('start')
+
+    def update(self, *args):
+        SaveManager.set_entry('village1', 'seen_tardis', True)
+        if time() - self._start_time > 3:
+            SceneManager.current_scene.remove_object(self.game_object)
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return TardisController(obj)

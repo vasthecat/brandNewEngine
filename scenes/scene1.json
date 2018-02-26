@@ -18,7 +18,7 @@
             "components": [
                 {
                     "name": "ImageFile",
-                    "path": "images/ground_layer.png"
+                    "path": "images/interiors/village1/ground_layer.png"
                 }
             ]
         },
@@ -95,7 +95,285 @@
                 }
             ]
         },
+        {
+            "name": "npc1",
+            "x": 136, "y": 764,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_right",
+                    "animations": {
+                        "up": {"path": "images/npcs/npc1/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/npcs/npc1/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/npcs/npc1/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/npcs/npc1/run_left.png", "size": [1, 4], "repeats": 10},
 
+                        "idle_up": {"path": "images/npcs/npc1/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/npcs/npc1/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/npcs/npc1/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/npcs/npc1/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "NPCController",
+                    "speed": 2,
+                    "commands": [
+                        "move_to (141;776) (141;689) (137;690) (-26;690) (-25;689) (-47;685) (-49;685) (-72;670) (-72;670) (-84;645) (-84;645) (-92;616) (-94;614) (-94;389) (-94;389) (625;-77) (626;-78) (637;-94) (637;-94) (646;-126) (646;-126) (646;-181) (645;-181) (648;-189) (648;-189) (648;-953) (646;-952) (585;-952) (586;-949) (586;-909)",
+                        "sleep 5",
+                        "move_to (585;-925) (646;-909) (646;-909) (646;-79) (644;-81) (-102;421) (-102;421) (-102;633) (-100;629) (-87;645) (-87;645) (-73;649) (-73;649) (108;649) (106;649) (135;649) (135;651) (135;789) (134;789) (141;789) (141;790) (141;786)",
+                        "sleep 9"
+                    ]
+                },
+                {
+                    "name": "PhysicsCollider",
+                    "rects": [
+                        [0, 0, 24, 24]
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "npc2",
+            "x": -660, "y": 240,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_right",
+                    "animations": {
+                        "up": {"path": "images/npcs/npc2/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/npcs/npc2/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/npcs/npc2/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/npcs/npc2/run_left.png", "size": [1, 4], "repeats": 10},
+
+                        "idle_up": {"path": "images/npcs/npc2/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/npcs/npc2/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/npcs/npc2/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/npcs/npc2/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "NPCController",
+                    "speed": 2,
+                    "commands": [
+                        "move_to (-671;235) (-671;341) (-670;341) (-641;371) (-641;371) (-641;411) (-641;411) (-618;411) (-620;409) (-620;565) (-621;565) (-309;619) (-309;619) (-191;604) (-191;604) (-165;595) (-165;595) (-165;-7) (-165;-6) (-453;-98) (-454;-97) (-454;-69)",
+                        "sleep 3",
+                        "move_to (-455;-70) (143;-242) (139;-243) (532;-419) (532;-419) (532;-754) (534;-754) (332;-780) (332;-780) (332;-855) (331;-855) (358;-855)",
+                        "sleep 4",
+                        "move_to (358;-855) (358;-782) (358;-782) (534;-752) (526;-749) (526;-417) (524;-417) (-65;-171) (-64;-171) (-141;-147) (-141;-147) (-141;608) (-141;607) (-622;607) (-622;606) (-622;401) (-623;401) (-669;348) (-669;348) (-669;236)",
+                        "sleep 8"
+                    ]
+                },
+                {
+                    "name": "PhysicsCollider",
+                    "rects": [
+                        [0, 0, 24, 24]
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "npc3",
+            "x": 863, "y": -880,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_right",
+                    "animations": {
+                        "up": {"path": "images/npcs/npc3/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/npcs/npc3/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/npcs/npc3/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/npcs/npc3/run_left.png", "size": [1, 4], "repeats": 10},
+
+                        "idle_up": {"path": "images/npcs/npc3/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/npcs/npc3/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/npcs/npc3/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/npcs/npc3/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "NPCController",
+                    "speed": 2,
+                    "commands": [
+                        "move_to (863;-856) (864;-858) (973;-888) (972;-888) (972;-950) (967;-950) (862;-976) (862;-976) (168;-976) (167;-977) (-58;-901) (-58;-901) (-58;-600) (-58;-603) (-636;-436) (-636;-436) (-636;-189) (-636;-190) (-583;-121) (-583;-121) (-583;-116)",
+                        "sleep 5",
+                        "move_to (-588;-116) (-619;-198) (-619;-198) (-619;-423) (-620;-423) (-63;-584) (-64;-586) (-64;-822) (-65;-830) (202;-981) (200;-972) (806;-972) (806;-971) (806;-816) (808;-816) (861;-765) (861;-765) (861;-770)",
+                        "sleep 7"
+                    ]
+                },
+                {
+                    "name": "PhysicsCollider",
+                    "rects": [
+                        [0, 0, 24, 24]
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "npc4",
+            "x": -882, "y": -385,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_right",
+                    "animations": {
+                        "up": {"path": "images/npcs/npc6/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/npcs/npc6/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/npcs/npc6/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/npcs/npc6/run_left.png", "size": [1, 4], "repeats": 10},
+
+                        "idle_up": {"path": "images/npcs/npc6/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/npcs/npc6/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/npcs/npc6/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/npcs/npc6/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "NPCController",
+                    "speed": 2,
+                    "commands": [
+                        "move_to (-877;-388) (-1000;-456) (-1000;-456) (-1000;-973) (-1000;-972) (-496;-972) (-496;-970) (-496;-904) (-497;-904) (-564;-904) (-564;-901) (-564;-873) (-566;-873) (-586;-873)",
+                        "sleep 9",
+                        "move_to (-586;-872) (-586;-965) (-589;-965) (-990;-971) (-990;-971) (-990;-477) (-989;-480) (-708;-427) (-708;-427) (-708;-178) (-708;-179) (-996;-179) (-996;-181) (-996;-221)",
+                        "sleep 5",
+                        "move_to (-996;-221) (-971;-221) (-971;-220) (-878;-180) (-878;-180) (-711;-180) (-711;-180) (-711;-417) (-712;-416) (-878;-416) (-878;-385) (-878;-421)",
+                        "sleep 10"
+
+                    ]
+                },
+                {
+                    "name": "PhysicsCollider",
+                    "rects": [
+                        [0, 0, 24, 24]
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "npc5",
+            "x": -826, "y": -590,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_right",
+                    "animations": {
+                        "up": {"path": "images/npcs/npc5/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/npcs/npc5/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/npcs/npc5/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/npcs/npc5/run_left.png", "size": [1, 4], "repeats": 10},
+
+                        "idle_up": {"path": "images/npcs/npc5/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/npcs/npc5/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/npcs/npc5/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/npcs/npc5/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "NPCController",
+                    "speed": 2,
+                    "commands": [
+                        "move_to (-826;-585) (-949;-587) (-949;-587) (-949;-942) (-949;-942) (-868;-942) (-868;-946) (-868;-924)",
+                        "sleep 4",
+                        "move_to (-865;-924) (-947;-941) (-947;-941) (-947;-584) (-946;-584) (-826;-584) (-826;-585) (-826;-592)",
+                        "sleep 11"
+                    ]
+                },
+                {
+                    "name": "PhysicsCollider",
+                    "rects": [
+                        [0, 0, 24, 24]
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "duck1",
+            "x": -953, "y": 50,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_right",
+                    "animations": {
+                        "up": {"path": "images/npcs/duck1/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/npcs/duck1/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/npcs/duck1/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/npcs/duck1/run_left.png", "size": [1, 4], "repeats": 10},
+
+                        "idle_up": {"path": "images/npcs/duck1/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/npcs/duck1/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/npcs/duck1/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/npcs/duck1/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "NPCController",
+                    "speed": 1,
+                    "commands": [
+                        "move_to (-953;204) (-926;222) (-902;223) (-838;212) (-810;189) (-766;186) (-724;182) (-725;162) (-784;159) (-830;178) (-876;164) (-929;131) (-979;61) (-1005;75) (-998;129) (-975;166) (-969;186) (-836;135) (-791;133) (-739;107) (-726;76) (-736;42) (-775;72) (-828;96) (-872;83) (-900;106) (-921;154) (-890;178) (-848;156)"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "duck2",
+            "x": -923, "y": 80,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_right",
+                    "animations": {
+                        "up": {"path": "images/npcs/duck2/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/npcs/duck2/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/npcs/duck2/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/npcs/duck2/run_left.png", "size": [1, 4], "repeats": 10},
+
+                        "idle_up": {"path": "images/npcs/duck2/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/npcs/duck2/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/npcs/duck2/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/npcs/duck2/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "NPCController",
+                    "speed": 1,
+                    "commands": [
+                        "move_to (-654;153) (-621;158) (-563;150) (-558;126) (-587;113) (-613;122) (-652;153) (-685;159) (-692;122) (-680;78) (-644;46) (-665;20) (-626;-1) (-596;22) (-602;67) (-632;87) (-629;116) (-648;135) (-674;125) (-686;138)"                    ]
+                }
+            ]
+        },
+        {
+            "name": "beaver1",
+            "x": -953, "y": 57,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_right",
+                    "animations": {
+                        "up": {"path": "images/npcs/beaver/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/npcs/beaver/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/npcs/beaver/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/npcs/beaver/run_left.png", "size": [1, 4], "repeats": 10},
+
+                        "idle_up": {"path": "images/npcs/beaver/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/npcs/beaver/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/npcs/beaver/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/npcs/beaver/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "NPCController",
+                    "speed": 1,
+                    "commands": [
+                        "move_to (-959;57) (-989;135) (-989;134) (-989;204) (-986;204) (-728;232) (-728;232) (-677;169) (-676;168) (-664;75) (-664;75) (-586;46) (-584;46) (-597;-11) (-598;-12) (-624;153) (-624;153) (-832;144) (-832;144) (-889;70) (-889;67) (-985;41) (-986;48) (-902;155)",
+                        "sleep 2",
+                        "move_to (-902;155) (-926;80) (-923;80) (-724;57)",
+                        "sleep 4",
+                        "move_to (-724;57) (-704;94) (-704;94) (-811;190) (-811;190) (-930;223) (-930;223) (-1094;267) (-1094;267) (-1087;105) (-1087;105) (-1072;34)",
+                        "sleep 3",
+                        "move_to (-1072;33) (-987;93)"
+                    ]
+                }
+            ]
+        },
         {
             "name": "player",
             "x": -960, "y": 712,
@@ -139,7 +417,7 @@
             "components": [
                 {
                     "name": "ImageFile",
-                    "path": "images/upper_layer.png"
+                    "path": "images/interiors/village1/upper_layer.png"
                 }
             ]
         },
@@ -232,14 +510,139 @@
             ]
         },
         {
+            "x": -650, "y": 140,
+            "components": [
+                {
+                    "name": "WaterSound",
+                    "max_distance": 650
+                }
+            ]
+        },
+        {
             "components": [
                 {
                     "name": "TriggerCollider",
-                    "trigger_name": "House",
+                    "trigger_name": "house1",
                     "rects": [
                         [-440, 813, 64, 32],
-                        [-506, -335, 64, 32],
                         [862, -35, 64, 32]
+                    ]
+                },
+                {
+                    "name": "House1Trigger"
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "name": "TriggerCollider",
+                    "trigger_name": "house2",
+                    "rects": [
+                        [-506, -335, 64, 32]
+                    ]
+                },
+                {
+                    "name": "House2Trigger"
+                }
+            ]
+        },
+        {
+            "name": "bird1",
+            "x": 1377, "y": 588,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_right",
+                    "animations": {
+                        "up": {"path": "images/npcs/bird1/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/npcs/bird1/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/npcs/bird1/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/npcs/bird1/run_left.png", "size": [1, 4], "repeats": 10},
+
+                        "idle_up": {"path": "images/npcs/bird1/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/npcs/bird1/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/npcs/bird1/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/npcs/bird1/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "NPCController",
+                    "speed": 7,
+                    "commands": [
+                        "move_to (1182;874) (-1214;84) (-1215;82) (-1219;-16)",
+                        "sleep 4",
+                        "move_to (-1217;-17) (-982;222) (-982;221) (-839;205) (-823;201) (-752;144) (-752;144) (-695;148) (-693;149) (-638;218) (-638;218) (-659;279) (-660;282) (-783;277) (-783;277) (-805;233) (-805;233) (-826;171) (-826;171) (-864;113) (-864;113) (-922;77) (-923;75) (-907;36) (-905;33) (-848;32) (-845;32) (-798;37) (-796;37) (-725;52) (-724;52) (-693;84) (-693;84) (-669;97) (-669;97) (-639;69) (-639;69) (-644;14) (-644;6) (-641;-32) (-641;-32) (-572;-26) (-571;-23) (-569;19) (-569;36) (-582;90) (-585;114) (-596;145) (-597;150) (-680;191) (-681;190) (-737;127) (-737;127) (-740;124) (-740;123) (-379;-1128) (-379;-1202) (1106;-1083) (1106;-1083) (1140;-922) (1140;-922) (1101;-666)",
+                        "sleep 5",
+                        "move_to (1101;-666) (497;-597) (497;-597) (-85;60) (-86;59) (-370;570) (-370;570) (-392;1068) (-392;1068) (1246;1097) (1244;1094) (867;1081) (863;1081) (609;-612) (610;-609) (613;-964) (613;-978) (639;-1193) (640;-1192) (641;-1192) (632;-1190) (1114;-1067) (1114;-1067) (1162;888)",
+                        "sleep 6"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "bird2",
+            "x": 1377, "y": 573,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_right",
+                    "animations": {
+                        "up": {"path": "images/npcs/bird1/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/npcs/bird1/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/npcs/bird1/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/npcs/bird1/run_left.png", "size": [1, 4], "repeats": 10},
+
+                        "idle_up": {"path": "images/npcs/bird1/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/npcs/bird1/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/npcs/bird1/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/npcs/bird1/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "NPCController",
+                    "speed": 7,
+                    "commands": [
+                       "move_to (1155;879) (-1175;111) (-1178;110) (-1187;-6)",
+                        "sleep 4",
+                        "move_to (-1187;-11) (-967;220) (-963;221) (-837;222) (-837;222) (-793;200) (-786;198) (-738;157) (-738;157) (-724;154) (-712;157) (-673;193) (-668;198) (-674;241) (-677;250) (-711;283) (-717;285) (-792;295) (-808;292) (-842;207) (-843;182) (-875;137) (-894;123) (-955;92) (-964;80) (-963;57) (-945;35) (-911;12) (-879;6) (-842;2) (-801;5) (-752;18) (-724;32) (-690;40) (-667;63) (-661;89) (-658;99) (-625;109) (-554;107) (-526;37) (-550;-2) (-604;-22) (-634;-19) (-624;13) (-621;45) (-613;83) (-606;120) (-611;151) (-635;171) (-675;172) (-708;170) (-748;137) (-765;99) (-775;56) (-779;34) (-775;-3) (-774;-24) (-401;-1144) (-401;-1144) (1119;-1103) (1119;-1103) (1117;-652)",
+                        "sleep 5",
+                        "move_to (1117;-653) (570;-613) (570;-613) (431;-462) (431;-462) (-141;-14) (-141;-14) (-400;571) (-400;577) (-414;1096) (-414;1096) (1248;1113) (1248;1113) (853;1108) (853;1108) (570;-710) (570;-719) (601;-1229) (601;-1229) (1198;-1086) (1198;-1052) (1188;886)",
+                        "sleep 6"
+
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "bird3",
+            "x": 1400, "y": 560,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_right",
+                    "animations": {
+                        "up": {"path": "images/npcs/bird3/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/npcs/bird3/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/npcs/bird3/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/npcs/bird3/run_left.png", "size": [1, 4], "repeats": 10},
+
+                        "idle_up": {"path": "images/npcs/bird3/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/npcs/bird3/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/npcs/bird3/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/npcs/bird3/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "NPCController",
+                    "speed": 7,
+                    "commands": [
+                        "move_to (1182;874) (-1214;84) (-1215;82) (-1219;-16)",
+                        "sleep 4",
+                        "move_to (-1217;-17) (-982;222) (-982;221) (-839;205) (-823;201) (-752;144) (-752;144) (-695;148) (-693;149) (-638;218) (-638;218) (-659;279) (-660;282) (-783;277) (-783;277) (-805;233) (-805;233) (-826;171) (-826;171) (-864;113) (-864;113) (-922;77) (-923;75) (-907;36) (-905;33) (-848;32) (-845;32) (-798;37) (-796;37) (-725;52) (-724;52) (-693;84) (-693;84) (-669;97) (-669;97) (-639;69) (-639;69) (-644;14) (-644;6) (-641;-32) (-641;-32) (-572;-26) (-571;-23) (-569;19) (-569;36) (-582;90) (-585;114) (-596;145) (-597;150) (-680;191) (-681;190) (-737;127) (-737;127) (-740;124) (-740;123) (-379;-1128) (-379;-1202) (1106;-1083) (1106;-1083) (1140;-922) (1140;-922) (1101;-666)",
+                        "sleep 5",
+                        "move_to (1101;-666) (497;-597) (497;-597) (-85;60) (-86;59) (-370;570) (-370;570) (-392;1068) (-392;1068) (1246;1097) (1244;1094) (867;1081) (863;1081) (609;-612) (610;-609) (613;-964) (613;-978) (639;-1193) (640;-1192) (641;-1192) (632;-1190) (1114;-1067) (1114;-1067) (1162;888)",
+                        "sleep 6"
                     ]
                 }
             ]

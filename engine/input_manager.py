@@ -13,26 +13,26 @@ class InputManager:
         },
     }
 
-    def __init__(self):
-        self.subscribers = []
-        self.events = []
+    _events = []
 
-    def get_axis(self, name):
+    @staticmethod
+    def get_axis(name):
         axis = InputManager.AXES.get(name, None)
         if axis is not None:
             return sum(val for key, val in axis.items() if pygame.key.get_pressed()[key])
 
-    def get_mouse_pos(self):
+    @staticmethod
+    def get_mouse_pos():
         return pygame.mouse.get_pos()
 
-    def add_axis(self, name, keys):
+    @staticmethod
+    def add_axis(name, keys):
         InputManager.AXES[name] = keys
 
-    def get_events(self):
-        return self.events
+    @staticmethod
+    def get_events():
+        return InputManager.events
 
-    def update(self):
-        self.events = list(pygame.event.get())
-
-
-input_manager = InputManager()
+    @staticmethod
+    def update():
+        InputManager.events = list(pygame.event.get())
