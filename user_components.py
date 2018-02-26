@@ -20,14 +20,22 @@ from gui_misc import MedievalButton
 
 class SceneReplacement:
     coords = {}
+    del_tardis_flag = False
+
 
     @staticmethod
-    def load_house(coord):
+    def load_house(coord, house):
         from scene_loader import load_scene
         gui.del_element('house')
         gui.del_element('label_house')
-        load_scene('scenes/house.json')
+        load_scene('scenes/{}.json'.format(house))
         SceneReplacement.coords['coord_in_street'] = coord
+
+        if SceneReplacement.del_tardis_flag:
+            if scene_manager.current_scene.find_objects('tardis'):
+                scene_manager.current_scene.remove_object(scene_manager.current_scene.find_objects('tardis')[0])
+        else:
+            SceneReplacement.del_tardis_flag = True
 
     @staticmethod
     def load_street(obj):
@@ -147,6 +155,7 @@ class PlayerController(Component):
             )
 
     def update(self, *args):
+        print(self.game_object.transform.coord)
         move = Vector2(
             input_manager.get_axis('Horizontal') * self.speed,
             input_manager.get_axis('Vertical') * self.speed
@@ -169,16 +178,17 @@ class PlayerController(Component):
                 trigger_collider.update()
                 if obj != self.game_object and obj.has_component(TriggerCollider):
                     if trigger_collider.detect_collision(obj.get_component(TriggerCollider)):
-                        if obj.get_component(TriggerCollider).trigger_name == 'House':
+                        trigger_name = obj.get_component(TriggerCollider).trigger_name
+                        if len(trigger_name) > 5 and trigger_name[:5] == 'house':
                             _ = MedievalButton(
                                 (width//2, height-100), 'Enter in house', 29, 'house',
-                                lambda: SceneReplacement.load_house(self.game_object.transform.coord)
+                                lambda: SceneReplacement.load_house(self.game_object.transform.coord, trigger_name)
                             )
 
                             gui.add_element(_)
                             self.gui_obj[obj.get_component(TriggerCollider)] = _
 
-                        elif obj.get_component(TriggerCollider).trigger_name == 'enter_in_street':
+                        elif trigger_name == 'enter_in_street':
                             _ = MedievalButton(
                                 (width // 2, height - 100), 'Come to street', 29, 'enter_to_street',
                                 lambda: SceneReplacement.load_street(self.game_object)
@@ -431,6 +441,9 @@ class NPCController(Component):
                 self._start_sleep = None
             self.change_animation(Vector2())
             self._prev_move = Vector2()
+
+        elif command[0] == 'del_self':
+            scene_manager.current_scene.remove_object(self.game_object)
 
 
     @staticmethod
