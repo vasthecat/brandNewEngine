@@ -1,4 +1,4 @@
-from engine.scene_manager import scene_manager
+from engine.scene_manager import SceneManager
 from engine.game_objects import GameObject
 from engine.base_components import ImageFile
 from user_components import (PhysicsCollider, TriggerCollider, PlayerController, AnimationController, ParticleSystem,
@@ -12,8 +12,8 @@ def load_scene(path):
     with open(path, encoding='utf-8') as f:
         scene_dict = json.load(f)
 
-    scene_manager.create_scene(scene_dict['name'], set_current=True)
-    scene = scene_manager.current_scene
+    SceneManager.create_scene(scene_dict['name'], set_current=True)
+    scene = SceneManager.current_scene
 
     for obj in scene_dict['objects']:
         game_object = GameObject(

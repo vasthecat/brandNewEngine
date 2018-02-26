@@ -1,36 +1,6 @@
 from engine.game_objects import Camera
 
 
-class SceneManager:
-    def __init__(self):
-        self.current_scene = None
-        self.scenes = {}
-        self.create_scene('default_scene', set_current=True)
-
-    def set_current(self, name):
-        scene = self.scenes.get(name, None)
-        if scene is not None:
-            self.current_scene = scene
-
-    def create_scene(self, scene_name, camera=None, set_current=False):
-        if camera is None:
-            camera = Camera()
-        self.scenes[scene_name] = Scene(scene_name, camera)
-        if set_current:
-            self.current_scene = self.scenes[scene_name]
-
-    def rename_scene(self, old_name, new_name):
-        scene = self.scenes.get(old_name, None)
-        if scene is not None:
-            if new_name not in self.scenes:
-                self.scenes[new_name] = self.scenes[old_name]
-                del self.scenes[old_name]
-                scene.name = new_name
-
-    def remove_scene(self, name):
-        del self.scenes[name]
-
-
 class Scene:
     def __init__(self, name, camera):
         self.name = name
@@ -74,4 +44,33 @@ class Scene:
         self.current_camera.draw(self.objects)
 
 
-scene_manager = SceneManager()
+class SceneManager:
+    current_scene = Scene('default_scene', Camera())
+    scenes = {'default_scene': current_scene}
+
+    @staticmethod
+    def set_current(name):
+        scene = SceneManager.scenes.get(name, None)
+        if scene is not None:
+            SceneManager.current_scene = scene
+
+    @staticmethod
+    def create_scene(scene_name, camera=None, set_current=False):
+        if camera is None:
+            camera = Camera()
+        SceneManager.scenes[scene_name] = Scene(scene_name, camera)
+        if set_current:
+            SceneManager.current_scene = SceneManager.scenes[scene_name]
+
+    @staticmethod
+    def rename_scene(old_name, new_name):
+        scene = SceneManager.scenes.get(old_name, None)
+        if scene is not None:
+            if new_name not in SceneManager.scenes:
+                SceneManager.scenes[new_name] = SceneManager.scenes[old_name]
+                del SceneManager.scenes[old_name]
+                scene.name = new_name
+
+    @staticmethod
+    def remove_scene(name):
+        del SceneManager.scenes[name]

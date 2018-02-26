@@ -1,4 +1,4 @@
-from engine.gui import gui, load_image, Label, Image
+from engine.gui import GUI, load_image, Label, Image
 from engine.initialize_engine import width, height
 
 from scene_loader import load_scene
@@ -13,7 +13,7 @@ class MainMenuGUI:
     @staticmethod
     def start_game():
         load_scene('scenes/scene1.json')
-        gui.clear()
+        GUI.clear()
         GameGUI.init()
 
     @staticmethod
@@ -26,18 +26,18 @@ class MainMenuGUI:
         clouds_controller = CloudsController('Con', [1, 0])
         CloudsController.generate_clouds(15, clouds_controller)
 
-        gui.add_element(Image((width // 2, height // 2), pygame.transform.scale(
+        GUI.add_element(Image((width // 2, height // 2), pygame.transform.scale(
             load_image('images/sky.png'), (width, height)
         ), 'sky'))
-        gui.add_element(clouds_controller)
+        GUI.add_element(clouds_controller)
 
-        gui.add_element(Image((width // 2, 75), load_image('images/title_bg.png'), 'title'))
-        gui.add_element(
+        GUI.add_element(Image((width // 2, 75), load_image('images/title_bg.png'), 'title'))
+        GUI.add_element(
             Label((width // 2, 159), 53, 'Untitled game', Color('white'), 'fonts/Dot.ttf', 'title_text'))
 
-        gui.add_element(MedievalButton((width // 2, height // 2), 'Start game', 35, 'start_game', MainMenuGUI.start_game))
+        GUI.add_element(MedievalButton((width // 2, height // 2), 'Start game', 35, 'start_game', MainMenuGUI.start_game))
 
-        gui.add_element(MedievalButton((width // 2, height // 2 + 100), 'Exit', 35, 'exit', MainMenuGUI.exit))
+        GUI.add_element(MedievalButton((width // 2, height // 2 + 100), 'Exit', 35, 'exit', MainMenuGUI.exit))
 
 
 class GameGUI:
@@ -45,31 +45,31 @@ class GameGUI:
 
     @staticmethod
     def exit_in_menu():
-        gui.clear()
+        GUI.clear()
         load_scene('scenes/main_menu.json')
         MainMenuGUI.init()
 
     @staticmethod
     def pause_menu_clear():
         for _ in GameGUI.pause_menu_elements:
-            gui.del_element(_)
+            GUI.del_element(_)
 
         GameGUI.pause_menu_elements.clear()
 
     @staticmethod
     def create_menu():
-        gui.add_element(Image((width // 2, height // 2), load_image("images/game_menu_gui/menu.png"), 'background'))
+        GUI.add_element(Image((width // 2, height // 2), load_image("images/game_menu_gui/menu.png"), 'background'))
         GameGUI.pause_menu_elements.add('background')
 
-        gui.add_element(MedievalButton((width // 2, height // 2 - 50), 'Resume', 35, 'resume', GameGUI.pause_menu_clear))
+        GUI.add_element(MedievalButton((width // 2, height // 2 - 50), 'Resume', 35, 'resume', GameGUI.pause_menu_clear))
         GameGUI.pause_menu_elements.add('resume')
 
-        gui.add_element(MedievalButton((width // 2, height // 2 + 30), 'Exit in menu', 33, 'exit', GameGUI.exit_in_menu))
+        GUI.add_element(MedievalButton((width // 2, height // 2 + 30), 'Exit in menu', 33, 'exit', GameGUI.exit_in_menu))
         GameGUI.pause_menu_elements.add('exit')
 
-        gui.add_element(MedievalButton((width // 2, height // 2 + 85), 'Exit in desktop', 29, 'exit_in_desktop', MainMenuGUI.exit))
+        GUI.add_element(MedievalButton((width // 2, height // 2 + 85), 'Exit in desktop', 29, 'exit_in_desktop', MainMenuGUI.exit))
         GameGUI.pause_menu_elements.add('exit_in_desktop')
 
     @staticmethod
     def init():
-        gui.add_element(MedievalButton((width // 2, height - 35), 'Menu', 35, 'game_menu', GameGUI.create_menu))
+        GUI.add_element(MedievalButton((width // 2, height - 35), 'Menu', 35, 'game_menu', GameGUI.create_menu))

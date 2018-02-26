@@ -110,45 +110,47 @@ class Image:
 
 
 class GUI:
-    def __init__(self):
-        self.elements = []
+    elements = []
 
-    def add_element(self, element):
-        if all(map(lambda elem: elem.name != element.name, self.elements)):
-            self.elements.append(element)
+    @staticmethod
+    def add_element(element):
+        if all(map(lambda elem: elem.name != element.name, GUI.elements)):
+            GUI.elements.append(element)
             return element
 
-    def get_element(self, name):
-        for elem in self.elements:
+    @staticmethod
+    def get_element(name):
+        for elem in GUI.elements:
             if elem.name == name:
                 return elem
 
-
-    def render(self):
-        for element in self.elements:
+    @staticmethod
+    def render():
+        for element in GUI.elements:
             render = getattr(element, "render", None)
             if callable(render):
                 element.render(pygame.display.get_surface())
 
-    def update(self):
-        for element in self.elements:
+    @staticmethod
+    def update():
+        for element in GUI.elements:
             update = getattr(element, "update", None)
             if callable(update):
                 element.update()
 
-    def apply_event(self, event):
-        for element in self.elements:
+    @staticmethod
+    def apply_event(event):
+        for element in GUI.elements:
             get_event = getattr(element, "apply_event", None)
             if callable(get_event):
                 element.apply_event(event)
 
-    def del_element(self, name):
-        for element in self.elements:
+    @staticmethod
+    def del_element(name):
+        for element in GUI.elements:
             if element.name == name:
-                self.elements.remove(element)
+                GUI.elements.remove(element)
 
-    def clear(self):
-        self.elements = []
-
-
-gui = GUI()
+    @staticmethod
+    def clear():
+        GUI.elements = []

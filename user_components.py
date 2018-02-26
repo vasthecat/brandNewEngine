@@ -8,12 +8,12 @@ from pygame.math import Vector2
 import pygame
 
 
-from engine.input_manager import input_manager
-from engine.scene_manager import scene_manager
+from engine.input_manager import InputManager
+from engine.scene_manager import SceneManager
 from engine.initialize_engine import width, height
 from engine.base_components import Component, ImageComponent, ImageFile
 from engine.game_objects import GameObject
-from engine.gui import gui
+from engine.gui import GUI
 
 from gui_misc import MedievalButton
 
@@ -25,22 +25,22 @@ class SceneReplacement:
     @staticmethod
     def load_house(house):
         from scene_loader import load_scene
-        gui.del_element('house')
-        SceneReplacement.coords['coord_in_street'] = scene_manager.current_scene.find_object('player').transform.coord
+        GUI.del_element('house')
+        SceneReplacement.coords['coord_in_street'] = SceneManager.current_scene.find_object('player').transform.coord
         load_scene('scenes/{}.json'.format(house))
 
         if SceneReplacement.del_tardis_flag:
-            if scene_manager.current_scene.find_object('tardis'):
-                scene_manager.current_scene.remove_object(scene_manager.current_scene.find_object('tardis'))
+            if SceneManager.current_scene.find_object('tardis'):
+                SceneManager.current_scene.remove_object(SceneManager.current_scene.find_object('tardis'))
         else:
             SceneReplacement.del_tardis_flag = True
 
     @staticmethod
     def load_street():
         from scene_loader import load_scene
-        gui.del_element('enter_to_street')
+        GUI.del_element('enter_to_street')
         load_scene('scenes/scene1.json')
-        scene_manager.current_scene.find_object('player').transform.move_to(*SceneReplacement.coords['coord_in_street'])
+        SceneManager.current_scene.find_object('player').transform.move_to(*SceneReplacement.coords['coord_in_street'])
 
 
 class AnimationController(ImageComponent):
@@ -134,7 +134,7 @@ class PlayerController(Component):
             self._steps_sound.stop()
 
     def set_camera_pos(self):
-        cam = scene_manager.current_scene.current_camera
+        cam = SceneManager.current_scene.current_camera
         x, y = self.game_object.transform.coord
 
         if abs(x) < 1024 - width // 2:
@@ -153,14 +153,14 @@ class PlayerController(Component):
 
     def update(self, *args):
         move = Vector2(
-            input_manager.get_axis('Horizontal') * self.speed,
-            input_manager.get_axis('Vertical') * self.speed
+            InputManager.get_axis('Horizontal') * self.speed,
+            InputManager.get_axis('Vertical') * self.speed
         )
         self.game_object.transform.move(move.x, move.y)
 
         phys_collider = self.game_object.get_component(PhysicsCollider)
 
-        for obj in scene_manager.current_scene.objects:
+        for obj in SceneManager.current_scene.objects:
             if phys_collider is not None:
                 phys_collider.update()
                 if obj != self.game_object and obj.has_component(PhysicsCollider):
@@ -185,7 +185,7 @@ class PlayerController(Component):
 class TriggerController(Component):
     def __init__(self, game_object):
         super().__init__(game_object)
-        self._player_collider = scene_manager.current_scene.find_object('player').get_component(TriggerCollider)
+        self._player_collider = SceneManager.current_scene.find_object('player').get_component(TriggerCollider)
         self._collider = self.game_object.get_component(TriggerCollider)
 
         self.gui_obj = None
@@ -200,13 +200,13 @@ class House1Trigger(TriggerController):
         if self._collider is not None and self._player_collider is not None:
             if self._collider.detect_collision(self._player_collider):
                 if self.gui_obj is None:
-                    self.gui_obj = gui.add_element(MedievalButton(
+                    self.gui_obj = GUI.add_element(MedievalButton(
                         (width // 2, height - 100), 'Enter in house', 29, 'house',
                         lambda: SceneReplacement.load_house('house1')
                     ))
             else:
                 if self.gui_obj is not None:
-                    gui.del_element(self.gui_obj.name)
+                    GUI.del_element(self.gui_obj.name)
                     self.gui_obj = None
 
     @staticmethod
@@ -219,13 +219,13 @@ class House2Trigger(TriggerController):
         if self._collider is not None and self._player_collider is not None:
             if self._collider.detect_collision(self._player_collider):
                 if self.gui_obj is None:
-                    self.gui_obj = gui.add_element(MedievalButton(
+                    self.gui_obj = GUI.add_element(MedievalButton(
                         (width // 2, height - 100), 'Enter in house', 29, 'house',
                         lambda: SceneReplacement.load_house('house2')
                     ))
             else:
                 if self.gui_obj is not None:
-                    gui.del_element(self.gui_obj.name)
+                    GUI.del_element(self.gui_obj.name)
                     self.gui_obj = None
 
     @staticmethod
@@ -238,13 +238,13 @@ class EnterStreetTrigger(TriggerController):
         if self._collider is not None and self._player_collider is not None:
             if self._collider.detect_collision(self._player_collider):
                 if self.gui_obj is None:
-                    self.gui_obj = gui.add_element(MedievalButton(
+                    self.gui_obj = GUI.add_element(MedievalButton(
                         (width // 2, height - 100), 'Come to street', 29, 'enter_to_street',
                         lambda: SceneReplacement.load_street()
                     ))
             else:
                 if self.gui_obj is not None:
-                    gui.del_element(self.gui_obj.name)
+                    GUI.del_element(self.gui_obj.name)
                     self.gui_obj = None
 
     @staticmethod
@@ -340,7 +340,7 @@ class ParticleSystem(Component):
                 (self.correction + Vector2(random.random(), random.random())).normalize(),
                 self.speed, self.life_time, go
             ))
-            scene_manager.current_scene.add_object(go)
+            SceneManager.current_scene.add_object(go)
 
     @staticmethod
     def deserialize(component_dict, obj):
@@ -361,7 +361,7 @@ class Particle(Component):
     def update(self, *args):
         if time() - self._start >= self.life_time:
             # POSSIBLE MEMORY LEAK ????????
-            scene_manager.current_scene.remove_object(self.game_object)
+            SceneManager.current_scene.remove_object(self.game_object)
         else:
             move = self.direction * self.speed
             self.game_object.transform.move(move.x, move.y)
@@ -385,7 +385,7 @@ class WaterSound(Component):
         super().__init__(game_object)
         self.sound = pygame.mixer.Sound('sounds/water_waves.ogg')
         self.sound.play(-1)
-        self.player_transform = scene_manager.current_scene.find_object('player').transform
+        self.player_transform = SceneManager.current_scene.find_object('player').transform
         self.max_distance = max_distance
 
     def update(self, *args):
@@ -460,7 +460,7 @@ class NPCController(Component):
             self.game_object.transform.move(move.x, move.y)
 
             phys_collider = self.game_object.get_component(PhysicsCollider)
-            for obj in scene_manager.current_scene.objects:
+            for obj in SceneManager.current_scene.objects:
                 if phys_collider is not None:
                     phys_collider.update()
                     if obj != self.game_object and obj.has_component(PhysicsCollider):
@@ -482,7 +482,7 @@ class NPCController(Component):
             self._prev_move = Vector2()
 
         elif command[0] == 'del_self':
-            scene_manager.current_scene.remove_object(self.game_object)
+            SceneManager.current_scene.remove_object(self.game_object)
 
 
     @staticmethod
