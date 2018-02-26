@@ -116,6 +116,7 @@ class GUI:
     def add_element(self, element):
         if all(map(lambda elem: elem.name != element.name, self.elements)):
             self.elements.append(element)
+            return element
 
     def get_element(self, name):
         for elem in self.elements:

@@ -56,6 +56,9 @@
                     "rects": [
                         [-4, -250, 140, 32]
                     ]
+                },
+                {
+                    "name": "EnterStreetTrigger"
                 }
             ]
         },

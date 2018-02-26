@@ -22,28 +22,25 @@ class SceneReplacement:
     coords = {}
     del_tardis_flag = False
 
-
     @staticmethod
-    def load_house(coord, house):
+    def load_house(house):
         from scene_loader import load_scene
         gui.del_element('house')
-        gui.del_element('label_house')
+        SceneReplacement.coords['coord_in_street'] = scene_manager.current_scene.find_object('player').transform.coord
         load_scene('scenes/{}.json'.format(house))
-        SceneReplacement.coords['coord_in_street'] = coord
 
         if SceneReplacement.del_tardis_flag:
-            if scene_manager.current_scene.find_objects('tardis'):
-                scene_manager.current_scene.remove_object(scene_manager.current_scene.find_objects('tardis')[0])
+            if scene_manager.current_scene.find_object('tardis'):
+                scene_manager.current_scene.remove_object(scene_manager.current_scene.find_object('tardis'))
         else:
             SceneReplacement.del_tardis_flag = True
 
     @staticmethod
-    def load_street(obj):
+    def load_street():
         from scene_loader import load_scene
         gui.del_element('enter_to_street')
-        gui.del_element('label_enter_to_street')
         load_scene('scenes/scene1.json')
-        scene_manager.current_scene.find_objects(obj.name)[0].transform.move_to(*SceneReplacement.coords['coord_in_street'])
+        scene_manager.current_scene.find_object('player').transform.move_to(*SceneReplacement.coords['coord_in_street'])
 
 
 class AnimationController(ImageComponent):
@@ -162,7 +159,6 @@ class PlayerController(Component):
         self.game_object.transform.move(move.x, move.y)
 
         phys_collider = self.game_object.get_component(PhysicsCollider)
-        trigger_collider = self.game_object.get_component(TriggerCollider)
 
         for obj in scene_manager.current_scene.objects:
             if phys_collider is not None:
@@ -172,32 +168,6 @@ class PlayerController(Component):
                     if collision:
                         self.game_object.transform.move(-move.x, -move.y)
                         move = Vector2()
-
-            if trigger_collider is not None:
-                trigger_collider.update()
-                if obj != self.game_object and obj.has_component(TriggerCollider):
-                    if trigger_collider.detect_collision(obj.get_component(TriggerCollider)):
-                        trigger_name = obj.get_component(TriggerCollider).trigger_name
-                        if len(trigger_name) > 5 and trigger_name[:5] == 'house':
-                            _ = MedievalButton(
-                                (width//2, height-100), 'Enter in house', 29, 'house',
-                                lambda: SceneReplacement.load_house(self.game_object.transform.coord, trigger_name)
-                            )
-
-                            gui.add_element(_)
-                            self.gui_obj[obj.get_component(TriggerCollider)] = _
-
-                        elif trigger_name == 'enter_in_street':
-                            _ = MedievalButton(
-                                (width // 2, height - 100), 'Come to street', 29, 'enter_to_street',
-                                lambda: SceneReplacement.load_street(self.game_object)
-                            )
-                            gui.add_element(_)
-                            self.gui_obj[obj.get_component(TriggerCollider)] = _
-                    else:
-                        if obj.get_component(TriggerCollider) in self.gui_obj:
-                            gui.del_element(self.gui_obj[obj.get_component(TriggerCollider)].name)
-                            del self.gui_obj[obj.get_component(TriggerCollider)]
 
         self.set_camera_pos()
         self.change_animation(move)
@@ -210,6 +180,76 @@ class PlayerController(Component):
 
     def serialize(self):
         return {'name': 'PlayerController', 'speed': self.speed}
+
+
+class TriggerController(Component):
+    def __init__(self, game_object):
+        super().__init__(game_object)
+        self._player_collider = scene_manager.current_scene.find_object('player').get_component(TriggerCollider)
+        self._collider = self.game_object.get_component(TriggerCollider)
+
+        self.gui_obj = None
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return TriggerController(obj)
+
+
+class House1Trigger(TriggerController):
+    def update(self, *args):
+        if self._collider is not None and self._player_collider is not None:
+            if self._collider.detect_collision(self._player_collider):
+                if self.gui_obj is None:
+                    self.gui_obj = gui.add_element(MedievalButton(
+                        (width // 2, height - 100), 'Enter in house', 29, 'house',
+                        lambda: SceneReplacement.load_house('house1')
+                    ))
+            else:
+                if self.gui_obj is not None:
+                    gui.del_element(self.gui_obj.name)
+                    self.gui_obj = None
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return House1Trigger(obj)
+
+
+class House2Trigger(TriggerController):
+    def update(self, *args):
+        if self._collider is not None and self._player_collider is not None:
+            if self._collider.detect_collision(self._player_collider):
+                if self.gui_obj is None:
+                    self.gui_obj = gui.add_element(MedievalButton(
+                        (width // 2, height - 100), 'Enter in house', 29, 'house',
+                        lambda: SceneReplacement.load_house('house2')
+                    ))
+            else:
+                if self.gui_obj is not None:
+                    gui.del_element(self.gui_obj.name)
+                    self.gui_obj = None
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return House2Trigger(obj)
+
+
+class EnterStreetTrigger(TriggerController):
+    def update(self, *args):
+        if self._collider is not None and self._player_collider is not None:
+            if self._collider.detect_collision(self._player_collider):
+                if self.gui_obj is None:
+                    self.gui_obj = gui.add_element(MedievalButton(
+                        (width // 2, height - 100), 'Come to street', 29, 'enter_to_street',
+                        lambda: SceneReplacement.load_street()
+                    ))
+            else:
+                if self.gui_obj is not None:
+                    gui.del_element(self.gui_obj.name)
+                    self.gui_obj = None
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return EnterStreetTrigger(obj)
 
 
 class _ColliderSprite(pygame.sprite.Sprite):
@@ -345,7 +385,7 @@ class WaterSound(Component):
         super().__init__(game_object)
         self.sound = pygame.mixer.Sound('sounds/water_waves.ogg')
         self.sound.play(-1)
-        self.player_transform = scene_manager.current_scene.find_objects('player')[0].transform
+        self.player_transform = scene_manager.current_scene.find_object('player').transform
         self.max_distance = max_distance
 
     def update(self, *args):

@@ -10,19 +10,22 @@ class GameObject:
         self.add_component(TransformComponent(x, y, self))
         self.transform = self.get_component(TransformComponent)
 
-    def get_component(self, type):
-        for component in self.components:
-            if isinstance(component, type):
-                return component
-
     def add_component(self, component):
         self.components.append(component)
 
-    def has_component(self, type):
-        return self.get_component(type) is not None
+    def get_component(self, type):
+        try:
+            return next(self.get_components(type))
+        except StopIteration:
+            return None
 
     def get_components(self, type):
-        return list(filter(lambda comp: isinstance(comp, type), self.components))
+        for component in self.components:
+            if isinstance(component, type):
+                yield component
+
+    def has_component(self, type):
+        return self.get_component(type) is not None
 
     def update(self):
         for component in self.components:

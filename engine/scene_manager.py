@@ -53,8 +53,16 @@ class Scene:
     def remove_object(self, game_obj):
         self.objects.remove(game_obj)
 
+    def find_object(self, name):
+        try:
+            return next(self.find_objects(name))
+        except StopIteration:
+            return None
+
     def find_objects(self, name):
-        return list(filter(lambda obj: obj.name == name, self.objects))
+        for obj in self.objects:
+            if obj.name == name:
+                yield obj
 
     def update(self):
         for obj in self.objects:
