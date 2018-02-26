@@ -6,7 +6,7 @@
             "components": [
                 {
                     "name": "ImageFile",
-                    "path": "images/house.png"
+                    "path": "images/interiors/house1/house.png"
                 }
             ]
         },
@@ -84,11 +84,11 @@
             ]
         },
         {
-            "name": "ground_layer",
+            "name": "upper_layer",
             "components": [
                 {
                     "name": "ImageFile",
-                    "path": "images/house_1_2.png"
+                    "path": "images/interiors/house1/house_1_2.png"
                 }
             ]
         },

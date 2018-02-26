@@ -18,7 +18,7 @@
             "components": [
                 {
                     "name": "ImageFile",
-                    "path": "images/ground_layer.png"
+                    "path": "images/interiors/village1/ground_layer.png"
                 }
             ]
         },
@@ -417,7 +417,7 @@
             "components": [
                 {
                     "name": "ImageFile",
-                    "path": "images/upper_layer.png"
+                    "path": "images/interiors/village1/upper_layer.png"
                 }
             ]
         },

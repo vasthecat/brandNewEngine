@@ -78,7 +78,7 @@ class Button:
 
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
-                if self.states['hovered']:
+                if self.states['hovered'] and self.states['after_click']:
                     self.states['after_click'] = False
                     self.func()
 

@@ -29,11 +29,11 @@ class MainMenuGUI:
         CloudsController.generate_clouds(15, clouds_controller)
 
         GUI.add_element(Image((width // 2, height // 2), pygame.transform.scale(
-            load_image('images/sky.png'), (width, height)
+            load_image('images/main_menu/sky.png'), (width, height)
         ), 'sky'))
         GUI.add_element(clouds_controller)
 
-        GUI.add_element(Image((width // 2, 75), load_image('images/title_bg.png'), 'title'))
+        GUI.add_element(Image((width // 2, 75), load_image('images/main_menu/title_bg.png'), 'title'))
         GUI.add_element(
             Label((width // 2, 159), 53, 'Untitled game', Color('white'), 'fonts/Dot.ttf', 'title_text'))
 
@@ -69,10 +69,10 @@ class GameGUI:
         GUI.add_element(MedievalButton((width // 2, height // 2 - 50), 'Resume', 35, 'resume', GameGUI.pause_menu_clear))
         GameGUI.pause_menu_elements.add('resume')
 
-        GUI.add_element(MedievalButton((width // 2, height // 2 + 30), 'Exit in menu', 33, 'exit', GameGUI.exit_in_menu))
+        GUI.add_element(MedievalButton((width // 2, height // 2 + 20), 'Exit in menu', 33, 'exit', GameGUI.exit_in_menu))
         GameGUI.pause_menu_elements.add('exit')
 
-        GUI.add_element(MedievalButton((width // 2, height // 2 + 85), 'Exit in desktop', 29, 'exit_in_desktop', MainMenuGUI.exit))
+        GUI.add_element(MedievalButton((width // 2, height // 2 + 90), 'Exit in desktop', 29, 'exit_in_desktop', MainMenuGUI.exit))
         GameGUI.pause_menu_elements.add('exit_in_desktop')
 
     @staticmethod

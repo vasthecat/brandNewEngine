@@ -6,7 +6,7 @@
             "components": [
                 {
                     "name": "ImageFile",
-                    "path": "images/house2.png"
+                    "path": "images/interiors/house2/house2.png"
                 }
             ]
         },
@@ -90,7 +90,7 @@
             "components": [
                 {
                     "name": "ImageFile",
-                    "path": "images/house_2_2.png"
+                    "path": "images/interiors/house2/house_2_2.png"
                 }
             ]
         }
