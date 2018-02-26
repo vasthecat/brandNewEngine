@@ -97,28 +97,14 @@
             "components": [
                 {
                     "name": "AnimationController",
-                    "start_animation": "idle_down",
+                    "start_animation": "transparent",
                     "animations": {
-                        "up": {"path": "images/npcs/tardis/tardis.png", "size": [5, 5], "repeats": 3},
-                        "down": {"path": "images/npcs/tardis/tardis.png", "size": [5, 5], "repeats": 3},
-
-                        "idle_up": {"path": "images/npcs/tardis/tardis.png", "size": [5, 5], "repeats": 3},
-                        "idle_down": {"path": "images/npcs/tardis/tardis.png", "size": [5, 5], "repeats": 3}
+                        "transparent": {"path": "images/npcs/tardis/transparent.png", "size": [1, 1], "repeats": 1},
+                        "start": {"path": "images/npcs/tardis/tardis.png", "size": [5, 5], "repeats": 3}
                     }
                 },
                 {
-                    "name": "NPCController",
-                    "speed": 1,
-                    "commands":[
-                        "move_to (0;70)",
-                        "del_self"
-                    ]
-                },
-                {
-                   "name": "PhysicsCollider",
-                    "rects": [
-                        [0, 0, 30, 70]
-                   ]
+                    "name": "TardisController"
                 }
             ]
         }

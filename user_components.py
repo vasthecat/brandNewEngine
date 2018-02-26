@@ -76,7 +76,7 @@ class AnimationController(ImageComponent):
         self._current_animation_name = name
         self._current_animation = it.cycle(self.animations[name])
 
-    def play_animation(self, name, times):
+    def play_animation(self, name, times=1):
         self._current_animation = it.chain(
             iter(self.animations[name] * times), it.cycle(self.animations[self._current_animation_name])
         )
@@ -89,9 +89,6 @@ class AnimationController(ImageComponent):
         return AnimationController(
             component_dict['animations'], component_dict['start_animation'], obj
         )
-
-    def serialize(self):
-        return {}  # TODO
 
 
 class PlayerController(Component):
@@ -177,9 +174,6 @@ class PlayerController(Component):
     @staticmethod
     def deserialize(component_dict, obj):
         return PlayerController(component_dict['speed'], obj)
-
-    def serialize(self):
-        return {'name': 'PlayerController', 'speed': self.speed}
 
 
 class TriggerController(Component):
@@ -281,9 +275,6 @@ class Collider(Component):
     def deserialize(component_dict, obj):
         return Collider(component_dict['rects'], obj)
 
-    def serialize(self):
-        return {'name': 'Collider'}  # TODO
-
 
 class PhysicsCollider(Collider):
     def __init__(self, rects, game_object):
@@ -300,11 +291,6 @@ class PhysicsCollider(Collider):
     def deserialize(component_dict, obj):
         return PhysicsCollider(component_dict['rects'], obj)
 
-    def serialize(self):
-        d = super().serialize()
-        d['name'] = 'PhysicsCollider'
-        return d
-
 
 class TriggerCollider(Collider):
     def __init__(self, rects, trigger_name, game_object):
@@ -316,11 +302,6 @@ class TriggerCollider(Collider):
         return TriggerCollider(
             component_dict['rects'], component_dict['trigger_name'], obj
         )
-
-    def serialize(self):
-        d = super().serialize()
-        d.update({'name': 'TriggerCollider', 'trigger_name': self.trigger_name})
-        return d
 
 
 class ParticleSystem(Component):
@@ -484,7 +465,21 @@ class NPCController(Component):
         elif command[0] == 'del_self':
             SceneManager.current_scene.remove_object(self.game_object)
 
-
     @staticmethod
     def deserialize(component_dict, obj):
         return NPCController(component_dict['speed'], component_dict['commands'], obj)
+
+
+class TardisController(Component):
+    def __init__(self, game_object):
+        super().__init__(game_object)
+        self._start_time = time()
+        self.game_object.get_component(AnimationController).play_animation('start')
+
+    def update(self, *args):
+        if time() - self._start_time > 3:
+            SceneManager.current_scene.remove_object(self.game_object)
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return TardisController(obj)

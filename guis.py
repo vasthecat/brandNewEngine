@@ -55,9 +55,12 @@ class GameGUI:
             GUI.del_element(_)
 
         GameGUI.pause_menu_elements.clear()
+        GUI.get_element('game_menu').func = GameGUI.create_menu
 
     @staticmethod
     def create_menu():
+        GUI.get_element('game_menu').func = GameGUI.pause_menu_clear
+
         GUI.add_element(Image((width // 2, height // 2), load_image("images/game_menu_gui/menu.png"), 'background'))
         GameGUI.pause_menu_elements.add('background')
 
