@@ -1,7 +1,7 @@
 import itertools as it
 from time import time
 import random
-from math import copysign, hypot
+from math import copysign
 
 
 from pygame.math import Vector2
@@ -13,7 +13,7 @@ from engine.scene_manager import scene_manager
 from engine.initialize_engine import width, height
 from engine.base_components import Component, ImageComponent, ImageFile
 from engine.game_objects import GameObject
-from engine.gui import gui, Label, Button
+from engine.gui import gui
 
 from gui_misc import MedievalButton
 
@@ -104,7 +104,7 @@ class PlayerController(Component):
         self.gui_obj = {}
         self._prev_move = Vector2()
         self._direction = 'down'
-        self.set_camera_pos(Vector2())
+        self.set_camera_pos()
 
         self._steps_sound = pygame.mixer.Sound('sounds/steps.ogg')
 
@@ -136,26 +136,25 @@ class PlayerController(Component):
         elif move.length() == 0:
             self._steps_sound.stop()
 
-    def set_camera_pos(self, player_move):
+    def set_camera_pos(self):
         cam = scene_manager.current_scene.current_camera
         x, y = self.game_object.transform.coord
 
-        if abs(x + player_move.x) < 1024 - width // 2:
-            cam.transform.move_to(x + player_move.x, cam.transform.y)
+        if abs(x) < 1024 - width // 2:
+            cam.transform.move_to(x, cam.transform.y)
         else:
             cam.transform.move_to(
-                copysign(1024 - width // 2, x + player_move.x), cam.transform.y
+                copysign(1024 - width // 2, x), cam.transform.y
             )
 
-        if abs(y + player_move.y) < 1024 - height // 2:
-            cam.transform.move_to(cam.transform.x, y + player_move.y)
+        if abs(y) < 1024 - height // 2:
+            cam.transform.move_to(cam.transform.x, y)
         else:
             cam.transform.move_to(
-                cam.transform.x, copysign(1024 - height // 2, y + player_move.y)
+                cam.transform.x, copysign(1024 - height // 2, y)
             )
 
     def update(self, *args):
-        print(self.game_object.transform.coord)
         move = Vector2(
             input_manager.get_axis('Horizontal') * self.speed,
             input_manager.get_axis('Vertical') * self.speed
@@ -200,7 +199,7 @@ class PlayerController(Component):
                             gui.del_element(self.gui_obj[obj.get_component(TriggerCollider)].name)
                             del self.gui_obj[obj.get_component(TriggerCollider)]
 
-        self.set_camera_pos(move)
+        self.set_camera_pos()
         self.change_animation(move)
         self.play_sound(move)
         self._prev_move = move
