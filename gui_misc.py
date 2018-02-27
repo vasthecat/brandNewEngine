@@ -1,6 +1,6 @@
 from engine.gui import load_image, Image, Button
 from random import randint
-from engine.initialize_engine import width, height
+from engine.initialize_engine import Config
 
 
 class CloudsController:
@@ -12,7 +12,7 @@ class CloudsController:
     @staticmethod
     def generate_clouds(n_clouds, clouds_controller):
         for _ in range(n_clouds):
-            x, y = randint(-100, 700), randint(0, height)
+            x, y = randint(-100, 700), randint(0, Config.get_height())
             i = str(randint(1, 7))
             clouds_controller.add_element(
                 Image((x, y), load_image(
@@ -22,14 +22,14 @@ class CloudsController:
     def add_element(self, element):
         if randint(0, 1):
             self.elements.append({'element': element, 'step': (-self.change_pos[0], self.change_pos[1])})
-            element.const_rect.x = width
+            element.const_rect.x = Config.get_width()
         else:
             self.elements.append({'element': element, 'step': (self.change_pos[0], self.change_pos[1])})
 
     def update(self):
         for element in self.elements:
             element['element'].move(*element['step'])
-            if element['element'].get_pos()[0] > width or element['element'].get_pos()[1] > height \
+            if element['element'].get_pos()[0] > Config.get_width() or element['element'].get_pos()[1] > Config.get_width() \
                     or element['element'].get_pos()[0] + element['element'].size[0] < 0 \
                     or element['element'].get_pos()[1] + element['element'].size[1] < 0:
                 element['element'].set_const_pos()

@@ -1,5 +1,5 @@
 import pygame
-from engine.initialize_engine import width, height
+from engine.initialize_engine import Config
 from random import randint
 
 
@@ -105,7 +105,7 @@ class Image:
         return self.rect[0], self.rect[1]
 
     def set_const_pos(self):
-        self.const_rect.y = randint(0, height - self.size[1])
+        self.const_rect.y = randint(0, Config.get_height() - self.size[1])
         self.rect = self.const_rect.copy()
 
 

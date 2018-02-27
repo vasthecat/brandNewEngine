@@ -1,5 +1,5 @@
 from engine.base_components import TransformComponent, ImageComponent
-from engine.initialize_engine import width, height
+from engine.initialize_engine import Config
 import pygame
 
 
@@ -53,8 +53,8 @@ class Camera(GameObject):
                 x, y = cam_transform.coord
 
                 rect = surface.get_rect(
-                    centerx=width // 2 + obj_x - x,
-                    centery=height // 2 + y - obj_y
+                    centerx=Config.get_width() // 2 + obj_x - x,
+                    centery=Config.get_height() // 2 + y - obj_y
                 )
 
                 self.surface.blit(surface, rect)

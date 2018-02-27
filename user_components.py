@@ -11,7 +11,7 @@ import pygame
 from engine.input_manager import InputManager
 from engine.scene_manager import SceneManager
 from engine.save_manager import SaveManager
-from engine.initialize_engine import width, height
+from engine.initialize_engine import Config
 from engine.base_components import Component, ImageComponent, ImageFile
 from engine.game_objects import GameObject
 from engine.gui import GUI
@@ -110,18 +110,18 @@ class PlayerController(Component):
         cam = SceneManager.current_scene.current_camera
         x, y = self.game_object.transform.coord
 
-        if abs(x) < 1024 - width // 2:
+        if abs(x) < 1024 - Config.get_width() // 2:
             cam.transform.move_to(x, cam.transform.y)
         else:
             cam.transform.move_to(
-                copysign(1024 - width // 2, x), cam.transform.y
+                copysign(1024 - Config.get_width() // 2, x), cam.transform.y
             )
 
-        if abs(y) < 1024 - height // 2:
+        if abs(y) < 1024 - Config.get_height() // 2:
             cam.transform.move_to(cam.transform.x, y)
         else:
             cam.transform.move_to(
-                cam.transform.x, copysign(1024 - height // 2, y)
+                cam.transform.x, copysign(1024 - Config.get_height() // 2, y)
             )
 
     def update(self, *args):
@@ -166,6 +166,7 @@ class HousesTrigger(Component):
         pass
 
     def update(self, *args):
+        self.gui_obj.pos = Config.get_width() // 2, Config.get_height() - 100
         if self._collider is not None and self._player_collider is not None:
             if self._collider.detect_collision(self._player_collider):
                 if not self._button_shown:
@@ -185,7 +186,7 @@ class House1Trigger(HousesTrigger):
     def __init__(self, game_object):
         super().__init__(game_object)
         self.gui_obj = MedievalButton(
-            (width // 2, height - 100), 'Enter in house', 29, 'house', self.load_scene
+            (Config.get_width() // 2, Config.get_height() - 100), 'Enter in house', 29, 'house', self.load_scene
         )
 
     def load_scene(self):
@@ -205,7 +206,7 @@ class House2Trigger(HousesTrigger):
     def __init__(self, game_object):
         super().__init__(game_object)
         self.gui_obj = MedievalButton(
-            (width // 2, height - 100), 'Enter in house', 29, 'house', self.load_scene
+            (Config.get_width() // 2, Config.get_height() - 100), 'Enter in house', 29, 'house', self.load_scene
         )
 
     def load_scene(self):
@@ -223,7 +224,7 @@ class EnterStreetTrigger(HousesTrigger):
     def __init__(self, game_object):
         super().__init__(game_object)
         self.gui_obj = MedievalButton(
-            (width // 2, height - 100), 'Come to street', 29, 'enter_to_street', self.load_scene
+            (Config.get_width() // 2, Config.get_height() - 100), 'Come to street', 29, 'enter_to_street', self.load_scene
         )
 
     def load_scene(self):
