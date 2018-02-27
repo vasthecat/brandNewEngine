@@ -3,7 +3,7 @@ from engine.initialize_engine import Config
 from engine.save_manager import SaveManager
 
 from scene_loader import load_scene
-from gui_misc import CloudsController, MedievalButton
+from gui_misc import CloudsController, MedievalButton, MedievalCheckbox
 
 from pygame import Color
 import pygame
@@ -17,6 +17,11 @@ class MainMenuGUI:
         SaveManager.add_profile('village1', {'seen_tardis': False})
         GUI.clear()
         GameGUI.init()
+
+    @staticmethod
+    def load_settings():
+        GUI.clear()
+        SettingsGUI.init()
 
     @staticmethod
     def exit():
@@ -34,12 +39,44 @@ class MainMenuGUI:
         GUI.add_element(clouds_controller)
 
         GUI.add_element(Image((Config.get_width() // 2, 75), load_image('images/main_menu/title_bg.png'), 'title'))
-        GUI.add_element(
-            Label((Config.get_width() // 2, 159), 53, 'Untitled game', Color('white'), 'fonts/Dot.ttf', 'title_text'))
+        GUI.add_element(Label(
+            (Config.get_width() // 2, 159), 53, 'Untitled game',
+            Color('white'), 'fonts/Dot.ttf', 'title_text'
+        ))
 
-        GUI.add_element(MedievalButton((Config.get_width() // 2, Config.get_height() // 2), 'Start game', 35, 'start_game', MainMenuGUI.start_game))
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2, Config.get_height() // 2),
+            'Start game', 35, 'start_game', MainMenuGUI.start_game
+        ))
 
-        GUI.add_element(MedievalButton((Config.get_width() // 2, Config.get_height() // 2 + 100), 'Exit', 35, 'exit', MainMenuGUI.exit))
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2, Config.get_height() // 2 + 75),
+            'Settings', 35, 'settings', MainMenuGUI.load_settings
+        ))
+
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2, Config.get_height() // 2 + 150),
+            'Exit', 35, 'exit', MainMenuGUI.exit
+        ))
+
+
+class SettingsGUI:
+    @staticmethod
+    def exit():
+        GUI.clear()
+        MainMenuGUI.init()
+
+    @staticmethod
+    def init():
+        GUI.clear()
+        GUI.add_element(MedievalCheckbox(
+            'checkbox', (Config.get_width() // 2 + 200, Config.get_height() // 2 - 200),
+            'Toggle Fullscreen', 29, func=lambda val: Config.set_fullscreen(val)
+        ))
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2, Config.get_height() // 2),
+            'Exit', 29, 'exit_menu', SettingsGUI.exit
+        ))
 
 
 class GameGUI:

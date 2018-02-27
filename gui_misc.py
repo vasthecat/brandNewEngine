@@ -1,4 +1,4 @@
-from engine.gui import load_image, Image, Button
+from engine.gui import load_image, Image, Button, CheckboxWithText
 from random import randint
 from engine.initialize_engine import Config
 
@@ -40,9 +40,19 @@ class CloudsController:
 
 
 class MedievalButton(Button):
-    def __init__(self, pos, text, text_size, name, func=lambda: None):
+    def __init__(self, pos, text, text_size, name, func=lambda: None, *args):
         super().__init__(pos, {
             'normal': 'images/button/normal.png',
             'hovered': 'images/button/hovered.png',
             'clicked': 'images/button/clicked.png'
-        }, text, 'fonts/Dot.ttf', 'white', text_size, name, func)
+        }, text, 'fonts/Dot.ttf', 'white', text_size, name, func, *args)
+
+
+class MedievalCheckbox(CheckboxWithText):
+    def __init__(self, name, pos, text, text_size, value=False, func=lambda val: None):
+        super().__init__(name, pos, {
+            'normal_checked': 'images/checkbox/normal_checked.png',
+            'normal_unchecked': 'images/checkbox/normal_unchecked.png',
+            'hovered_checked': 'images/checkbox/hovered_checked.png',
+            'hovered_unchecked': 'images/checkbox/hovered_unchecked.png',
+        }, text, 'fonts/Dot.ttf', 'white', text_size, value, func)
