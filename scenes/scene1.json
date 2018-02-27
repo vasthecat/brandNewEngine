@@ -408,7 +408,7 @@
                 },
                 {
                     "name": "PlayerController",
-                    "speed": 20
+                    "speed": 4
                 }
             ]
         },
@@ -506,6 +506,15 @@
                     "paths": [
                         ["sounds/village_background_music.ogg", 100]
                     ]
+                }
+            ]
+        },
+        {
+            "x": -650, "y": 140,
+            "components": [
+                {
+                    "name": "WaterSound",
+                    "max_distance": 650
                 }
             ]
         },

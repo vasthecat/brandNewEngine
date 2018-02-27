@@ -108,10 +108,6 @@ class PlayerController(Component):
 
         self._steps_sound = pygame.mixer.Sound('sounds/steps.ogg')
 
-
-        self.flag = False #Debug
-
-
     def change_animation(self, move):
         animator = self.game_object.get_component(AnimationController)
         if animator is not None:
@@ -131,7 +127,7 @@ class PlayerController(Component):
                 if self._prev_move.y == 0 or self._direction != 'down':
                     animator.set_animation('down')
                 self._direction = 'down'
-            elif move.x == move.y == 0:
+            elif move.x == move.y == 0 and self._prev_move.length() != 0:
                 animator.set_animation('idle_' + self._direction)
 
     def play_sound(self, move):
@@ -224,20 +220,10 @@ class _ColliderSprite(pygame.sprite.Sprite):
         self.shift_y = rect[1]
         self.rect = pygame.Rect(0, 0, *rect[2:])
 
-        self.go = GameObject(*self.rect.center)
-        surface = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
-        surface.fill(pygame.Color(0, 255, 0, 120))
-        i = ImageComponent(surface, self.go)
-
-        scene_manager.current_scene.add_object(self.go)
-        self.go.add_component(i)
-
     def move_to(self, x, y):
         self.rect.center = x + self.shift_x, y + self.shift_y
 
     def update(self, x, y, *args):
-        self.go.transform.move_to(self.rect.centerx, self.rect.centery)
-
         self.move_to(x, y)
 
 
@@ -355,6 +341,31 @@ class MusicController(Component):
         return MusicController(component_dict['paths'], obj)
 
 
+class WaterSound(Component):
+    def __init__(self, max_distance, game_object):
+        super().__init__(game_object)
+        self.sound = pygame.mixer.Sound('sounds/water_waves.ogg')
+        self.sound.play(-1)
+        self.player_transform = scene_manager.current_scene.find_objects('player')[0].transform
+        self.max_distance = max_distance
+
+    def update(self, *args):
+        vol = (self.max_distance - Vector2(
+            self.game_object.transform.x - self.player_transform.x,
+            self.game_object.transform.y - self.player_transform.y
+        ).length()) / self.max_distance
+
+        self.sound.set_volume(0 if vol < 0 else vol)
+        if vol < 0:
+            self.sound.set_volume(0)
+        else:
+            self.sound.set_volume(vol)
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return WaterSound(component_dict['max_distance'], obj)
+
+
 class NPCController(Component):
     def __init__(self, speed, commands, game_object):
         super().__init__(game_object)
@@ -395,7 +406,7 @@ class NPCController(Component):
                 if self._prev_move.y == 0 or self._direction != 'down':
                     animator.set_animation('down')
                 self._direction = 'down'
-            elif move.x == move.y == 0:
+            elif move.x == move.y == 0 and self._prev_move.length() != 0:
                 animator.set_animation('idle_' + self._direction)
 
     def update(self, *args):
