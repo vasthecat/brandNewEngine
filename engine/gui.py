@@ -231,9 +231,9 @@ class GUI:
                 element.apply_event(event)
 
     @staticmethod
-    def del_element(name):
-        for element in GUI.elements:
-            if element.name == name:
+    def del_element(*names):
+        for element in GUI.elements.copy():
+            if element.name in names:
                 GUI.elements.remove(element)
 
     @staticmethod

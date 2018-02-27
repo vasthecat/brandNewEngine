@@ -20,7 +20,7 @@ class SaveManager:
     @staticmethod
     def save_profile(name, path):
         with open(path, 'w', encoding='utf-8') as f:
-            json.dump(f, SaveManager.profiles.get(name))
+            json.dump(SaveManager.profiles.get(name), f, indent=4)
 
     @staticmethod
     def load_profile(name, path):

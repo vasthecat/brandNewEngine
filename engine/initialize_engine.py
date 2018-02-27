@@ -59,4 +59,5 @@ class Config:
         pygame.display.set_mode(SaveManager.get_entry('config', 'resolution'), Config.get_flags())
         return value
 
+
 Config.init()

@@ -7,7 +7,6 @@ from gui_misc import CloudsController, MedievalButton, MedievalCheckbox
 
 from pygame import Color
 import pygame
-import sys
 
 
 class MainMenuGUI:
@@ -20,13 +19,35 @@ class MainMenuGUI:
 
     @staticmethod
     def load_settings():
-        GUI.clear()
+        MainMenuGUI.remove_buttons()
         SettingsGUI.init()
 
     @staticmethod
     def exit():
-        pygame.quit()
-        sys.exit()
+        pygame.event.post(pygame.event.Event(pygame.QUIT))
+
+    @staticmethod
+    def add_buttons():
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2, Config.get_height() // 2),
+            'Start game', 35, 'start_game', MainMenuGUI.start_game
+        ))
+
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2, Config.get_height() // 2 + 75),
+            'Settings', 35, 'settings', MainMenuGUI.load_settings
+        ))
+
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2, Config.get_height() // 2 + 150),
+            'Exit', 35, 'exit', MainMenuGUI.exit
+        ))
+
+    @staticmethod
+    def remove_buttons():
+        GUI.del_element('start_game')
+        GUI.del_element('settings')
+        GUI.del_element('exit')
 
     @staticmethod
     def init():
@@ -44,38 +65,128 @@ class MainMenuGUI:
             Color('white'), 'fonts/Dot.ttf', 'title_text'
         ))
 
-        GUI.add_element(MedievalButton(
-            (Config.get_width() // 2, Config.get_height() // 2),
-            'Start game', 35, 'start_game', MainMenuGUI.start_game
-        ))
-
-        GUI.add_element(MedievalButton(
-            (Config.get_width() // 2, Config.get_height() // 2 + 75),
-            'Settings', 35, 'settings', MainMenuGUI.load_settings
-        ))
-
-        GUI.add_element(MedievalButton(
-            (Config.get_width() // 2, Config.get_height() // 2 + 150),
-            'Exit', 35, 'exit', MainMenuGUI.exit
-        ))
+        MainMenuGUI.add_buttons()
 
 
 class SettingsGUI:
     @staticmethod
     def exit():
-        GUI.clear()
+        SettingsGUI.clear()
         MainMenuGUI.init()
 
     @staticmethod
-    def init():
+    def clear():
+        GUI.del_element(
+            'lbl_change_keys', 'btn_mvup', 'btn_mvdown', 'btn_mvleft', 'btn_mvright',
+            'lbl_set_resolution', 'btn_res1080p', 'btn_res_wxga+', 'btn_res_wxga', 'btn_res_720p', 'btn_res_xga',
+            'bg_img', 'toggle_fullscreen', 'close_settings',
+        )
+
+    @staticmethod
+    def toggle_fullscreen(value):
+        SaveManager.set_entry('preferences', 'fullscreen', value)
+        Config.set_fullscreen(value)
+
+    @staticmethod
+    def add_move_buttons():
+        x = 230
+        y = 280
+
+        GUI.add_element(Label(
+            (Config.get_width() // 2 - x, Config.get_height() // 2 - y + 75), 32, 'Change control keys',
+            pygame.Color('white'), 'fonts/Dot.ttf', 'lbl_change_keys'
+        ))
+
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2 - x, Config.get_height() // 2 - y + 75 * 2),
+            'Move up: {}'.format(
+                pygame.key.name(SaveManager.get_entry('preferences', 'up'))
+            ), 29, 'btn_mvup'
+        ))
+
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2 - x, Config.get_height() // 2 - y + 75 * 3),
+            'Move down: {}'.format(
+                pygame.key.name(SaveManager.get_entry('preferences', 'down'))
+            ), 29, 'btn_mvdown'
+        ))
+
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2 - x, Config.get_height() // 2 - y + 75 * 4),
+            'Move left: {}'.format(
+                pygame.key.name(SaveManager.get_entry('preferences', 'left'))
+            ), 29, 'btn_mvleft'
+        ))
+
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2 - x, Config.get_height() // 2 - y + 75 * 5),
+            'Move right: {}'.format(
+                pygame.key.name(SaveManager.get_entry('preferences', 'right'))
+            ), 29, 'btn_mvright'
+        ))
+
+    @staticmethod
+    def add_resolutions_buttons():
+        x = 230
+        y = 280
+
+        GUI.add_element(Label(
+            (Config.get_width() // 2 + x, Config.get_height() // 2 - y + 75), 32, 'Set display resolution',
+            pygame.Color('white'), 'fonts/Dot.ttf', 'lbl_set_resolution'
+        ))
+
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2 + x, Config.get_height() // 2 - y + 75 * 2),
+            '1920x1080', 29, 'btn_res1080p', SettingsGUI.set_resolution, 1920, 1080
+        ))
+
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2 + x, Config.get_height() // 2 - y + 75 * 3),
+            '1440x900', 29, 'btn_res_wxga+', SettingsGUI.set_resolution, 1440, 900
+        ))
+
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2 + x, Config.get_height() // 2 - y + 75 * 4),
+            '1366x768', 29, 'btn_res_wxga', SettingsGUI.set_resolution, 1366, 768
+        ))
+
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2 + x, Config.get_height() // 2 - y + 75 * 5),
+            '1280x720', 29, 'btn_res_720p', SettingsGUI.set_resolution, 1280, 720
+        ))
+
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2 + x, Config.get_height() // 2 - y + 75 * 6),
+            '1024x768', 29, 'btn_res_xga', SettingsGUI.set_resolution, 1024, 768
+        ))
+
+    @staticmethod
+    def set_resolution(width, height):
+        Config.set_resolution(width, height)
+        SaveManager.set_entry('preferences', 'resolution', [width, height])
         GUI.clear()
+        MainMenuGUI.init()
+        MainMenuGUI.remove_buttons()
+        SettingsGUI.init()
+
+    @staticmethod
+    def init():
+        GUI.add_element(Image(
+            (Config.get_width() // 2, Config.get_height() // 2 + 40),
+            load_image('images/bg.png'), 'bg_img')
+        )
+
+        SettingsGUI.add_move_buttons()
+        SettingsGUI.add_resolutions_buttons()
+
         GUI.add_element(MedievalCheckbox(
-            'checkbox', (Config.get_width() // 2 + 200, Config.get_height() // 2 - 200),
-            'Toggle Fullscreen', 29, func=lambda val: Config.set_fullscreen(val)
+            'toggle_fullscreen', (Config.get_width() // 2 + 230, Config.get_height() // 2 - 280 + 525),
+            'Toggle Fullscreen', 29, SaveManager.get_entry('preferences', 'fullscreen'),
+            SettingsGUI.toggle_fullscreen
         ))
         GUI.add_element(MedievalButton(
-            (Config.get_width() // 2, Config.get_height() // 2),
-            'Exit', 29, 'exit_menu', SettingsGUI.exit
+            (Config.get_width() // 2, Config.get_height() // 2 + 280),
+            'Close', 29, 'close_settings', SettingsGUI.exit
         ))
 
 
