@@ -425,7 +425,7 @@
             "x": -108, "y": -225,
             "components": [
                 {
-                    "name": "ParticleSystem",
+                    "name": "ParticleEmitter",
                     "path": "images/smoke_particle.png",
                     "particles_per_second": 60,
                     "correction": [0, 2],
@@ -438,7 +438,7 @@
             "x": -424, "y": -189,
             "components": [
                 {
-                    "name": "ParticleSystem",
+                    "name": "ParticleEmitter",
                     "path": "images/smoke_particle.png",
                     "particles_per_second": 60,
                     "correction": [0, 2],
@@ -451,7 +451,7 @@
             "x": -784, "y": -232,
             "components": [
                 {
-                    "name": "ParticleSystem",
+                    "name": "ParticleEmitter",
                     "path": "images/smoke_particle.png",
                     "particles_per_second": 60,
                     "correction": [0, 2],
@@ -464,7 +464,7 @@
             "x": -770, "y": -644,
             "components": [
                 {
-                    "name": "ParticleSystem",
+                    "name": "ParticleEmitter",
                     "path": "images/smoke_particle.png",
                     "particles_per_second": 60,
                     "correction": [0, 2],
@@ -477,7 +477,7 @@
             "x": -472, "y": -672,
             "components": [
                 {
-                    "name": "ParticleSystem",
+                    "name": "ParticleEmitter",
                     "path": "images/smoke_particle.png",
                     "particles_per_second": 60,
                     "correction": [0, 2],
@@ -490,7 +490,7 @@
             "x": -144, "y": -700,
             "components": [
                 {
-                    "name": "ParticleSystem",
+                    "name": "ParticleEmitter",
                     "path": "images/smoke_particle.png",
                     "particles_per_second": 60,
                     "correction": [0, 2],

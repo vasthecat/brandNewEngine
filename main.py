@@ -31,7 +31,7 @@ while True:
     InputManager.update()
 
     for event in InputManager.get_events():
-        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+        if event.type == pygame.QUIT:
             SaveManager.save_profile('preferences', 'user_prefs.json')
             pygame.quit()
             sys.exit()

@@ -298,7 +298,7 @@ class TriggerCollider(Collider):
         )
 
 
-class ParticleSystem(Component):
+class ParticleEmitter(Component):
     def __init__(self, image_path, particles_per_second, correction, speed, life_time, game_object):
         self.path = image_path
         self.particles_per_second = particles_per_second
@@ -321,7 +321,7 @@ class ParticleSystem(Component):
 
     @staticmethod
     def deserialize(component_dict, obj):
-        return ParticleSystem(
+        return ParticleEmitter(
             component_dict['path'], component_dict['particles_per_second'], component_dict['correction'],
             component_dict['speed'], component_dict['life_time'], obj
         )
