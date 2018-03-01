@@ -126,8 +126,8 @@ class PlayerController(Component):
 
     def update(self, *args):
         move = Vector2(
-            InputManager.get_axis('Horizontal') * self.speed,
-            InputManager.get_axis('Vertical') * self.speed
+            InputManager.get_delta_tick() / 1000 * InputManager.get_axis('Horizontal') * self.speed,
+            InputManager.get_delta_tick() / 1000 * InputManager.get_axis('Vertical') * self.speed
         )
         self.game_object.transform.move(move.x, move.y)
 
@@ -299,28 +299,30 @@ class TriggerCollider(Collider):
 
 
 class ParticleSystem(Component):
-    def __init__(self, image_path, particles_per_frame, correction, speed, life_time, game_object):
+    def __init__(self, image_path, particles_per_second, correction, speed, life_time, game_object):
         self.path = image_path
-        self.particles_per_frame = particles_per_frame
+        self.particles_per_second = particles_per_second
         self.speed = speed
         self.life_time = life_time
         self.correction = Vector2(correction) + Vector2(-0.5, -0.5)
         super().__init__(game_object)
 
     def update(self, *args):
-        for _ in range(self.particles_per_frame):
-            go = GameObject(*self.game_object.transform.coord)
-            go.add_component(ImageFile(self.path, go))
-            go.add_component(Particle(
-                (self.correction + Vector2(random.random(), random.random())).normalize(),
-                self.speed, self.life_time, go
-            ))
-            SceneManager.current_scene.add_object(go)
+        fps = InputManager.get_fps()
+        if fps != 0:
+            for _ in range(self.particles_per_second // fps + 1):
+                go = GameObject(*self.game_object.transform.coord)
+                go.add_component(ImageFile(self.path, go))
+                go.add_component(Particle(
+                    (self.correction + Vector2(random.random(), random.random())).normalize(),
+                    self.speed, self.life_time, go
+                ))
+                SceneManager.current_scene.add_object(go)
 
     @staticmethod
     def deserialize(component_dict, obj):
         return ParticleSystem(
-            component_dict['path'], component_dict['particles_per_frame'], component_dict['correction'],
+            component_dict['path'], component_dict['particles_per_second'], component_dict['correction'],
             component_dict['speed'], component_dict['life_time'], obj
         )
 
@@ -331,14 +333,15 @@ class Particle(Component):
         self.life_time = life_time
         self.direction = direction
         self.speed = speed
-        self._start = time()
+        # self._start = time()
+        self._start = InputManager.get_ticks()
 
     def update(self, *args):
-        if time() - self._start >= self.life_time:
+        if self._start + self.life_time * 1000 < InputManager.get_ticks():
             # POSSIBLE MEMORY LEAK ????????
             SceneManager.current_scene.remove_object(self.game_object)
         else:
-            move = self.direction * self.speed
+            move = self.direction * self.speed * InputManager.get_delta_tick() / 1000
             self.game_object.transform.move(move.x, move.y)
 
 
@@ -426,7 +429,10 @@ class NPCController(Component):
     def update(self, *args):
         command = self.current_command.split()
         if command[0] == 'move_to':
-            move = Vector2(int(command[1]) - self.game_object.transform.x, int(command[2]) - self.game_object.transform.y)
+            move = Vector2(
+                int(command[1]) - self.game_object.transform.x,
+                int(command[2]) - self.game_object.transform.y
+            ) * InputManager.get_delta_tick() // 1000
             if move.length() > self.speed:
                 move = move.normalize() * self.speed
             else:

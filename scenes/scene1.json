@@ -408,7 +408,7 @@
                 },
                 {
                     "name": "PlayerController",
-                    "speed": 4
+                    "speed": 200
                 }
             ]
         },
@@ -427,9 +427,9 @@
                 {
                     "name": "ParticleSystem",
                     "path": "images/smoke_particle.png",
-                    "particles_per_frame": 1,
+                    "particles_per_second": 60,
                     "correction": [0, 2],
-                    "speed": 2,
+                    "speed": 120,
                     "life_time": 0.6
                 }
             ]
@@ -440,9 +440,9 @@
                 {
                     "name": "ParticleSystem",
                     "path": "images/smoke_particle.png",
-                    "particles_per_frame": 1,
+                    "particles_per_second": 60,
                     "correction": [0, 2],
-                    "speed": 2,
+                    "speed": 120,
                     "life_time": 0.6
                 }
             ]
@@ -453,9 +453,9 @@
                 {
                     "name": "ParticleSystem",
                     "path": "images/smoke_particle.png",
-                    "particles_per_frame": 1,
+                    "particles_per_second": 60,
                     "correction": [0, 2],
-                    "speed": 2,
+                    "speed": 120,
                     "life_time": 0.6
                 }
             ]
@@ -466,9 +466,9 @@
                 {
                     "name": "ParticleSystem",
                     "path": "images/smoke_particle.png",
-                    "particles_per_frame": 1,
+                    "particles_per_second": 60,
                     "correction": [0, 2],
-                    "speed": 2,
+                    "speed": 120,
                     "life_time": 0.6
                 }
             ]
@@ -479,9 +479,9 @@
                 {
                     "name": "ParticleSystem",
                     "path": "images/smoke_particle.png",
-                    "particles_per_frame": 1,
+                    "particles_per_second": 60,
                     "correction": [0, 2],
-                    "speed": 2,
+                    "speed": 120,
                     "life_time": 0.6
                 }
             ]
@@ -492,9 +492,9 @@
                 {
                     "name": "ParticleSystem",
                     "path": "images/smoke_particle.png",
-                    "particles_per_frame": 1,
+                    "particles_per_second": 60,
                     "correction": [0, 2],
-                    "speed": 2,
+                    "speed": 120,
                     "life_time": 0.6
                 }
             ]

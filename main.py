@@ -27,9 +27,7 @@ InputManager.add_axis('Vertical', {
 load_scene('scenes/main_menu.json')
 MainMenuGUI.init()
 
-clock = pygame.time.Clock()
 while True:
-    clock.tick(60)
     InputManager.update()
 
     for event in InputManager.get_events():

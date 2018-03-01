@@ -1,5 +1,6 @@
 import pygame
 from engine.save_manager import SaveManager
+from engine.input_manager import InputManager
 
 pygame.init()
 
@@ -10,6 +11,7 @@ class Config:
     @staticmethod
     def init():
         pygame.display.set_mode(SaveManager.get_entry('config', 'resolution'), Config.get_flags())
+        pygame.display.set_caption(SaveManager.get_entry('config', 'title'))
 
     @staticmethod
     def get_flags():
@@ -60,4 +62,5 @@ class Config:
         return value
 
 
+InputManager.set_max_fps(SaveManager.get_entry('config', 'fps'))
 Config.init()
