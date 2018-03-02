@@ -12,6 +12,8 @@ class Config:
     def init():
         pygame.display.set_mode(SaveManager.get_entry('config', 'resolution'), Config.get_flags())
         pygame.display.set_caption(SaveManager.get_entry('config', 'title'))
+        if SaveManager.has_entry('config', 'icon'):
+            Config.set_icon(SaveManager.get_entry('config', 'icon'))
 
     @staticmethod
     def get_flags():
@@ -60,6 +62,11 @@ class Config:
         SaveManager.set_entry('config', 'fullscreen', value)
         pygame.display.set_mode(SaveManager.get_entry('config', 'resolution'), Config.get_flags())
         return value
+
+    @staticmethod
+    def set_icon(path):
+        SaveManager.set_entry('config', 'icon', path)
+        pygame.display.set_icon(pygame.image.load(path).convert_alpha())
 
 
 InputManager.set_max_fps(SaveManager.get_entry('config', 'fps'))

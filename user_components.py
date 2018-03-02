@@ -126,9 +126,9 @@ class PlayerController(Component):
 
     def update(self, *args):
         move = Vector2(
-            InputManager.get_delta_tick() / 1000 * InputManager.get_axis('Horizontal') * self.speed,
-            InputManager.get_delta_tick() / 1000 * InputManager.get_axis('Vertical') * self.speed
-        )
+            InputManager.get_axis('Horizontal') * self.speed,
+            InputManager.get_axis('Vertical') * self.speed
+        ) * (InputManager.get_delta_tick() / 1000)
         self.game_object.transform.move(move.x, move.y)
 
         phys_collider = self.game_object.get_component(PhysicsCollider)
@@ -432,9 +432,10 @@ class NPCController(Component):
             move = Vector2(
                 int(command[1]) - self.game_object.transform.x,
                 int(command[2]) - self.game_object.transform.y
-            ) * InputManager.get_delta_tick() // 1000
-            if move.length() > self.speed:
-                move = move.normalize() * self.speed
+            )
+
+            if move.length() > self.speed * (InputManager.get_delta_tick() / 1000):
+                move = move.normalize() * self.speed * (InputManager.get_delta_tick() / 1000)
             else:
                 self.current_command = next(self.commands)
 

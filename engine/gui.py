@@ -196,6 +196,11 @@ class Image:
 
 class GUI:
     elements = []
+    _cursor = None
+
+    @staticmethod
+    def set_cursor(path):
+        GUI._cursor = load_image(path)
 
     @staticmethod
     def add_element(element):
@@ -216,8 +221,15 @@ class GUI:
             if callable(render):
                 element.render(pygame.display.get_surface())
 
+        if GUI._cursor is not None:
+            pygame.display.get_surface().blit(
+                GUI._cursor, GUI._cursor.get_rect(topleft=pygame.mouse.get_pos())
+            )
+
     @staticmethod
     def update():
+        pygame.mouse.set_visible(GUI._cursor is None)
+
         for element in GUI.elements:
             update = getattr(element, "update", None)
             if callable(update):

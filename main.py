@@ -14,12 +14,14 @@ SaveManager.load_profile('preferences', 'user_prefs.json')
 Config.set_resolution(*SaveManager.get_entry('preferences', 'resolution'))
 Config.set_fullscreen(SaveManager.get_entry('preferences', 'fullscreen'))
 
-InputManager.add_axis('Horizontal', {
+GUI.set_cursor(SaveManager.get_entry('config', 'cursor'))
+
+InputManager.set_axis('Horizontal', {
     SaveManager.get_entry('preferences', 'right'): 1,
     SaveManager.get_entry('preferences', 'left'): -1,
 })
 
-InputManager.add_axis('Vertical', {
+InputManager.set_axis('Vertical', {
     SaveManager.get_entry('preferences', 'up'): 1,
     SaveManager.get_entry('preferences', 'down'): -1,
 })

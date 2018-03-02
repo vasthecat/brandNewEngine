@@ -38,5 +38,9 @@ class SaveManager:
         return SaveManager.profiles[profile_name][entry_name]
 
     @staticmethod
+    def has_entry(profile_name, entry_name):
+        return entry_name in SaveManager.profiles[profile_name]
+
+    @staticmethod
     def remove_entry(profile_name, entry_name):
         del SaveManager.profiles[profile_name][entry_name]

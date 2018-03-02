@@ -29,7 +29,7 @@ class InputManager:
         return pygame.mouse.get_pos()
 
     @staticmethod
-    def add_axis(name, keys):
+    def set_axis(name, keys):
         InputManager.AXES[name] = keys
 
     @staticmethod

@@ -1,6 +1,12 @@
 from engine.gui import load_image, Image, Button, CheckboxWithText
-from random import randint
+from engine.base_components import Component
+from engine.input_manager import InputManager
+from engine.scene_manager import SceneManager
 from engine.initialize_engine import Config
+from engine.save_manager import SaveManager
+
+from random import randint
+import pygame
 
 
 class CloudsController:
@@ -56,3 +62,28 @@ class MedievalCheckbox(CheckboxWithText):
             'hovered_checked': 'images/checkbox/hovered_checked.png',
             'hovered_unchecked': 'images/checkbox/hovered_unchecked.png',
         }, text, 'fonts/Dot.ttf', 'white', text_size, value, func)
+
+
+class ButtonChanger(Component):
+    def __init__(self, name, button, game_object):
+        super().__init__(game_object)
+        self.name = name
+        self.button = button
+
+    def update(self, *args):
+        for event in InputManager.get_events():
+            if event.type == pygame.KEYDOWN:
+                if event.key not in list(InputManager.AXES['Horizontal']) + list(InputManager.AXES['Vertical']) or \
+                        event.key == SaveManager.get_entry('preferences', self.name):
+
+                    direction = 'Horizontal' if self.name in ('left', 'right') else 'Vertical'
+
+                    axis = InputManager.AXES[direction]
+                    axis[event.key] = axis.pop(SaveManager.get_entry('preferences', self.name))
+                    InputManager.set_axis(direction, axis)
+
+                    SaveManager.set_entry('preferences', self.name, event.key)
+                    self.button.text = 'Move {}: {}'.format(
+                        self.name, pygame.key.name(SaveManager.get_entry('preferences', self.name))
+                    )
+                    SceneManager.current_scene.remove_object(self.game_object)

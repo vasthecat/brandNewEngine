@@ -1,9 +1,11 @@
 from engine.gui import GUI, load_image, Label, Image
 from engine.initialize_engine import Config
 from engine.save_manager import SaveManager
+from engine.scene_manager import SceneManager
+from engine.game_objects import GameObject
 
 from scene_loader import load_scene
-from gui_misc import CloudsController, MedievalButton, MedievalCheckbox
+from gui_misc import CloudsController, MedievalButton, MedievalCheckbox, ButtonChanger
 
 from pygame import Color
 import pygame
@@ -69,6 +71,8 @@ class MainMenuGUI:
 
 
 class SettingsGUI:
+    _button_changer = None
+
     @staticmethod
     def exit():
         SettingsGUI.clear()
@@ -88,6 +92,22 @@ class SettingsGUI:
         Config.set_fullscreen(value)
 
     @staticmethod
+    def change_button(name):
+        if SettingsGUI._button_changer is not None:
+            if SettingsGUI._button_changer[2] in SceneManager.current_scene.objects:
+                SceneManager.current_scene.remove_object(
+                    SettingsGUI._button_changer[2]
+                )
+                SettingsGUI._button_changer[0].text = SettingsGUI._button_changer[1]
+
+        button = GUI.get_element('btn_mv' + name)
+        go = GameObject()
+        go.add_component(ButtonChanger(name, button, go))
+        SettingsGUI._button_changer = [button, button.text, go]
+        button.text = 'Press any key...'
+        SceneManager.current_scene.add_object(go)
+
+    @staticmethod
     def add_move_buttons():
         x = 230
         y = 280
@@ -101,28 +121,28 @@ class SettingsGUI:
             (Config.get_width() // 2 - x, Config.get_height() // 2 - y + 75 * 2),
             'Move up: {}'.format(
                 pygame.key.name(SaveManager.get_entry('preferences', 'up'))
-            ), 29, 'btn_mvup'
+            ), 29, 'btn_mvup', SettingsGUI.change_button, 'up'
         ))
 
         GUI.add_element(MedievalButton(
             (Config.get_width() // 2 - x, Config.get_height() // 2 - y + 75 * 3),
             'Move down: {}'.format(
                 pygame.key.name(SaveManager.get_entry('preferences', 'down'))
-            ), 29, 'btn_mvdown'
+            ), 29, 'btn_mvdown', SettingsGUI.change_button, 'down'
         ))
 
         GUI.add_element(MedievalButton(
             (Config.get_width() // 2 - x, Config.get_height() // 2 - y + 75 * 4),
             'Move left: {}'.format(
                 pygame.key.name(SaveManager.get_entry('preferences', 'left'))
-            ), 29, 'btn_mvleft'
+            ), 29, 'btn_mvleft', SettingsGUI.change_button, 'left'
         ))
 
         GUI.add_element(MedievalButton(
             (Config.get_width() // 2 - x, Config.get_height() // 2 - y + 75 * 5),
             'Move right: {}'.format(
                 pygame.key.name(SaveManager.get_entry('preferences', 'right'))
-            ), 29, 'btn_mvright'
+            ), 29, 'btn_mvright', SettingsGUI.change_button, 'right'
         ))
 
     @staticmethod
@@ -180,7 +200,7 @@ class SettingsGUI:
         SettingsGUI.add_resolutions_buttons()
 
         GUI.add_element(MedievalCheckbox(
-            'toggle_fullscreen', (Config.get_width() // 2 + 230, Config.get_height() // 2 - 280 + 525),
+            'toggle_fullscreen', (Config.get_width() // 2 + 230, Config.get_height() // 2 + 230),
             'Toggle Fullscreen', 29, SaveManager.get_entry('preferences', 'fullscreen'),
             SettingsGUI.toggle_fullscreen
         ))
