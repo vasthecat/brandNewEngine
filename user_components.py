@@ -220,16 +220,17 @@ class House2Trigger(HousesTrigger):
         return House2Trigger(obj)
 
 
-class EnterStreetTrigger(HousesTrigger):
+class EnterVillageTrigger(HousesTrigger):
     def __init__(self, game_object):
         super().__init__(game_object)
         self.gui_obj = MedievalButton(
-            (Config.get_width() // 2, Config.get_height() - 100), 'Come to street', 29, 'enter_to_street', self.load_scene
+            (Config.get_width() // 2, Config.get_height() - 100),
+            'Enter the village', 25, 'enter_village', self.load_scene
         )
 
     def load_scene(self):
         from scene_loader import load_scene
-        GUI.del_element('enter_to_street')
+        GUI.del_element('enter_village')
         load_scene('scenes/scene1.json')
         SceneManager.current_scene.find_object('player').transform.move_to(
             *SaveManager.get_entry('village1', 'plr_coord')
@@ -237,7 +238,7 @@ class EnterStreetTrigger(HousesTrigger):
 
     @staticmethod
     def deserialize(component_dict, obj):
-        return EnterStreetTrigger(obj)
+        return EnterVillageTrigger(obj)
 
 
 class _ColliderSprite(pygame.sprite.Sprite):

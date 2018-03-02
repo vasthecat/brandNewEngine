@@ -52,13 +52,13 @@
             "components": [
                 {
                     "name": "TriggerCollider",
-                    "trigger_name": "enter_in_street",
+                    "trigger_name": "enter_village",
                     "rects": [
                         [16, -250, 70, 16]
                     ]
                 },
                 {
-                    "name": "EnterStreetTrigger"
+                    "name": "EnterVillageTrigger"
                 }
             ]
         },
