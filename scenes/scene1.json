@@ -568,7 +568,7 @@
                 },
                 {
                     "name": "NPCController",
-                    "speed": 7,
+                    "speed": 420,
                     "commands": [
                         "move_to (1182;874) (-1214;84) (-1215;82) (-1219;-16)",
                         "sleep 4",
@@ -601,7 +601,7 @@
                 },
                 {
                     "name": "NPCController",
-                    "speed": 7,
+                    "speed": 420,
                     "commands": [
                        "move_to (1155;879) (-1175;111) (-1178;110) (-1187;-6)",
                         "sleep 4",
@@ -635,7 +635,7 @@
                 },
                 {
                     "name": "NPCController",
-                    "speed": 7,
+                    "speed": 420,
                     "commands": [
                         "move_to (1182;874) (-1214;84) (-1215;82) (-1219;-16)",
                         "sleep 4",
