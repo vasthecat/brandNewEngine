@@ -524,8 +524,7 @@
                     "name": "TriggerCollider",
                     "trigger_name": "house1",
                     "rects": [
-                        [-440, 813, 64, 32],
-                        [862, -35, 64, 32]
+                        [-440, 813, 64, 32]
                     ]
                 },
                 {
@@ -544,6 +543,17 @@
                 },
                 {
                     "name": "House2Trigger"
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "name": "TriggerCollider",
+                    "trigger_name": "house3",
+                    "rects": [
+                        [862, -35, 64, 32]
+                    ]
                 }
             ]
         },

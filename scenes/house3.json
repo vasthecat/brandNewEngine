@@ -1,0 +1,94 @@
+{
+    "name": "house1",
+    "objects": [
+        {
+            "name": "ground_layer",
+            "components": [
+                {
+                    "name": "ImageFile",
+                    "path": "images/house3.png"
+                }
+            ]
+        },
+        {
+            "name": "player",
+            "x": 48, "y": 16,
+            "components": [
+                {
+                    "name": "AnimationController",
+                    "start_animation": "idle_up",
+                    "animations": {
+                        "up": {"path": "images/player/run_up.png", "size": [1, 4], "repeats": 10},
+                        "down": {"path": "images/player/run_down.png", "size": [1, 4], "repeats": 10},
+                        "right": {"path": "images/player/run_right.png", "size": [1, 4], "repeats": 10},
+                        "left": {"path": "images/player/run_left.png", "size": [1, 4], "repeats": 10},
+
+                        "idle_up": {"path": "images/player/idle_up.png", "size": [1, 1], "repeats": 1},
+                        "idle_down": {"path": "images/player/idle_down.png", "size": [1, 1], "repeats": 1},
+                        "idle_right": {"path": "images/player/idle_right.png", "size": [1, 1], "repeats": 1},
+                        "idle_left": {"path": "images/player/idle_left.png", "size": [1, 1], "repeats": 1}
+                    }
+                },
+                {
+                    "name": "PhysicsCollider",
+                    "rects": [
+                        [0, -24, 30, 15]
+                    ]
+                },
+                {
+                    "name": "TriggerCollider",
+                    "trigger_name": "PlayerTrigger",
+                    "rects": [
+                        [0, -24, 30, 15]
+                    ]
+                },
+                {
+                    "name": "PlayerController",
+                    "speed": 4
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "name": "TriggerCollider",
+                    "trigger_name": "enter_in_street",
+                    "rects": [
+                        [48, 0, 70, 32]
+                    ]
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "name": "PhysicsCollider",
+                    "rects": [
+                        [40, -22, 1000, 8],
+                        [448, 42, 8, 120],
+                        [380, 250, 124, 324],
+                        [256, 340, 140, 60],
+                        [40, 324, 160, 70],
+                        [-170, 340, 140, 60],
+                        [40, 348, 300, 8],
+                        [42, 144, 166, 120],
+                        [-456, 112, 8, 280],
+                        [-436, 108, 40, 100],
+                        [-295, 132, 130, 100],
+                        [-388, 134, 60, 20],
+                        [-236, 248, 8, 120]
+                   ]
+                }
+            ]
+        },
+        {
+            "name": "ground_layer",
+            "components": [
+                {
+                    "name": "ImageFile",
+                    "path": "images/house3_2.png"
+                }
+            ]
+        }
+    ]
+}
