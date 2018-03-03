@@ -6,7 +6,7 @@
             "components": [
                 {
                     "name": "ImageFile",
-                    "path": "images/house3.png"
+                    "path": "images/interiors/house3/house3.png"
                 }
             ]
         },
@@ -44,7 +44,7 @@
                 },
                 {
                     "name": "PlayerController",
-                    "speed": 4
+                    "speed": 200
                 }
             ]
         },
@@ -56,6 +56,9 @@
                     "rects": [
                         [48, 0, 70, 32]
                     ]
+                },
+                {
+                    "name": "EnterVillageTrigger"
                 }
             ]
         },
@@ -86,7 +89,7 @@
             "components": [
                 {
                     "name": "ImageFile",
-                    "path": "images/house3_2.png"
+                    "path": "images/interiors/house3/house3_2.png"
                 }
             ]
         }

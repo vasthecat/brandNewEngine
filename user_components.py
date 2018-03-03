@@ -220,6 +220,24 @@ class House2Trigger(HousesTrigger):
         return House2Trigger(obj)
 
 
+class House3Trigger(HousesTrigger):
+    def __init__(self, game_object):
+        super().__init__(game_object)
+        self.gui_obj = MedievalButton(
+            (Config.get_width() // 2, Config.get_height() - 100), 'Enter in house', 29, 'house', self.load_scene
+        )
+
+    def load_scene(self):
+        from scene_loader import load_scene
+        GUI.del_element('house')
+        SaveManager.set_entry('village1', 'plr_coord', self._player.transform.coord)
+        load_scene('scenes/house3.json')
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return House3Trigger(obj)
+
+
 class EnterVillageTrigger(HousesTrigger):
     def __init__(self, game_object):
         super().__init__(game_object)
