@@ -2,6 +2,16 @@
     "name": "house2",
     "objects": [
         {
+            "components": [
+                {
+                    "name": "MusicController",
+                    "paths": [
+                        ["sounds/house2_music.ogg", 10]
+                    ]
+                }
+            ]
+        },
+        {
             "name": "ground_layer",
             "components": [
                 {

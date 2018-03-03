@@ -6,7 +6,7 @@
                 {
                     "name": "MusicController",
                     "paths": [
-                        ["sounds/main_menu_music.wav", 25]
+                        ["sounds/main_menu_music.ogg", 25]
                     ]
                 }
             ]
