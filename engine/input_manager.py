@@ -14,6 +14,9 @@ class InputManager:
     }
 
     _events = []
+    _clock = pygame.time.Clock()
+    _fps = 60
+    _delta_tick = _clock.tick(_fps)
 
     @staticmethod
     def get_axis(name):
@@ -26,13 +29,30 @@ class InputManager:
         return pygame.mouse.get_pos()
 
     @staticmethod
-    def add_axis(name, keys):
+    def set_axis(name, keys):
         InputManager.AXES[name] = keys
 
     @staticmethod
+    def set_max_fps(value):
+        InputManager._fps = value
+
+    @staticmethod
+    def get_fps():
+        return int(InputManager._clock.get_fps())
+
+    @staticmethod
     def get_events():
-        return InputManager.events
+        return InputManager._events
+
+    @staticmethod
+    def get_delta_tick():
+        return InputManager._delta_tick
+
+    @staticmethod
+    def get_ticks():
+        return pygame.time.get_ticks()
 
     @staticmethod
     def update():
-        InputManager.events = list(pygame.event.get())
+        InputManager._events = list(pygame.event.get())
+        InputManager._delta_tick = InputManager._clock.tick(InputManager._fps)

@@ -1,5 +1,5 @@
 import pygame
-from engine.initialize_engine import width, height
+from engine.initialize_engine import Config
 from random import randint
 
 
@@ -23,8 +23,92 @@ class Label:
         surface.blit(rendered_text, rendered_rect)
 
 
+class Checkbox:
+    def __init__(self, name, pos, image_states, value=False, func=lambda val, *args: None, *args):
+        self.images = {
+            'normal': {
+                True: load_image(image_states['normal_checked']),
+                False: load_image(image_states['normal_unchecked'])
+            },
+            'hovered': {
+                True: load_image(image_states['hovered_checked']),
+                False: load_image(image_states['hovered_unchecked'])
+            }
+        }
+
+        self.name = name
+        self.args = args
+
+        self.image = self.images['normal'][value]
+        self.pos = pos
+        self.rect = self.image.get_rect(center=self.pos)
+
+        self.func = func
+        self.value = value
+
+        self.states = {
+            'hovered': False,
+            'clicked': False
+        }
+
+    def update(self):
+        self.rect = self.image.get_rect(center=self.pos)
+        if self.states['hovered']:
+            self.image = self.images['hovered'][self.value]
+        else:
+            self.image = self.images['normal'][self.value]
+
+    def render(self, surface):
+        surface.blit(self.image, self.image.get_rect(center=self.pos))
+
+    def apply_event(self, event):
+        self.states['hovered'] = self.rect.collidepoint(*pygame.mouse.get_pos())
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                if self.states['hovered']:
+                    self.states['clicked'] = True
+
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1:
+                if self.states['hovered'] and self.states['clicked']:
+                    self.value = not self.value
+                    self.states['clicked'] = False
+                    self.func(self.value, *self.args)
+
+
+class CheckboxWithText(Checkbox):
+    def __init__(self, name, pos, image_states, text, font_path, text_color, text_size,
+                 value=False, func=lambda val, *args: None, *args):
+        super().__init__(name, pos, image_states, value, func, *args)
+        self.font = pygame.font.Font(font_path, text_size)
+        self.text_color = pygame.Color(text_color)
+        self.text = text
+
+        self.text_surf = self.font.render(self.text, 1, self.text_color)
+        self.rect = pygame.Rect(0, 0,
+            self.text_surf.get_width() + self.image.get_width(),
+            self.text_surf.get_height(),
+        )
+        self.rect.center = self.pos
+
+    def update(self):
+        super().update()
+        self.text_surf = self.font.render(self.text, 1, self.text_color)
+        self.rect = pygame.Rect(0, 0,
+            self.text_surf.get_width() + self.image.get_width(),
+            self.text_surf.get_height(),
+        )
+        self.rect.center = self.pos
+
+    def render(self, surface):
+        surface.blit(self.text_surf, self.text_surf.get_rect(left=self.rect.left, centery=self.pos[1]))
+        surface.blit(self.image, self.image.get_rect(right=self.rect.right, centery=self.pos[1]))
+
+
 class Button:
-    def __init__(self, pos, image_states, text, font_path, text_color, text_size, name, func=lambda: None):
+    def __init__(self, pos, image_states, text, font_path, text_color, text_size, name,
+                 func=lambda *args: None, *args):
         self.normal_image = load_image(image_states['normal'])
         self.hover_image = load_image(image_states['hovered'])
         self.click_image = load_image(image_states['clicked'])
@@ -39,6 +123,7 @@ class Button:
 
         self.name = name
         self.func = func
+        self.args = args
 
         self.states = {
             'hovered': False,
@@ -46,7 +131,7 @@ class Button:
             'after_click': False
         }
 
-    def update(self, *args):
+    def update(self):
         if self.states['clicked']:
             self.states['clicked'] = False
             self.image = self.click_image
@@ -80,7 +165,7 @@ class Button:
             if event.button == 1:
                 if self.states['hovered'] and self.states['after_click']:
                     self.states['after_click'] = False
-                    self.func()
+                    self.func(*self.args)
 
 
 class Image:
@@ -105,12 +190,17 @@ class Image:
         return self.rect[0], self.rect[1]
 
     def set_const_pos(self):
-        self.const_rect.y = randint(0, height - self.size[1])
+        self.const_rect.y = randint(0, Config.get_height() - self.size[1])
         self.rect = self.const_rect.copy()
 
 
 class GUI:
     elements = []
+    _cursor = None
+
+    @staticmethod
+    def set_cursor(path):
+        GUI._cursor = load_image(path)
 
     @staticmethod
     def add_element(element):
@@ -131,8 +221,15 @@ class GUI:
             if callable(render):
                 element.render(pygame.display.get_surface())
 
+        if GUI._cursor is not None:
+            pygame.display.get_surface().blit(
+                GUI._cursor, GUI._cursor.get_rect(topleft=pygame.mouse.get_pos())
+            )
+
     @staticmethod
     def update():
+        pygame.mouse.set_visible(GUI._cursor is None)
+
         for element in GUI.elements:
             update = getattr(element, "update", None)
             if callable(update):
@@ -146,9 +243,9 @@ class GUI:
                 element.apply_event(event)
 
     @staticmethod
-    def del_element(name):
-        for element in GUI.elements:
-            if element.name == name:
+    def del_element(*names):
+        for element in GUI.elements.copy():
+            if element.name in names:
                 GUI.elements.remove(element)
 
     @staticmethod

@@ -1,18 +1,18 @@
 {
-    "name": "house2",
+    "name": "house1",
     "objects": [
         {
             "name": "ground_layer",
             "components": [
                 {
                     "name": "ImageFile",
-                    "path": "images/interiors/house2/house2.png"
+                    "path": "images/interiors/house3/house3.png"
                 }
             ]
         },
         {
             "name": "player",
-            "x": 20, "y": -220,
+            "x": 48, "y": 16,
             "components": [
                 {
                     "name": "AnimationController",
@@ -52,9 +52,9 @@
             "components": [
                 {
                     "name": "TriggerCollider",
-                    "trigger_name": "enter_village",
+                    "trigger_name": "enter_in_street",
                     "rects": [
-                        [16, -250, 70, 16]
+                        [48, 0, 70, 32]
                     ]
                 },
                 {
@@ -67,20 +67,19 @@
                 {
                     "name": "PhysicsCollider",
                     "rects": [
-                        [16, -264, 600, 20],
-                        [16, 68, 600, 20],
-                        [-260, -80, 20, 500],
-                        [254, -80, 20, 500],
-                        [184, 48, 140, 60],
-                        [228, -220, 32, 70],
-                        [28, -98, 80, 172],
-                        [-106, -208, 10, 60],
-                        [-106, -60, 10, 130],
-                        [-106, 68, 10, 40],
-                        [-188, -61, 160, 40],
-                        [-200, 48, 100, 20],
-                        [-238, -154, 40, 80],
-                        [-184, -248, 140, 20]
+                        [40, -22, 1000, 8],
+                        [448, 42, 8, 120],
+                        [380, 250, 124, 324],
+                        [256, 340, 140, 60],
+                        [40, 324, 160, 70],
+                        [-170, 340, 140, 60],
+                        [40, 348, 300, 8],
+                        [42, 144, 166, 120],
+                        [-456, 112, 8, 280],
+                        [-436, 108, 40, 100],
+                        [-295, 132, 130, 100],
+                        [-388, 134, 60, 20],
+                        [-236, 248, 8, 120]
                    ]
                 }
             ]
@@ -90,7 +89,7 @@
             "components": [
                 {
                     "name": "ImageFile",
-                    "path": "images/interiors/house2/house_2_2.png"
+                    "path": "images/interiors/house3/house3_2.png"
                 }
             ]
         }

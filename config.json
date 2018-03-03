@@ -1,5 +1,8 @@
 {
     "resolution": [1280, 720],
     "title": "Untitled game",
-    "fullscreen": false
+    "fullscreen": false,
+    "fps": 60,
+    "cursor": "images/cursor.png",
+    "icon": "images/icon.png"
 }

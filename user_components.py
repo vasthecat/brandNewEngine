@@ -11,7 +11,7 @@ import pygame
 from engine.input_manager import InputManager
 from engine.scene_manager import SceneManager
 from engine.save_manager import SaveManager
-from engine.initialize_engine import width, height
+from engine.initialize_engine import Config
 from engine.base_components import Component, ImageComponent, ImageFile
 from engine.game_objects import GameObject
 from engine.gui import GUI
@@ -110,25 +110,25 @@ class PlayerController(Component):
         cam = SceneManager.current_scene.current_camera
         x, y = self.game_object.transform.coord
 
-        if abs(x) < 1024 - width // 2:
+        if abs(x) < 1024 - Config.get_width() // 2:
             cam.transform.move_to(x, cam.transform.y)
         else:
             cam.transform.move_to(
-                copysign(1024 - width // 2, x), cam.transform.y
+                copysign(1024 - Config.get_width() // 2, x), cam.transform.y
             )
 
-        if abs(y) < 1024 - height // 2:
+        if abs(y) < 1024 - Config.get_height() // 2:
             cam.transform.move_to(cam.transform.x, y)
         else:
             cam.transform.move_to(
-                cam.transform.x, copysign(1024 - height // 2, y)
+                cam.transform.x, copysign(1024 - Config.get_height() // 2, y)
             )
 
     def update(self, *args):
         move = Vector2(
             InputManager.get_axis('Horizontal') * self.speed,
             InputManager.get_axis('Vertical') * self.speed
-        )
+        ) * (InputManager.get_delta_tick() / 1000)
         self.game_object.transform.move(move.x, move.y)
 
         phys_collider = self.game_object.get_component(PhysicsCollider)
@@ -166,6 +166,7 @@ class HousesTrigger(Component):
         pass
 
     def update(self, *args):
+        self.gui_obj.pos = Config.get_width() // 2, Config.get_height() - 100
         if self._collider is not None and self._player_collider is not None:
             if self._collider.detect_collision(self._player_collider):
                 if not self._button_shown:
@@ -185,7 +186,7 @@ class House1Trigger(HousesTrigger):
     def __init__(self, game_object):
         super().__init__(game_object)
         self.gui_obj = MedievalButton(
-            (width // 2, height - 100), 'Enter in house', 29, 'house', self.load_scene
+            (Config.get_width() // 2, Config.get_height() - 100), 'Enter in house', 29, 'house', self.load_scene
         )
 
     def load_scene(self):
@@ -205,7 +206,7 @@ class House2Trigger(HousesTrigger):
     def __init__(self, game_object):
         super().__init__(game_object)
         self.gui_obj = MedievalButton(
-            (width // 2, height - 100), 'Enter in house', 29, 'house', self.load_scene
+            (Config.get_width() // 2, Config.get_height() - 100), 'Enter in house', 29, 'house', self.load_scene
         )
 
     def load_scene(self):
@@ -219,16 +220,35 @@ class House2Trigger(HousesTrigger):
         return House2Trigger(obj)
 
 
-class EnterStreetTrigger(HousesTrigger):
+class House3Trigger(HousesTrigger):
     def __init__(self, game_object):
         super().__init__(game_object)
         self.gui_obj = MedievalButton(
-            (width // 2, height - 100), 'Come to street', 29, 'enter_to_street', self.load_scene
+            (Config.get_width() // 2, Config.get_height() - 100), 'Enter in house', 29, 'house', self.load_scene
         )
 
     def load_scene(self):
         from scene_loader import load_scene
-        GUI.del_element('enter_to_street')
+        GUI.del_element('house')
+        SaveManager.set_entry('village1', 'plr_coord', self._player.transform.coord)
+        load_scene('scenes/house3.json')
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return House3Trigger(obj)
+
+
+class EnterVillageTrigger(HousesTrigger):
+    def __init__(self, game_object):
+        super().__init__(game_object)
+        self.gui_obj = MedievalButton(
+            (Config.get_width() // 2, Config.get_height() - 100),
+            'Enter the village', 25, 'enter_village', self.load_scene
+        )
+
+    def load_scene(self):
+        from scene_loader import load_scene
+        GUI.del_element('enter_village')
         load_scene('scenes/scene1.json')
         SceneManager.current_scene.find_object('player').transform.move_to(
             *SaveManager.get_entry('village1', 'plr_coord')
@@ -236,7 +256,7 @@ class EnterStreetTrigger(HousesTrigger):
 
     @staticmethod
     def deserialize(component_dict, obj):
-        return EnterStreetTrigger(obj)
+        return EnterVillageTrigger(obj)
 
 
 class _ColliderSprite(pygame.sprite.Sprite):
@@ -297,29 +317,31 @@ class TriggerCollider(Collider):
         )
 
 
-class ParticleSystem(Component):
-    def __init__(self, image_path, particles_per_frame, correction, speed, life_time, game_object):
+class ParticleEmitter(Component):
+    def __init__(self, image_path, particles_per_second, correction, speed, life_time, game_object):
         self.path = image_path
-        self.particles_per_frame = particles_per_frame
+        self.particles_per_second = particles_per_second
         self.speed = speed
         self.life_time = life_time
         self.correction = Vector2(correction) + Vector2(-0.5, -0.5)
         super().__init__(game_object)
 
     def update(self, *args):
-        for _ in range(self.particles_per_frame):
-            go = GameObject(*self.game_object.transform.coord)
-            go.add_component(ImageFile(self.path, go))
-            go.add_component(Particle(
-                (self.correction + Vector2(random.random(), random.random())).normalize(),
-                self.speed, self.life_time, go
-            ))
-            SceneManager.current_scene.add_object(go)
+        fps = InputManager.get_fps()
+        if fps != 0:
+            for _ in range(self.particles_per_second // fps + 1):
+                go = GameObject(*self.game_object.transform.coord)
+                go.add_component(ImageFile(self.path, go))
+                go.add_component(Particle(
+                    (self.correction + Vector2(random.random(), random.random())).normalize(),
+                    self.speed, self.life_time, go
+                ))
+                SceneManager.current_scene.add_object(go)
 
     @staticmethod
     def deserialize(component_dict, obj):
-        return ParticleSystem(
-            component_dict['path'], component_dict['particles_per_frame'], component_dict['correction'],
+        return ParticleEmitter(
+            component_dict['path'], component_dict['particles_per_second'], component_dict['correction'],
             component_dict['speed'], component_dict['life_time'], obj
         )
 
@@ -330,14 +352,15 @@ class Particle(Component):
         self.life_time = life_time
         self.direction = direction
         self.speed = speed
-        self._start = time()
+        # self._start = time()
+        self._start = InputManager.get_ticks()
 
     def update(self, *args):
-        if time() - self._start >= self.life_time:
+        if self._start + self.life_time * 1000 < InputManager.get_ticks():
             # POSSIBLE MEMORY LEAK ????????
             SceneManager.current_scene.remove_object(self.game_object)
         else:
-            move = self.direction * self.speed
+            move = self.direction * self.speed * InputManager.get_delta_tick() / 1000
             self.game_object.transform.move(move.x, move.y)
 
 
@@ -425,9 +448,13 @@ class NPCController(Component):
     def update(self, *args):
         command = self.current_command.split()
         if command[0] == 'move_to':
-            move = Vector2(int(command[1]) - self.game_object.transform.x, int(command[2]) - self.game_object.transform.y)
-            if move.length() > self.speed:
-                move = move.normalize() * self.speed
+            move = Vector2(
+                int(command[1]) - self.game_object.transform.x,
+                int(command[2]) - self.game_object.transform.y
+            )
+
+            if move.length() > self.speed * (InputManager.get_delta_tick() / 1000):
+                move = move.normalize() * self.speed * (InputManager.get_delta_tick() / 1000)
             else:
                 self.current_command = next(self.commands)
 

@@ -116,7 +116,7 @@
                 },
                 {
                     "name": "NPCController",
-                    "speed": 2,
+                    "speed": 120,
                     "commands": [
                         "move_to (141;776) (141;689) (137;690) (-26;690) (-25;689) (-47;685) (-49;685) (-72;670) (-72;670) (-84;645) (-84;645) (-92;616) (-94;614) (-94;389) (-94;389) (625;-77) (626;-78) (637;-94) (637;-94) (646;-126) (646;-126) (646;-181) (645;-181) (648;-189) (648;-189) (648;-953) (646;-952) (585;-952) (586;-949) (586;-909)",
                         "sleep 5",
@@ -153,7 +153,7 @@
                 },
                 {
                     "name": "NPCController",
-                    "speed": 2,
+                    "speed": 120,
                     "commands": [
                         "move_to (-671;235) (-671;341) (-670;341) (-641;371) (-641;371) (-641;411) (-641;411) (-618;411) (-620;409) (-620;565) (-621;565) (-309;619) (-309;619) (-191;604) (-191;604) (-165;595) (-165;595) (-165;-7) (-165;-6) (-453;-98) (-454;-97) (-454;-69)",
                         "sleep 3",
@@ -192,7 +192,7 @@
                 },
                 {
                     "name": "NPCController",
-                    "speed": 2,
+                    "speed": 120,
                     "commands": [
                         "move_to (863;-856) (864;-858) (973;-888) (972;-888) (972;-950) (967;-950) (862;-976) (862;-976) (168;-976) (167;-977) (-58;-901) (-58;-901) (-58;-600) (-58;-603) (-636;-436) (-636;-436) (-636;-189) (-636;-190) (-583;-121) (-583;-121) (-583;-116)",
                         "sleep 5",
@@ -229,7 +229,7 @@
                 },
                 {
                     "name": "NPCController",
-                    "speed": 2,
+                    "speed": 120,
                     "commands": [
                         "move_to (-877;-388) (-1000;-456) (-1000;-456) (-1000;-973) (-1000;-972) (-496;-972) (-496;-970) (-496;-904) (-497;-904) (-564;-904) (-564;-901) (-564;-873) (-566;-873) (-586;-873)",
                         "sleep 9",
@@ -269,7 +269,7 @@
                 },
                 {
                     "name": "NPCController",
-                    "speed": 2,
+                    "speed": 120,
                     "commands": [
                         "move_to (-826;-585) (-949;-587) (-949;-587) (-949;-942) (-949;-942) (-868;-942) (-868;-946) (-868;-924)",
                         "sleep 4",
@@ -306,7 +306,7 @@
                 },
                 {
                     "name": "NPCController",
-                    "speed": 1,
+                    "speed": 60,
                     "commands": [
                         "move_to (-953;204) (-926;222) (-902;223) (-838;212) (-810;189) (-766;186) (-724;182) (-725;162) (-784;159) (-830;178) (-876;164) (-929;131) (-979;61) (-1005;75) (-998;129) (-975;166) (-969;186) (-836;135) (-791;133) (-739;107) (-726;76) (-736;42) (-775;72) (-828;96) (-872;83) (-900;106) (-921;154) (-890;178) (-848;156)"
                     ]
@@ -334,7 +334,7 @@
                 },
                 {
                     "name": "NPCController",
-                    "speed": 1,
+                    "speed": 60,
                     "commands": [
                         "move_to (-654;153) (-621;158) (-563;150) (-558;126) (-587;113) (-613;122) (-652;153) (-685;159) (-692;122) (-680;78) (-644;46) (-665;20) (-626;-1) (-596;22) (-602;67) (-632;87) (-629;116) (-648;135) (-674;125) (-686;138)"                    ]
                 }
@@ -361,7 +361,7 @@
                 },
                 {
                     "name": "NPCController",
-                    "speed": 1,
+                    "speed": 60,
                     "commands": [
                         "move_to (-959;57) (-989;135) (-989;134) (-989;204) (-986;204) (-728;232) (-728;232) (-677;169) (-676;168) (-664;75) (-664;75) (-586;46) (-584;46) (-597;-11) (-598;-12) (-624;153) (-624;153) (-832;144) (-832;144) (-889;70) (-889;67) (-985;41) (-986;48) (-902;155)",
                         "sleep 2",
@@ -408,7 +408,7 @@
                 },
                 {
                     "name": "PlayerController",
-                    "speed": 4
+                    "speed": 200
                 }
             ]
         },
@@ -425,11 +425,11 @@
             "x": -108, "y": -225,
             "components": [
                 {
-                    "name": "ParticleSystem",
+                    "name": "ParticleEmitter",
                     "path": "images/smoke_particle.png",
-                    "particles_per_frame": 1,
+                    "particles_per_second": 60,
                     "correction": [0, 2],
-                    "speed": 2,
+                    "speed": 120,
                     "life_time": 0.6
                 }
             ]
@@ -438,11 +438,11 @@
             "x": -424, "y": -189,
             "components": [
                 {
-                    "name": "ParticleSystem",
+                    "name": "ParticleEmitter",
                     "path": "images/smoke_particle.png",
-                    "particles_per_frame": 1,
+                    "particles_per_second": 60,
                     "correction": [0, 2],
-                    "speed": 2,
+                    "speed": 120,
                     "life_time": 0.6
                 }
             ]
@@ -451,11 +451,11 @@
             "x": -784, "y": -232,
             "components": [
                 {
-                    "name": "ParticleSystem",
+                    "name": "ParticleEmitter",
                     "path": "images/smoke_particle.png",
-                    "particles_per_frame": 1,
+                    "particles_per_second": 60,
                     "correction": [0, 2],
-                    "speed": 2,
+                    "speed": 120,
                     "life_time": 0.6
                 }
             ]
@@ -464,11 +464,11 @@
             "x": -770, "y": -644,
             "components": [
                 {
-                    "name": "ParticleSystem",
+                    "name": "ParticleEmitter",
                     "path": "images/smoke_particle.png",
-                    "particles_per_frame": 1,
+                    "particles_per_second": 60,
                     "correction": [0, 2],
-                    "speed": 2,
+                    "speed": 120,
                     "life_time": 0.6
                 }
             ]
@@ -477,11 +477,11 @@
             "x": -472, "y": -672,
             "components": [
                 {
-                    "name": "ParticleSystem",
+                    "name": "ParticleEmitter",
                     "path": "images/smoke_particle.png",
-                    "particles_per_frame": 1,
+                    "particles_per_second": 60,
                     "correction": [0, 2],
-                    "speed": 2,
+                    "speed": 120,
                     "life_time": 0.6
                 }
             ]
@@ -490,11 +490,11 @@
             "x": -144, "y": -700,
             "components": [
                 {
-                    "name": "ParticleSystem",
+                    "name": "ParticleEmitter",
                     "path": "images/smoke_particle.png",
-                    "particles_per_frame": 1,
+                    "particles_per_second": 60,
                     "correction": [0, 2],
-                    "speed": 2,
+                    "speed": 120,
                     "life_time": 0.6
                 }
             ]
@@ -524,8 +524,7 @@
                     "name": "TriggerCollider",
                     "trigger_name": "house1",
                     "rects": [
-                        [-440, 813, 64, 32],
-                        [862, -35, 64, 32]
+                        [-440, 813, 64, 32]
                     ]
                 },
                 {
@@ -544,6 +543,20 @@
                 },
                 {
                     "name": "House2Trigger"
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "name": "TriggerCollider",
+                    "trigger_name": "house3",
+                    "rects": [
+                        [862, -35, 64, 32]
+                    ]
+                },
+                {
+                    "name": "House3Trigger"
                 }
             ]
         },
@@ -568,7 +581,7 @@
                 },
                 {
                     "name": "NPCController",
-                    "speed": 7,
+                    "speed": 420,
                     "commands": [
                         "move_to (1182;874) (-1214;84) (-1215;82) (-1219;-16)",
                         "sleep 4",
@@ -601,7 +614,7 @@
                 },
                 {
                     "name": "NPCController",
-                    "speed": 7,
+                    "speed": 420,
                     "commands": [
                        "move_to (1155;879) (-1175;111) (-1178;110) (-1187;-6)",
                         "sleep 4",
@@ -635,7 +648,7 @@
                 },
                 {
                     "name": "NPCController",
-                    "speed": 7,
+                    "speed": 420,
                     "commands": [
                         "move_to (1182;874) (-1214;84) (-1215;82) (-1219;-16)",
                         "sleep 4",

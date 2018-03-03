@@ -1,0 +1,11 @@
+{
+    "up": 119,
+    "down": 115,
+    "right": 100,
+    "left": 97,
+    "fullscreen": false,
+    "resolution": [
+        1280,
+        720
+    ]
+}
