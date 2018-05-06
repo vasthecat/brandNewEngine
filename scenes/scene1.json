@@ -413,6 +413,15 @@
             ]
         },
         {
+            "components": [
+                {
+                    "name": "NetworkingController",
+                    "host": "localhost", "port": 50000,
+                    "login": "Andrew"
+                }
+            ]
+        },
+        {
             "name": "upper_layer",
             "components": [
                 {

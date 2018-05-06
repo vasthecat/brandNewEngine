@@ -2,6 +2,8 @@ import itertools as it
 from time import time
 import random
 from math import copysign
+import csv
+import io
 
 
 from pygame.math import Vector2
@@ -17,6 +19,7 @@ from engine.game_objects import GameObject
 from engine.gui import GUI
 
 from gui_misc import MedievalButton
+from client import NetworkClient
 
 
 class AnimationController(ImageComponent):
@@ -504,3 +507,66 @@ class TardisController(Component):
     @staticmethod
     def deserialize(component_dict, obj):
         return TardisController(obj)
+
+
+class NetworkingController(Component):
+    def __init__(self, login, host, port, game_object):
+        super().__init__(game_object)
+        self.client = NetworkClient(login, (host, port))
+        self.player = SceneManager.current_scene.find_object('player')
+        self.client.send('create')
+
+    def update(self, *args):
+        coord = 'coord {};{}'.format(*self.player.transform.coord)
+        self.client.send(coord)
+        for line in self.client.received.readlines():
+            print(self.parse(line))
+            login, command = self.parse(line)
+            if login != self.client.login:
+                if command.startswith('coord '):
+                    coord = map(float, command.replace('coord ', '').split(';'))
+                    SceneManager.current_scene.find_object(login).transform.move_to(*coord)
+                elif command.startswith('create'):
+                    SceneManager.current_scene.add_object(self.create_player(login))
+
+    def create_player(self, login):
+        go = GameObject(-960, 712, login)
+        go.add_component(AnimationController.deserialize({
+            "name": "AnimationController",
+            "start_animation": "idle_right",
+            "animations": {
+                "up": {"path": "images/player/run_up.png", "size": [1, 4], "repeats": 10},
+                "down": {"path": "images/player/run_down.png", "size": [1, 4], "repeats": 10},
+                "right": {"path": "images/player/run_right.png", "size": [1, 4], "repeats": 10},
+                "left": {"path": "images/player/run_left.png", "size": [1, 4], "repeats": 10},
+
+                "idle_up": {"path": "images/player/idle_up.png", "size": [1, 1], "repeats": 1},
+                "idle_down": {"path": "images/player/idle_down.png", "size": [1, 1], "repeats": 1},
+                "idle_right": {"path": "images/player/idle_right.png", "size": [1, 1], "repeats": 1},
+                "idle_left": {"path": "images/player/idle_left.png", "size": [1, 1], "repeats": 1}
+            }
+        }, go))
+        go.add_component(PhysicsCollider.deserialize({
+            "name": "PhysicsCollider",
+            "rects": [
+                [0, -24, 30, 15]
+            ]
+        }, go))
+        go.add_component(TriggerCollider.deserialize({
+            "name": "TriggerCollider",
+            "trigger_name": "PlayerTrigger",
+            "rects": [
+                [0, -24, 30, 15]
+            ]
+        }, go))
+        return go
+
+    def parse(self, s):
+        return list(csv.reader(io.StringIO(s.decode()), delimiter=' ', quotechar='"'))[0]
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return NetworkingController(
+            component_dict['login'], component_dict['host'],
+            component_dict['port'], obj
+        )
