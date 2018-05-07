@@ -1,6 +1,7 @@
 import pygame
 from engine.initialize_engine import Config
 from random import randint
+from pygame import Color
 
 
 def load_image(path):
@@ -21,6 +22,120 @@ class Label:
         rendered_text = self.font.render(self.text, 1, self.font_color)
         rendered_rect = rendered_text.get_rect(center=self.pos)
         surface.blit(rendered_text, rendered_rect)
+
+
+class Element:
+    def __init__(self, pos=(0, 0), size=(1, 1)):
+        self.rect = pygame.Rect(pos, size)
+        self.name = ''
+
+    def move(self, x, y):
+        self.rect.x += x
+        self.rect.y += y
+
+    def apply_event(self, event):
+        pass
+
+    def update(self):
+        pass
+
+    def render(self, surface):
+        pass
+
+class LabelForTextBox(Element):
+    def __init__(self, rect, text):
+        super().__init__()
+
+        self.rect = pygame.Rect(rect)
+        self.text = text
+        self.bgcolor = pygame.Color("white")
+        self.font_color = (77, 81, 83)
+        self.font = pygame.font.Font(None, self.rect.height - 4)
+        self.rendered_text = None
+        self.rendered_rect = None
+
+    def render(self, surface):
+        surface.fill(self.bgcolor, self.rect)
+        self.rendered_text = self.font.render(self.text, 1, self.font_color)
+        self.rendered_rect = self.rendered_text.get_rect(x=self.rect.x + 2, centery=self.rect.centery)
+        surface.blit(self.rendered_text, self.rendered_rect)
+
+class TextBox(LabelForTextBox):
+    def __init__(self, rect, text, max_len=None, default_text='', name=''):
+        super().__init__(rect, text)
+        self.active = False
+        self.blink = True
+        self.blink_timer = 0
+        self.caret = 0
+
+        self.rect.center = (rect[0], rect[1])
+
+        self.flag_first_active = True
+        self.default_text = default_text
+
+        self.max_len = max_len
+
+        self.text = self.default_text
+
+        self.name = name
+
+    def apply_event(self, event):
+        if event.type == pygame.KEYDOWN and self.active:
+
+            if event.key == pygame.K_BACKSPACE:
+                if len(self.text) > 0 and self.caret != 0:
+                    self.text = self.text[:self.caret - 1] + self.text[self.caret:]
+                    if self.caret > 0:
+                        self.caret -= 1
+
+            else:
+                if self.font.render(self.text + event.unicode, 1, self.font_color).get_rect().w < self.rect.w:
+                    self.text = self.text[:self.caret] + event.unicode + self.text[self.caret:]
+                    self.caret += 1
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+
+            if event.button == 1:
+                self.active = self.rect.collidepoint(event.pos)
+                if self.active:
+                    if len(self.text) > 0 and self.text != self.default_text:
+                        self.caret = (event.pos[0] - self.rect.x) // (self.rendered_rect.width // len(self.text))
+                        if self.caret >= len(self.text):
+                            self.caret = len(self.text)
+                    else:
+                        self.caret = 0
+
+    def update(self):
+        if self.active and self.flag_first_active:
+            self.flag_first_active = False
+            self.text = ''
+            self.caret = 0
+
+        elif not self.active and not self.flag_first_active and self.text == '':
+            self.flag_first_active = True
+            self.text = self.default_text
+            self.caret = 0
+
+        if pygame.time.get_ticks() - self.blink_timer > 200:
+            self.blink = not self.blink
+            self.blink_timer = pygame.time.get_ticks()
+
+    def render(self, surface):
+        super(TextBox, self).render(surface)
+        w = self.rect.x + self.font.render(self.text[:self.caret], 1, self.font_color).get_rect().width
+
+        pygame.draw.line(surface, Color('gray'), (self.rect.x, self.rect.y), (self.rect.x, self.rect.y + self.rect.h),
+                         2)
+        pygame.draw.line(surface, Color('gray'), (self.rect.x, self.rect.y + self.rect.h),
+                         (self.rect.x + self.rect.w, self.rect.y + self.rect.h), 2)
+        pygame.draw.line(surface, Color('gray'), (self.rect.x + self.rect.w, self.rect.y),
+                         (self.rect.x + self.rect.w, self.rect.y + self.rect.h), 2)
+        pygame.draw.line(surface, Color('gray'), (self.rect.x, self.rect.y), (self.rect.x + self.rect.w, self.rect.y),
+                         2)
+
+        if self.blink and self.active:
+            pygame.draw.line(
+                surface, pygame.Color("black"), (w + 2, self.rendered_rect.top + 2),
+                (w + 2, self.rendered_rect.bottom - 2))
 
 
 class Checkbox:

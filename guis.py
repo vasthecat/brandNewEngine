@@ -1,4 +1,4 @@
-from engine.gui import GUI, load_image, Label, Image
+from engine.gui import GUI, load_image, Label, Image, TextBox
 from engine.initialize_engine import Config
 from engine.save_manager import SaveManager
 from engine.scene_manager import SceneManager
@@ -37,17 +37,23 @@ class MainMenuGUI:
 
         GUI.add_element(MedievalButton(
             (Config.get_width() // 2, Config.get_height() // 2 + 75),
-            'Settings', 35, 'settings', MainMenuGUI.load_settings
+            'Myultyplayer', 35, 'myultyplayer', Myultyplayer.init
         ))
 
         GUI.add_element(MedievalButton(
             (Config.get_width() // 2, Config.get_height() // 2 + 150),
+            'Settings', 35, 'settings', MainMenuGUI.load_settings
+        ))
+
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2, Config.get_height() // 2 + 225),
             'Exit', 35, 'exit', MainMenuGUI.exit
         ))
 
     @staticmethod
     def remove_buttons():
         GUI.del_element('start_game')
+        GUI.del_element('myultyplayer')
         GUI.del_element('settings')
         GUI.del_element('exit')
 
@@ -69,6 +75,44 @@ class MainMenuGUI:
 
         MainMenuGUI.add_buttons()
 
+class Myultyplayer:
+    @staticmethod
+    def init():
+        MainMenuGUI.remove_buttons()
+
+        GUI.add_element(TextBox(
+            (Config.get_width() // 2, Config.get_height() // 2, Config.get_height() // 2+100, 40),
+            '', default_text='Login', name='user_login'))
+        GUI.add_element(TextBox(
+            (Config.get_width() // 2, Config.get_height() // 2+80, Config.get_height() // 2+100, 40),
+            '', default_text='Server`s IP address', name='server`s_ip'))
+
+        Myultyplayer.add_buttons()
+    @staticmethod
+    def add_buttons():
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2, Config.get_height() // 2 + 180),
+            'Connect', 29, 'connect_with_server', lambda :Myultyplayer.connect_with_server(
+                    GUI.get_element('user_login').text,
+                    GUI.get_element('server`s_ip').text)
+        ))
+        GUI.add_element(MedievalButton(
+            (Config.get_width() // 2, Config.get_height() // 2 + 280),
+            'Close', 29, 'close_myultyplayer', Myultyplayer.exit
+        ))
+
+    @staticmethod
+    def exit():
+        Myultyplayer.clear()
+        MainMenuGUI.init()
+
+    @staticmethod
+    def clear():
+        GUI.del_element('user_login', 'server`s_ip', 'bg_img', 'close_myultyplayer', 'connect_with_server')
+
+    @staticmethod
+    def connect_with_server(login, ip_address):
+        print(login, ip_address)
 
 class SettingsGUI:
     _button_changer = None
