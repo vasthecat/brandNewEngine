@@ -37,7 +37,6 @@ class Server:
             if data == b'stop':
                 print('Client {} stopped'.format(login))
                 self.connected.remove(client_sock)
-                self.players.remove(login)
                 try:
                     client_sock.sendall(b'')
                 except ConnectionResetError:
@@ -104,7 +103,7 @@ class Server:
         print('Server thread stopped')
 
 
-server = Server(('', 50000))
+server = Server(('', 50001))
 
 try:
     server.start()

@@ -8,7 +8,7 @@ from engine.input_manager import InputManager
 from engine.save_manager import SaveManager
 from engine.gui import GUI
 
-from user_components import NetworkingController
+from user_components import NetworkingController, ChatController
 from scene_loader import load_scene
 from guis import MainMenuGUI
 
@@ -40,6 +40,8 @@ while True:
             for scene in SceneManager.scenes.values():
                 for obj in scene.objects:
                     for component in obj.get_components(NetworkingController):
+                        component.client.shutdown()
+                    for component in obj.get_components(ChatController):
                         component.client.shutdown()
 
             pygame.quit()

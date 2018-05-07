@@ -10,7 +10,7 @@ def load_image(path):
 
 class Label:
     def __init__(self, pos, size, text, front_color, path_font, name):
-        self.pos = pos
+        self.pos = list(pos)
         self.size = size
         self.text = text
         self.font_color = front_color
@@ -61,7 +61,7 @@ class LabelForTextBox(Element):
         surface.blit(self.rendered_text, self.rendered_rect)
 
 class TextBox(LabelForTextBox):
-    def __init__(self, rect, text, max_len=None, default_text='', name=''):
+    def __init__(self, rect, text, max_len=None, default_text='', callback=None, name=''):
         super().__init__(rect, text)
         self.active = False
         self.blink = True
@@ -78,15 +78,28 @@ class TextBox(LabelForTextBox):
         self.text = self.default_text
 
         self.name = name
+        self.callback = callback
 
     def apply_event(self, event):
         if event.type == pygame.KEYDOWN and self.active:
+            if event.key == pygame.K_RETURN:
+                if callable(self.callback):
+                    self.callback(self.text)
+                    self.text = ''
 
-            if event.key == pygame.K_BACKSPACE:
+            elif event.key == pygame.K_BACKSPACE:
                 if len(self.text) > 0 and self.caret != 0:
                     self.text = self.text[:self.caret - 1] + self.text[self.caret:]
                     if self.caret > 0:
                         self.caret -= 1
+
+            elif event.key == pygame.K_LEFT:
+                if self.caret > 0:
+                    self.caret -= 1
+
+            elif event.key == pygame.K_RIGHT:
+                if self.caret < len(self.text):
+                    self.caret += 1
 
             else:
                 if self.font.render(self.text + event.unicode, 1, self.font_color).get_rect().w < self.rect.w:

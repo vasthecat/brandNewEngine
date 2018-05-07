@@ -16,7 +16,7 @@ from engine.save_manager import SaveManager
 from engine.initialize_engine import Config
 from engine.base_components import Component, ImageComponent, ImageFile
 from engine.game_objects import GameObject
-from engine.gui import GUI
+from engine.gui import GUI, Label, TextBox
 
 from gui_misc import MedievalButton
 from client import NetworkClient
@@ -569,3 +569,68 @@ class NetworkingController(Component):
             component_dict['login'], component_dict['host'],
             component_dict['port'], obj
         )
+
+
+class ChatController(Component):
+    def __init__(self, login, host, port, game_object):
+        super().__init__(game_object)
+        self.client = NetworkClient(login, (host, port))
+        self.on_screen = False
+
+    def update(self, *args):
+        for event in InputManager.get_events():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    if not self.on_screen:
+                        container = self.game_object.get_component(ChatContainer)
+                        GUI.add_element(TextBox(
+                            (Config.get_width() // 8 + 10, Config.get_height() - 40, Config.get_width() // 4, 40),
+                            '', callback=lambda text: container.add(self.client.login + ': ' + text),
+                            name='message_textbox'
+                        ))
+                        self.on_screen = True
+                elif event.key == pygame.K_ESCAPE:
+                    if self.on_screen:
+                        GUI.del_element('message_textbox')
+                        self.on_screen = False
+
+    def parse(self, s):
+        return list(csv.reader(io.StringIO(s.decode()), delimiter=' ', quotechar='"'))[0]
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return NetworkingController(
+            component_dict['login'], component_dict['host'],
+            component_dict['port'], obj
+        )
+
+
+class ChatContainer(Component):
+    def __init__(self, game_object):
+        super().__init__(game_object)
+        self.container = []
+
+    def add(self, message):
+        if len(self.container) >= 5:
+            GUI.del_element(self.container[0][0])
+            self.container.pop(0)
+
+        for i in range(5):
+            name = 'message' + str(i)
+            try:
+                if name not in list(zip(*self.container))[0]:
+                    break
+            except IndexError:
+                break
+
+        self.container.append((name, GUI.add_element(Label(
+            (200, Config.get_height() - 80), 32, message,
+            pygame.Color('black'), 'fonts/Dot.ttf', name
+        ))))
+
+        for name, label in self.container:
+            label.pos[1] -= 50
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return ChatContainer(obj)
