@@ -580,15 +580,14 @@ class ChatController(Component):
     def update(self, *args):
         container = self.game_object.get_component(ChatContainer)
         for msg in self.client.received.readlines():
-            container.add(self.client.login + ': ' + msg.decode())
+            container.add(': '.join(self.parse(msg)))
         for event in InputManager.get_events():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     if not self.on_screen:
                         GUI.add_element(TextBox(
                             (Config.get_width() // 8 + 10, Config.get_height() - 40, Config.get_width() // 4, 40),
-                            '', callback=lambda text: self.client.send(text.encode()),
-                            name='message_textbox'
+                            '', callback=self.client.send, name='message_textbox'
                         ))
                         self.on_screen = True
                 elif event.key == pygame.K_ESCAPE:
