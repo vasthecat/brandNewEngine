@@ -86,6 +86,7 @@ class TextBox(LabelForTextBox):
                 if callable(self.callback):
                     self.callback(self.text)
                     self.text = ''
+                    self.caret = 0
 
             elif event.key == pygame.K_BACKSPACE:
                 if len(self.text) > 0 and self.caret != 0:
