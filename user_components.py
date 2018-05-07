@@ -520,7 +520,6 @@ class NetworkingController(Component):
         coord = 'coord {};{}'.format(*self.player.transform.coord)
         self.client.send(coord)
         for line in self.client.received.readlines():
-            print(self.parse(line))
             login, command = self.parse(line)
             if login != self.client.login:
                 if command.startswith('coord '):

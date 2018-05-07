@@ -6,8 +6,10 @@ import sys
 
 from engine.input_manager import InputManager
 from engine.save_manager import SaveManager
-from scene_loader import load_scene
 from engine.gui import GUI
+
+from user_components import NetworkingController
+from scene_loader import load_scene
 from guis import MainMenuGUI
 
 SaveManager.load_profile('preferences', 'user_prefs.json')
@@ -35,6 +37,11 @@ while True:
     for event in InputManager.get_events():
         if event.type == pygame.QUIT:
             SaveManager.save_profile('preferences', 'user_prefs.json')
+            for scene in SceneManager.scenes.values():
+                for obj in scene.objects:
+                    for component in obj.get_components(NetworkingController):
+                        component.client.shutdown()
+
             pygame.quit()
             sys.exit()
 

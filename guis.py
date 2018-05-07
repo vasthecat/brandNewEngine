@@ -6,6 +6,7 @@ from engine.game_objects import GameObject
 
 from scene_loader import load_scene
 from gui_misc import CloudsController, MedievalButton, MedievalCheckbox, ButtonChanger
+from user_components import NetworkingController
 
 from pygame import Color
 import pygame
@@ -113,6 +114,10 @@ class Myultyplayer:
     @staticmethod
     def connect_with_server(login, ip_address):
         print(login, ip_address)
+        MainMenuGUI.start_game()
+        go = GameObject()
+        go.add_component(NetworkingController(login, ip_address, 50000, go))
+        SceneManager.current_scene.add_object(go)
 
 class SettingsGUI:
     _button_changer = None
@@ -259,6 +264,10 @@ class GameGUI:
 
     @staticmethod
     def exit_in_menu():
+        for scene in SceneManager.scenes.values():
+            for obj in scene.objects:
+                for component in obj.get_components(NetworkingController):
+                    component.client.shutdown()
         GUI.clear()
         load_scene('scenes/main_menu.json')
         MainMenuGUI.init()
