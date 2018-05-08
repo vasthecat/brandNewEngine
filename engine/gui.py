@@ -51,14 +51,12 @@ class LabelForTextBox(Element):
         self.bgcolor = pygame.Color("white")
         self.font_color = (77, 81, 83)
         self.font = pygame.font.Font(None, self.rect.height - 4)
-        self.rendered_text = None
-        self.rendered_rect = None
 
     def render(self, surface):
         surface.fill(self.bgcolor, self.rect)
         self.rendered_text = self.font.render(self.text, 1, self.font_color)
         self.rendered_rect = self.rendered_text.get_rect(x=self.rect.x + 2, centery=self.rect.centery)
-        surface.blit(self.rendered_text, self.rendered_rect)
+        surface.blit(self.rendered_text, (self.rendered_rect.x, self.rendered_rect.y+2, self.rendered_rect.w,self.rendered_rect.h))
 
 class TextBox(LabelForTextBox):
     def __init__(self, rect, text, max_len=None, default_text='', callback=None, name=''):

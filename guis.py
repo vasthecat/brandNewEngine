@@ -6,16 +6,17 @@ from engine.game_objects import GameObject
 
 from scene_loader import load_scene
 from gui_misc import CloudsController, MedievalButton, MedievalCheckbox, ButtonChanger
-from user_components import NetworkingController, ChatController, ChatContainer
+from user_components import NetworkingController, ChatController, ChatContainer, AnimationController,MusicController, PhysicsCollider
 
 from pygame import Color
 import pygame
 
 
 class MainMenuGUI:
+    scene = None
     @staticmethod
     def start_game():
-        load_scene('scenes/scene1.json')
+        MainMenuGUI.scene = load_scene('scenes/scene1.json')
         SaveManager.add_profile('village1', {'seen_tardis': False})
         GUI.clear()
         GameGUI.init()
@@ -38,7 +39,7 @@ class MainMenuGUI:
 
         GUI.add_element(MedievalButton(
             (Config.get_width() // 2, Config.get_height() // 2 + 75),
-            'Myultyplayer', 35, 'myultyplayer', Myultyplayer.init
+            'Multyplayer', 35, 'multyplayer', Multyplayer.init
         ))
 
         GUI.add_element(MedievalButton(
@@ -54,7 +55,7 @@ class MainMenuGUI:
     @staticmethod
     def remove_buttons():
         GUI.del_element('start_game')
-        GUI.del_element('myultyplayer')
+        GUI.del_element('multyplayer')
         GUI.del_element('settings')
         GUI.del_element('exit')
 
@@ -76,7 +77,7 @@ class MainMenuGUI:
 
         MainMenuGUI.add_buttons()
 
-class Myultyplayer:
+class Multyplayer:
     @staticmethod
     def init():
         MainMenuGUI.remove_buttons()
@@ -88,23 +89,23 @@ class Myultyplayer:
             (Config.get_width() // 2, Config.get_height() // 2+80, Config.get_height() // 2+100, 40),
             '', default_text='Server`s IP address', name='server`s_ip'))
 
-        Myultyplayer.add_buttons()
+        Multyplayer.add_buttons()
     @staticmethod
     def add_buttons():
         GUI.add_element(MedievalButton(
             (Config.get_width() // 2, Config.get_height() // 2 + 180),
-            'Connect', 29, 'connect_with_server', lambda :Myultyplayer.connect_with_server(
+            'Connect', 29, 'connect_with_server', lambda :Multyplayer.connect_with_server(
                     GUI.get_element('user_login').text,
                     GUI.get_element('server`s_ip').text)
         ))
         GUI.add_element(MedievalButton(
             (Config.get_width() // 2, Config.get_height() // 2 + 280),
-            'Close', 29, 'close_myultyplayer', Myultyplayer.exit
+            'Close', 29, 'close_myultyplayer', Multyplayer.exit
         ))
 
     @staticmethod
     def exit():
-        Myultyplayer.clear()
+        Multyplayer.clear()
         MainMenuGUI.init()
 
     @staticmethod
@@ -263,6 +264,7 @@ class SettingsGUI:
 
 class GameGUI:
     pause_menu_elements = set()
+    flag_borba = True
 
     @staticmethod
     def exit_in_menu():
@@ -302,4 +304,48 @@ class GameGUI:
 
     @staticmethod
     def init():
+        GUI.add_element(MedievalButton((Config.get_width() // 2, Config.get_height()- 175), 'Начать бароца', 25, 'myBorba',
+                                       GameGUI.borba))
         GUI.add_element(MedievalButton((Config.get_width() // 2, Config.get_height() - 35), 'Menu', 35, 'game_menu', GameGUI.create_menu))
+
+    @staticmethod
+    def borba():
+        print('Борьба активирована')
+
+        player = MainMenuGUI.scene.find_object('player')
+        print(player.components)
+        if GameGUI.flag_borba:
+            anime = [str(player.components[1]), str(player.components[2])]
+        else:
+            anime = [str(player.components[-1]), str(player.components[-2])]
+        a = []
+        for com in player.components:
+            if str(com) not in anime:
+                a.append(com)
+        player.components = a[:]
+        player.add_component(AnimationController.deserialize({
+            "name": "AnimationControllerd1",
+            "start_animation": "idle_right",
+            "animations": {
+                "up": {"path": "images/player/myBorba/run_up.png", "size": [1, 10], "repeats": 3},
+                "down": {"path": "images/player/myBorba/run_down.png", "size": [1, 10], "repeats": 3},
+                "right": {"path": "images/player/myBorba/run_right.png", "size": [1, 10], "repeats": 3},
+                "left": {"path": "images/player/myBorba/run_left.png", "size": [1, 10], "repeats": 3},
+
+                "idle_up": {"path": "images/player/myBorba/idle_up.png", "size": [1, 1], "repeats": 1},
+                "idle_down": {"path": "images/player/myBorba/idle_down.png", "size": [1, 3], "repeats": 10},
+                "idle_right": {"path": "images/player/myBorba/idle_right.png", "size": [1, 3], "repeats": 10},
+                "idle_left": {"path": "images/player/myBorba/idle_left.png", "size": [1, 3], "repeats": 10}
+            }
+        }, player))
+        player.add_component(PhysicsCollider.deserialize({'rects':[[0, -52, 66, 72]]}, player))
+        if GameGUI.flag_borba:
+            music = MainMenuGUI.scene.find_object("villagemusic")
+            _anime = str(music.components[1])
+            _a = []
+            for com in music.components:
+                if str(com) != _anime:
+                    _a.append(com)
+            music.components = _a[:]
+            music.add_component(MusicController.deserialize({"paths":[["sounds/village_background_music2.ogg", 100]]}, music))
+            GameGUI.flag_borba = False

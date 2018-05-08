@@ -396,7 +396,7 @@
                 {
                     "name": "PhysicsCollider",
                     "rects": [
-                        [0, -24, 30, 15]
+                        [0, -25, 30, 15]
                     ]
                 },
                 {
@@ -499,7 +499,7 @@
                 }
             ]
         },
-        {
+        {   "name":"villagemusic",
             "components": [
                 {
                     "name": "MusicController",
