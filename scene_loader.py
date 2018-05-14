@@ -3,7 +3,7 @@ from engine.game_objects import GameObject
 from engine.base_components import ImageFile
 from user_components import (PhysicsCollider, TriggerCollider, PlayerController, AnimationController, ParticleEmitter,
                              MusicController, NPCController, WaterSound, House1Trigger, House2Trigger, House3Trigger,
-                             TardisController, EnterVillageTrigger)
+                             TardisController, EnterVillageTrigger, NetworkingController, ChatController, ChatContainer)
 import json
 import pygame
 
@@ -46,4 +46,7 @@ component_loaders = {
     'House3Trigger': House3Trigger.deserialize,
     'EnterVillageTrigger': EnterVillageTrigger.deserialize,
     'TardisController': TardisController.deserialize,
+    'NetworkingController': NetworkingController.deserialize,
+    'ChatController': ChatController.deserialize,
+    'ChatContainer': ChatContainer.deserialize,
 }

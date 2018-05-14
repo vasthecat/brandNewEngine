@@ -2,6 +2,8 @@ import itertools as it
 from time import time
 import random
 from math import copysign
+import csv
+import io
 
 
 from pygame.math import Vector2
@@ -14,9 +16,10 @@ from engine.save_manager import SaveManager
 from engine.initialize_engine import Config
 from engine.base_components import Component, ImageComponent, ImageFile
 from engine.game_objects import GameObject
-from engine.gui import GUI
+from engine.gui import GUI, Label, TextBox
 
 from gui_misc import MedievalButton
+from client import NetworkClient
 
 
 class AnimationController(ImageComponent):
@@ -504,3 +507,131 @@ class TardisController(Component):
     @staticmethod
     def deserialize(component_dict, obj):
         return TardisController(obj)
+
+
+class NetworkingController(Component):
+    def __init__(self, login, host, port, game_object):
+        super().__init__(game_object)
+        self.client = NetworkClient(login, (host, port))
+        self.player = SceneManager.current_scene.find_object('player')
+        self.client.send('create')
+
+    def update(self, *args):
+        coord = 'coord {};{}'.format(*self.player.transform.coord)
+        self.client.send(coord)
+        for line in self.client.received.readlines():
+            login, command = self.parse(line)
+            if login != self.client.login:
+                if command.startswith('coord '):
+                    coord = map(float, command.replace('coord ', '').split(';'))
+                    SceneManager.current_scene.find_object(login).transform.move_to(*coord)
+                elif command.startswith('create'):
+                    SceneManager.current_scene.add_object(self.create_player(login))
+
+    def create_player(self, login):
+        go = GameObject(-960, 712, login)
+        go.add_component(AnimationController.deserialize({
+            "name": "AnimationController",
+            "start_animation": "idle_right",
+            "animations": {
+                "up": {"path": "images/player/run_up.png", "size": [1, 4], "repeats": 10},
+                "down": {"path": "images/player/run_down.png", "size": [1, 4], "repeats": 10},
+                "right": {"path": "images/player/run_right.png", "size": [1, 4], "repeats": 10},
+                "left": {"path": "images/player/run_left.png", "size": [1, 4], "repeats": 10},
+
+                "idle_up": {"path": "images/player/idle_up.png", "size": [1, 1], "repeats": 1},
+                "idle_down": {"path": "images/player/idle_down.png", "size": [1, 1], "repeats": 1},
+                "idle_right": {"path": "images/player/idle_right.png", "size": [1, 1], "repeats": 1},
+                "idle_left": {"path": "images/player/idle_left.png", "size": [1, 1], "repeats": 1}
+            }
+        }, go))
+        go.add_component(PhysicsCollider.deserialize({
+            "name": "PhysicsCollider",
+            "rects": [
+                [0, -24, 30, 15]
+            ]
+        }, go))
+        go.add_component(TriggerCollider.deserialize({
+            "name": "TriggerCollider",
+            "trigger_name": "PlayerTrigger",
+            "rects": [
+                [0, -24, 30, 15]
+            ]
+        }, go))
+        return go
+
+    def parse(self, s):
+        return list(csv.reader(io.StringIO(s.decode()), delimiter=' ', quotechar='"'))[0]
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return NetworkingController(
+            component_dict['login'], component_dict['host'],
+            component_dict['port'], obj
+        )
+
+
+class ChatController(Component):
+    def __init__(self, login, host, port, game_object):
+        super().__init__(game_object)
+        self.client = NetworkClient(login, (host, port))
+        self.on_screen = False
+
+    def update(self, *args):
+        container = self.game_object.get_component(ChatContainer)
+        for msg in self.client.received.readlines():
+            container.add(': '.join(self.parse(msg)))
+        for event in InputManager.get_events():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    if not self.on_screen:
+                        GUI.add_element(TextBox(
+                            (Config.get_width() // 8 + 10, Config.get_height() - 40, Config.get_width() // 4, 40),
+                            '', callback=self.client.send, name='message_textbox'
+                        ))
+                        self.on_screen = True
+                elif event.key == pygame.K_ESCAPE:
+                    if self.on_screen:
+                        GUI.del_element('message_textbox')
+                        self.on_screen = False
+
+    def parse(self, s):
+        return list(csv.reader(io.StringIO(s.decode()), delimiter=' ', quotechar='"'))[0]
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return NetworkingController(
+            component_dict['login'], component_dict['host'],
+            component_dict['port'], obj
+        )
+
+
+class ChatContainer(Component):
+    def __init__(self, game_object):
+        super().__init__(game_object)
+        self.container = []
+
+    def add(self, message):
+        if len(self.container) >= 5:
+            GUI.del_element(self.container[0][0])
+            self.container.pop(0)
+
+        for i in range(5):
+            name = 'message' + str(i)
+            try:
+                if name not in list(zip(*self.container))[0]:
+                    break
+            except IndexError:
+                break
+
+        self.container.append((name, GUI.add_element(Label(
+            (200, Config.get_height() - 80), 32, message,
+            pygame.Color('black'), 'fonts/Dot.ttf', name
+        ))))
+
+        for name, label in self.container:
+            label.pos[1] -= 50
+
+    @staticmethod
+    def deserialize(component_dict, obj):
+        return ChatContainer(obj)
