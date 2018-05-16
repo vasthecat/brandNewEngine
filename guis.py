@@ -38,7 +38,7 @@ class MainMenuGUI:
 
         GUI.add_element(MedievalButton(
             (Config.get_width() // 2, Config.get_height() // 2 + 75),
-            'Myultyplayer', 35, 'myultyplayer', Myultyplayer.init
+            'Multiplayer', 35, 'myultyplayer', Myultyplayer.init
         ))
 
         GUI.add_element(MedievalButton(
