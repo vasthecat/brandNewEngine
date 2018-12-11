@@ -5,14 +5,13 @@ from math import copysign
 import csv
 import io
 
-
 from pygame.math import Vector2
 import pygame
-
 
 from engine.input_manager import InputManager
 from engine.scene_manager import SceneManager
 from engine.save_manager import SaveManager
+from engine.serialization_manager import SerializableClass
 from engine.initialize_engine import Config
 from engine.base_components import Component, ImageComponent, ImageFile
 from engine.game_objects import GameObject
@@ -20,8 +19,10 @@ from engine.gui import GUI, Label, TextBox
 
 from gui_misc import MedievalButton
 from client import NetworkClient
+from scene_loader import load_scene
 
 
+@SerializableClass
 class AnimationController(ImageComponent):
     def __init__(self, animations, start_animation, game_object):
         self.animations = {}
@@ -70,6 +71,7 @@ class AnimationController(ImageComponent):
         )
 
 
+@SerializableClass
 class PlayerController(Component):
     def __init__(self, speed, game_object):
         super().__init__(game_object)
@@ -80,6 +82,7 @@ class PlayerController(Component):
         self.set_camera_pos()
 
         self._steps_sound = pygame.mixer.Sound('sounds/steps.ogg')
+        self._steps_sound.set_volume(60)
 
     def change_animation(self, move):
         animator = self.game_object.get_component(AnimationController)
@@ -155,6 +158,7 @@ class PlayerController(Component):
         return PlayerController(component_dict['speed'], obj)
 
 
+@SerializableClass
 class HousesTrigger(Component):
     def __init__(self, game_object):
         super().__init__(game_object)
@@ -185,6 +189,7 @@ class HousesTrigger(Component):
         return HousesTrigger(obj)
 
 
+@SerializableClass
 class House1Trigger(HousesTrigger):
     def __init__(self, game_object):
         super().__init__(game_object)
@@ -193,7 +198,6 @@ class House1Trigger(HousesTrigger):
         )
 
     def load_scene(self):
-        from scene_loader import load_scene
         GUI.del_element('house')
         SaveManager.set_entry('village1', 'plr_coord', self._player.transform.coord)
         load_scene('scenes/house1.json')
@@ -205,6 +209,7 @@ class House1Trigger(HousesTrigger):
         return House1Trigger(obj)
 
 
+@SerializableClass
 class House2Trigger(HousesTrigger):
     def __init__(self, game_object):
         super().__init__(game_object)
@@ -213,7 +218,6 @@ class House2Trigger(HousesTrigger):
         )
 
     def load_scene(self):
-        from scene_loader import load_scene
         GUI.del_element('house')
         SaveManager.set_entry('village1', 'plr_coord', self._player.transform.coord)
         load_scene('scenes/house2.json')
@@ -223,6 +227,7 @@ class House2Trigger(HousesTrigger):
         return House2Trigger(obj)
 
 
+@SerializableClass
 class House3Trigger(HousesTrigger):
     def __init__(self, game_object):
         super().__init__(game_object)
@@ -231,7 +236,6 @@ class House3Trigger(HousesTrigger):
         )
 
     def load_scene(self):
-        from scene_loader import load_scene
         GUI.del_element('house')
         SaveManager.set_entry('village1', 'plr_coord', self._player.transform.coord)
         load_scene('scenes/house3.json')
@@ -241,6 +245,7 @@ class House3Trigger(HousesTrigger):
         return House3Trigger(obj)
 
 
+@SerializableClass
 class EnterVillageTrigger(HousesTrigger):
     def __init__(self, game_object):
         super().__init__(game_object)
@@ -250,7 +255,6 @@ class EnterVillageTrigger(HousesTrigger):
         )
 
     def load_scene(self):
-        from scene_loader import load_scene
         GUI.del_element('enter_village')
         load_scene('scenes/scene1.json')
         SceneManager.current_scene.find_object('player').transform.move_to(
@@ -292,6 +296,7 @@ class Collider(Component):
         return Collider(component_dict['rects'], obj)
 
 
+@SerializableClass
 class PhysicsCollider(Collider):
     def __init__(self, rects, game_object):
         if not rects:
@@ -308,6 +313,7 @@ class PhysicsCollider(Collider):
         return PhysicsCollider(component_dict['rects'], obj)
 
 
+@SerializableClass
 class TriggerCollider(Collider):
     def __init__(self, rects, trigger_name, game_object):
         self.trigger_name = trigger_name
@@ -320,6 +326,7 @@ class TriggerCollider(Collider):
         )
 
 
+@SerializableClass
 class ParticleEmitter(Component):
     def __init__(self, image_path, particles_per_second, correction, speed, life_time, game_object):
         self.path = image_path
@@ -367,6 +374,7 @@ class Particle(Component):
             self.game_object.transform.move(move.x, move.y)
 
 
+@SerializableClass
 class MusicController(Component):
     def __init__(self, music_paths, game_object):
         super().__init__(game_object)
@@ -380,6 +388,7 @@ class MusicController(Component):
         return MusicController(component_dict['paths'], obj)
 
 
+@SerializableClass
 class WaterSound(Component):
     def __init__(self, max_distance, game_object):
         super().__init__(game_object)
@@ -405,6 +414,7 @@ class WaterSound(Component):
         return WaterSound(component_dict['max_distance'], obj)
 
 
+@SerializableClass
 class NPCController(Component):
     def __init__(self, speed, commands, game_object):
         super().__init__(game_object)
@@ -493,6 +503,7 @@ class NPCController(Component):
         return NPCController(component_dict['speed'], component_dict['commands'], obj)
 
 
+@SerializableClass
 class TardisController(Component):
     def __init__(self, game_object):
         super().__init__(game_object)
@@ -509,6 +520,7 @@ class TardisController(Component):
         return TardisController(obj)
 
 
+@SerializableClass
 class NetworkingController(Component):
     def __init__(self, login, host, port, game_object):
         super().__init__(game_object)
@@ -571,6 +583,7 @@ class NetworkingController(Component):
         )
 
 
+@SerializableClass
 class ChatController(Component):
     def __init__(self, login, host, port, game_object):
         super().__init__(game_object)
@@ -606,6 +619,7 @@ class ChatController(Component):
         )
 
 
+@SerializableClass
 class ChatContainer(Component):
     def __init__(self, game_object):
         super().__init__(game_object)

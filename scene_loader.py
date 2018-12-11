@@ -1,9 +1,7 @@
 from engine.scene_manager import SceneManager
 from engine.game_objects import GameObject
-from engine.base_components import ImageFile
-from user_components import (PhysicsCollider, TriggerCollider, PlayerController, AnimationController, ParticleEmitter,
-                             MusicController, NPCController, WaterSound, House1Trigger, House2Trigger, House3Trigger,
-                             TardisController, EnterVillageTrigger, NetworkingController, ChatController, ChatContainer)
+from engine.serialization_manager import serializable_types
+
 import json
 import pygame
 
@@ -24,29 +22,8 @@ def load_scene(path):
 
         for component_dict in obj['components']:
             game_object.add_component(
-                component_loaders[component_dict['name']](component_dict, game_object)
+                serializable_types[component_dict['name']].deserialize(component_dict, game_object)
             )
 
         scene.add_object(game_object)
     return scene
-
-
-component_loaders = {
-    'ImageFile': ImageFile.deserialize,
-    'PlayerController': PlayerController.deserialize,
-    'PhysicsCollider': PhysicsCollider.deserialize,
-    'TriggerCollider': TriggerCollider.deserialize,
-    'AnimationController': AnimationController.deserialize,
-    'ParticleEmitter': ParticleEmitter.deserialize,
-    'MusicController': MusicController.deserialize,
-    'NPCController': NPCController.deserialize,
-    'WaterSound': WaterSound.deserialize,
-    'House1Trigger': House1Trigger.deserialize,
-    'House2Trigger': House2Trigger.deserialize,
-    'House3Trigger': House3Trigger.deserialize,
-    'EnterVillageTrigger': EnterVillageTrigger.deserialize,
-    'TardisController': TardisController.deserialize,
-    'NetworkingController': NetworkingController.deserialize,
-    'ChatController': ChatController.deserialize,
-    'ChatContainer': ChatContainer.deserialize,
-}

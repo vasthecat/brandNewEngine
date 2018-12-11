@@ -1,5 +1,7 @@
 import pygame
 
+from engine.serialization_manager import SerializableClass
+
 
 class Component:
     def __init__(self, game_object):
@@ -47,6 +49,7 @@ class ImageComponent(Component):
         return pygame.image.load(filename).convert_alpha()
 
 
+@SerializableClass
 class ImageFile(ImageComponent):
     def __init__(self, image_path, game_object):
         super().__init__(ImageFile.load_image(image_path), game_object)

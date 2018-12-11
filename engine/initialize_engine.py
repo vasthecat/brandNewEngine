@@ -1,6 +1,7 @@
 import pygame
 from engine.save_manager import SaveManager
 from engine.input_manager import InputManager
+import engine.serialization_manager
 
 pygame.init()
 
